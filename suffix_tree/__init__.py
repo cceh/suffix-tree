@@ -3,6 +3,6 @@
 
 """ Package """
 
-from .suffix_tree import Tree, Path
+from .tree import Tree, Path
 
 __title__ = "suffix-tree"

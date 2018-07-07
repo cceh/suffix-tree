@@ -23,3 +23,4 @@ uninstall:
 clean:
 	-rm -rf dist build *.egg-info
 	-rm *~ .*~ pylintgraph.dot
+	find . -name __pycache__ -type d -exec rm -r "{}" \;

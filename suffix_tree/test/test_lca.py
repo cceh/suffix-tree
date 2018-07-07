@@ -1,3 +1,5 @@
+""" Test the Least Common Ancestor (LCA) implementation. """
+
 import unittest
 
 from suffix_tree import Tree

@@ -22,6 +22,7 @@ ancestor* of :math:`v` refers to an ancestor that is not :math:`v`.
 
 """
 
+import collections
 import ctypes
 import sys
 
@@ -100,9 +101,7 @@ def h (k):
 class Node (object):
     """ Mixin for Node to allow LCA retireval. """
 
-    def __init__ (self, path): # pylint: disable=unused-argument
-        self.parent = None
-
+    def __init__ (self, parent, path): # pylint: disable=unused-argument
         self.id = 0
         """Number of the node given in a depth-first traversal of the tree, starting
         with 1.  See [Gusfield1997]_ Figure 8.1, 182
@@ -138,7 +137,7 @@ class Node (object):
         """ Compute A. """
         raise NotImplementedError ()
 
-    def prepare_lca (self, counter, parent):
+    def prepare_lca (self, counter):
         """ Prepare the node for LCA retrievals. """
         raise NotImplementedError ()
 
@@ -147,11 +146,12 @@ class Leaf (Node):
     """ A mixin for leaf nodes to allow for LCA retrievals. """
 
     def __str__ (self):
-        return "%dh%d I=%dh%d A=0x%x\n" % (self.id, h (self.id), self.I, h (self.I), self.A)
+        if DEBUG:
+            return "\n%dh%d I=%dh%d A=0x%x\n" % (self.id, h (self.id), self.I, h (self.I), self.A)
+        return ''
 
-    def prepare_lca (self, counter, parent):
+    def prepare_lca (self, counter):
         self.id = counter
-        self.parent = parent
         return counter + 1
 
     def compute_I_and_L (self, L):
@@ -168,14 +168,15 @@ class Internal (Node):
     """ A mixin for internal nodes to allow for LCA retrievals. """
 
     def __str__ (self):
-        return "%dh%d I=%dh%d A=0x%x\n" % (self.id, h (self.id), self.I, h (self.I), self.A)
+        if DEBUG:
+            return "\n%dh%d I=%dh%d A=0x%x\n" % (self.id, h (self.id), self.I, h (self.I), self.A)
+        return ''
 
-    def prepare_lca (self, counter, parent):
+    def prepare_lca (self, counter):
         self.id = counter
-        self.parent = parent
         counter += 1
         for dest in self.children.values (): # pylint: disable=no-member
-            counter = dest.prepare_lca (counter, self)
+            counter = dest.prepare_lca (counter)
         return counter
 
     def compute_I_and_L (self, L):
@@ -202,6 +203,9 @@ class Tree (object):
     def __init__ (self, d): # pylint: disable=unused-argument
         self.L = None
 
+        self.nodemap = collections.defaultdict (dict)
+        """ map from string position to leaf node """
+
     def prepare_lca (self):
         """ Preprocess the tree for Lowest Common Ancestor retrieval.
 
@@ -209,15 +213,23 @@ class Tree (object):
         """
         self.L = dict ()
         # pylint: disable=no-member
-        self.root.prepare_lca (1, self.root)
+        self.root.prepare_lca (1)
         self.root.compute_I_and_L (self.L)
         self.root.compute_A (0)
+
+        # compute nodemap
+        def f (node):
+            """ Compute a nodemap """
+            if node.is_leaf ():
+                for id_, path in node.indices.items ():
+                    self.nodemap[id_][path.start] = node
+        self.root.pre_order (f)
 
     def lca (self, x, y):
         """ Returns the lowest common ancestor node of nodes x and y.
 
-        >>> import suffix_tree
-        >>> tree = suffix_tree.Tree ({ 'A' : 'xabxac', 'B' : 'awyawxawxz' })
+        >>> from suffix_tree import Tree
+        >>> tree = Tree ({ 'A' : 'xabxac', 'B' : 'awyawxawxz' })
         >>> tree.prepare_lca ()
         >>> tree.lca (tree.nodemap['A'][1], tree.nodemap['B'][3]).id
         8
