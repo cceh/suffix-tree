@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 #
 
-"""Ukkonen's Algorithm
+r"""Ukkonen's Algorithm
 
-Mixin for tree-building using Ukkonen's linear time Algorithm.
+Ukkonen's algorithm to build a suffix tree in linear time.
 
 Credits: This implementation of Ukkonen's algorithm in Python closely follows
 the description in [Gusfield1997]_ Chapter 6, 94ff.
@@ -19,15 +19,60 @@ http://www.cs.helsinki.fi/u/ukkonen/SuffixT1withFigs.pdf
 from .util import Path, debug
 from .node import Leaf
 
-class Tree (object):
-    """A mixin for building the suffix-tree using Ukkonen's Algorithm."""
+class Builder (object):
+    """Builds the suffix-tree using Ukkonen's Algorithm."""
 
-    def add_string_ukkonen (self, the_id, path):
-        """Add a string to the tree using Ukkonen's algorithm.
+    def __init__ (self, tree):
+        self.tree = tree
 
-        """
+    def suffix_link_dance (self, node, beta):
+        """Go to the parent, follow the suffix link and do the skip/count trick."""
 
-        node = self.root  # pylint: disable=no-member
+        if node.suffix_link is not None:
+            # just follow the suffix link
+            debug ("Followed node's own suffix link to node %s" % (str (node.suffix_link)))
+            return node.suffix_link
+
+        if node.parent and node.parent.suffix_link:
+            l = len (beta)
+            # do the skip / count dance
+            debug ("Starting suffix link dance from node %s" % (str (node)))
+            sv = node.parent.suffix_link
+            debug ("The old node has len %d" % len (node))
+            debug ("The sv node has len %d"  % len (sv))
+            debug ("Skipping down to len %d" % l)
+            # use the skip/count trick to move down the tree.
+            while True:
+                child = sv.children[node.path[len (sv) + 1]]
+                if len (child) >= l:
+                    break
+                sv = child
+            debug ("Ended suffix link dance on node %s" % (str (sv)))
+            return sv
+
+        # fallback to the naive method
+        node, dummy_matched_len, dummy_child = self.tree.find_path (beta)
+        debug ("Found node %s using naive method" % (str (node)))
+        return node
+
+    def fixup_e (self, M):
+        """ Fixup :math:`e` on all leaves. """
+        def f (node):
+            """ helper """
+            if node.is_leaf ():
+                for path in node.indices.values ():
+                    # Turn the variable :math:`e` into a constant because
+                    # the next string added will use :math:`e` again.
+                    # pylint: disable=protected-access
+                    if path._end == Path.inf:
+                        path._end = M
+
+        self.tree.root.pre_order (f)
+
+    def add_string (self, the_id, path):
+        """Add a string to the tree """
+
+        node = self.tree.root
         M = len (path)
         i = 0            # Ukkonen phase
         j = 0            # Ukkonen extension
@@ -112,6 +157,12 @@ class Tree (object):
                 #
                 # -- [Gusfield1997]_, page 100
 
+                ############################################
+                # Find the end of beta in the current tree #
+                ############################################
+
+                # node is positioned at the end of the last extension's beta.
+
                 beta = Path (path.S, j, i) # the string :math:`S[j..i]` aka. as :math:`beta`
                 l = len (beta)
 
@@ -119,56 +170,18 @@ class Tree (object):
                        % (j, l, j, i, str (beta), Sip1))
                 debug ("Now at node %s" % (str (node)))
 
-                ############################################
-                # Find the end of beta in the current tree #
-                ############################################
-
-                # node is positioned at the end of the last extension's beta.
-
-                # pylint: disable=no-member
                 if i != last_phase:
                     # node is already at the right positon
                     last_phase = i
                     debug ("Re-executing extension %d from node %s" % (j, str (node)))
-                elif node.suffix_link is not None:
-                    # just follow the suffix link
-                    node = node.suffix_link
-                    debug ("Followed node's own suffix link to node %s" % (str (node)))
                 else:
-                    if node.parent and node.parent.suffix_link:
-                        # go up, follow the suffix link, go down again
-                        debug ("Starting suffix link dance from node %s" % (str (node)))
-                        oldnode = node
-                        node = node.parent.suffix_link
-                        debug ("The old node has len %d" % len (oldnode))
-                        debug ("The sv node has len %d" % len (node))
-                        debug ("Skipping down to len %d" % l)
-                        # use the skip/count trick to move down the tree.
-                        while True:
-                            child = node.children[oldnode.path[len (node) + 1]]
-                            if len (child) >= l:
-                                break
-                            node = child
-                        debug ("Ended suffix link dance on node %s" % (str (node)))
-                    else:
-                        # fallback to naive method
-                        node, matched_len, child = self.find_path (beta)
-                        debug ("Found node %s using naive method" % (str (node)))
+                    # do the suffix link dance: SEA steps 1 and 2
+                    node = self.suffix_link_dance (node, beta)
 
                 # oldnode = node
-                # node, matched_len, child = self.find_path (beta)
+                # node, matched_len, child = self.tree.find_path (beta)
                 # assert node == oldnode, ("node is %s, should be = %s" %
                 #                          (str (oldnode), str (node)))
-
-                sw = node
-
-                # We matched :math:`S[j..i]`. Can we match :math:`S[j..i]S(i + 1)`?
-                beta_sip1 = Path (path.S, j, i + 1)
-                node, matched_len, child = node.find_path (beta_sip1)
-
-                assert matched_len >= l, (
-                    r"Fatal: \beta not found in tree. l = %d, matched_len = %d"
-                    % (l, matched_len))
 
                 ##############################
                 # Perform a suffix extension #
@@ -182,23 +195,17 @@ class Tree (object):
                 #
                 # -- [Gusfield1997]_, page 96
 
-                debug ("Performing suffix extension, l = %d, matched len = %d" % (l, matched_len))
+                sw = node # target for suffix link
 
-                # **Rule 3** Some path from the end of string :math:`\beta`
-                # starts with character :math:`S(i + 1)`.  In this case the
-                # string :math:`\beta S(i + 1)`, is already in the current tree,
-                # so (remembering that in an implicit suffix tree the end of a
-                # suffix need not be explicitly marked) we do nothing.
+                # We matched :math:`\beta`. Try matching :math:`\beta S(i + 1)`.
+                node, matched_len, child = node.find_path (Path (path.S, j, i + 1))
 
-                if matched_len > l: # we matched :math:`\beta S(i + 1)`
-                    # In a generalized suffix tree rule 3 must fix up leaf
-                    # nodes, because more than one string can end at a leaf.
-                    if node.is_leaf ():
-                        node.indices[the_id] = Path (path.S, j, Path.inf)
-                    debug ("*** Applied Rule 3 -- did nothing while at node %s" % str (node))
-                    # Trick 2: End any phase the first time that extension rule
-                    # 3 applies.
-                    break # SPA step 3: begin next phase, same extension
+                assert matched_len >= l, (
+                    r"Fatal: \beta not found in tree. l = %d, matched_len = %d" %
+                    (l, matched_len))
+
+                debug ("Performing suffix extension, l = %d, matched len = %d" %
+                       (l, matched_len))
 
                 # **Rule 1** In the current tree, path :math:`\beta` ends at a
                 # leaf.  That is, the path from the root labeled :math:`\beta`
@@ -209,6 +216,24 @@ class Tree (object):
                 if node.is_leaf ():
                     node.indices[the_id] = Path (path.S, j, Path.inf)
                     debug ("*** Applied Rule 1 -- extended leaf %s" % str (node))
+
+                # **Rule 3** Some path from the end of string :math:`\beta`
+                # starts with character :math:`S(i + 1)`.  In this case the
+                # string :math:`\beta S(i + 1)`, is already in the current tree,
+                # so (remembering that in an implicit suffix tree the end of a
+                # suffix need not be explicitly marked) we do nothing.
+
+                # N.B.  In a *generalized* suffix tree rule 3 must fix up leaf
+                # nodes, because more than one string can end at a leaf.  We
+                # test for rule 3 after rule 1, so rule 1 fixed up the node for
+                # us.
+
+                if matched_len > l:
+                    # We did match :math:`\beta S(i + 1)`!
+                    debug ("*** Applied Rule 3 -- did nothing while at node %s" % str (node))
+                    # Trick 2: End any phase the first time that extension rule
+                    # 3 applies.
+                    break # SPA step 3: begin next phase, same extension
 
                 # **Rule 2** No path from the end of string :math:`\beta` starts
                 # with character :math:`S(i + 1)`, but at least one labeled path
@@ -255,14 +280,4 @@ class Tree (object):
 
             i += 1
 
-        def f (node):
-            """ Fixup :math:`e` on all leaves. """
-            if node.is_leaf ():
-                for path in node.indices.values ():
-                    # Turn the variable :math:`e` into a constant because
-                    # the next string added will use :math:`e` again.
-                    # pylint: disable=protected-access
-                    if path._end == Path.inf:
-                        path._end = M
-
-        self.root.pre_order (f) # pylint: disable=no-member
+        self.fixup_e (M)

@@ -3,7 +3,7 @@
 
 """A node class for a Generalized Suffix Tree"""
 
-from .util import Path, debug
+from .util import Path
 from . import lca_mixin
 
 class Node (lca_mixin.Node):

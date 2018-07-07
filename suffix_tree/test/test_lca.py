@@ -1,5 +1,7 @@
 """ Test the Least Common Ancestor (LCA) implementation. """
 
+# pylint: disable=missing-docstring
+
 import unittest
 
 from suffix_tree import Tree

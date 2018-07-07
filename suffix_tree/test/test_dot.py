@@ -1,5 +1,7 @@
 """ Test the to_dot ()  method. """
 
+# pylint: disable=missing-docstring
+
 import unittest
 
 from suffix_tree import Tree

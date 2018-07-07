@@ -10,16 +10,16 @@ See: README.rst.
 import collections
 import itertools
 
-from . import ukkonen_mixin
+from . import ukkonen
 from . import lca_mixin
 
-from .node import Internal, Leaf
+from .node import Internal
 from . import util
-from .util import Path, UniqueEndChar, debug
+from .util import Path, UniqueEndChar
 
 _END = UniqueEndChar ()
 
-class Tree (ukkonen_mixin.Tree, lca_mixin.Tree):
+class Tree (lca_mixin.Tree):
     """A suffix tree.
 
     The key feature of the suffix tree is that for any leaf :math:`i`, the
@@ -43,14 +43,23 @@ class Tree (ukkonen_mixin.Tree, lca_mixin.Tree):
     >>> tree.find_all ('abc')
     []
 
+    >>> from . import naive
+    >>> tree = Tree ({ 'A' : 'xabxac' }, naive.Builder)
+    >>> tree.find ('abx')
+    True
+    >>> tree.find ('abc')
+    False
+
     """
 
-    def __init__ (self, d):
+    def __init__ (self, d, builder = ukkonen.Builder):
         """ Initialize and build the tree from dict of iterables.
 
         """
 
         super ().__init__ (d)
+
+        self.builder = builder (self)
 
         self.root = Internal (None, Path (tuple (), 0, 0))
 
@@ -60,48 +69,12 @@ class Tree (ukkonen_mixin.Tree, lca_mixin.Tree):
             path = Path.from_iterable (itertools.chain (S, [_END]))
 
             try:
-                #self.add_string_naive (id_, path)
-                self.add_string_ukkonen (id_, path)
+                self.builder.add_string (id_, path)
             except:
                 if util.DEBUG:
                     with open ('/tmp/core.dot', 'w') as tmp:
                         tmp.write (self.to_dot ())
                 raise
-
-    def add_string_naive (self, the_id, the_path):
-        r"""Add a string to the tree.
-
-        A naive implementation using :math:`\mathcal{O}(n^2)` time with no
-        optimizations.  See: [Gusfield1997]_ §5.4, 93
-        """
-
-        for i in range (0, the_path.end):
-            path = Path (the_path.S, i, the_path.end)
-
-            # find longest path from root
-            node, matched_len, child = self.find_path (path)
-
-            # are we in the middle of an edge?
-            if child is not None:
-                node = node.split_edge (matched_len, child)
-
-            assert matched_len == len (node), "Add String %d/%d" % (
-                matched_len, len (node))
-
-            if node.is_leaf ():
-                assert matched_len == len (path)
-                # In a generalized tree we may find a leaf is already there.  This
-                # is not possible in a non-generalized tree because of the unique
-                # ending character.
-                node.add (the_id, Path (path.S, path.start, path.end))
-                return node
-            assert matched_len < len (path)
-            new_leaf = Leaf (node, the_id, Path (path.S, path.start, path.end))
-            assert path.S[path.start + matched_len] not in node.children # do not overwrite
-            node.children[path.S[path.start + matched_len]] = new_leaf
-            debug ('Adding %s to node %s as [%s]' % (str (new_leaf), str (node),
-                                                     path.S[path.start + matched_len]))
-        return new_leaf
 
     def find_path (self, path):
         """Find a path in the tree.

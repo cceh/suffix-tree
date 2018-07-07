@@ -1,5 +1,7 @@
 """ Test the find ()  method. """
 
+# pylint: disable=missing-docstring
+
 import unittest
 
 from suffix_tree import Tree
