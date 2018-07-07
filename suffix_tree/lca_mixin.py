@@ -24,15 +24,8 @@ ancestor* of :math:`v` refers to an ancestor that is not :math:`v`.
 
 import collections
 import ctypes
-import sys
 
-DEBUG = 0
-
-def debug (*a, **kw):
-    """ Print a debug message to stderr. """
-
-    if DEBUG:
-        print (*a, file=sys.stderr, **kw)
+from .util import debug, DEBUG
 
 def uint (x):
     """ Convert a number into unsigned 32-bit representation. """

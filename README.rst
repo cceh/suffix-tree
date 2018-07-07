@@ -2,6 +2,9 @@
  A Generalized Suffix Tree
 ===========================
 
+A Generalized Suffix Tree for any Python iterable, with Lowest Common Ancestor
+retrieval.
+
 .. code-block:: shell
 
    pip install suffix-tree
@@ -11,7 +14,8 @@ This implementation:
 - works with any Python iterable, not just strings, if the items are hashable,
 - is a generalized suffix tree for sets of iterables,
 - uses Ukkonen's algorithm to build the tree in linear time,
-- can convert the tree to .dot if the items convert to strings,
+- does constant-time Lowest Common Ancestor retrieval,
+- outputs the tree as GraphViz .dot file.
 
 This implementation follows [Gusfield1997]_ Chapter 6, with some differences:
 

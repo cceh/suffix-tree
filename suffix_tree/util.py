@@ -15,7 +15,7 @@ class UniqueEndChar (object):
         return False
 
 
-DEBUG = 1
+DEBUG = 0
 
 def debug (*a, **kw):
     """ Print a debug message to stderr. """

@@ -14,8 +14,7 @@ from . import ukkonen
 from . import lca_mixin
 
 from .node import Internal
-from . import util
-from .util import Path, UniqueEndChar
+from .util import Path, UniqueEndChar, DEBUG
 
 _END = UniqueEndChar ()
 
@@ -71,7 +70,7 @@ class Tree (lca_mixin.Tree):
             try:
                 self.builder.add_string (id_, path)
             except:
-                if util.DEBUG:
+                if DEBUG:
                     with open ('/tmp/core.dot', 'w') as tmp:
                         tmp.write (self.to_dot ())
                 raise

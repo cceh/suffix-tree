@@ -8,13 +8,13 @@ lint:
 test:
 	nosetests --with-doctest -v
 
-dist:
+dist: test
 	python3 setup.py sdist bdist_wheel
 
-upload:
+upload: dist
 	twine upload dist/*
 
-install:
+install: dist
 	sudo pip3 install --upgrade dist/*.whl
 
 uninstall:
