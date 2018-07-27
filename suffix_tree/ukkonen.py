@@ -3,281 +3,239 @@
 
 r"""Ukkonen's Algorithm
 
-Ukkonen's algorithm to build a suffix tree in linear time.
+Ukkonen's algorithm to build a suffix tree in linear time adapted to
+generalized suffix trees.
 
-Credits: This implementation of Ukkonen's algorithm in Python closely follows
-the description in [Gusfield1997]_ Chapter 6, 94ff.
+In a generalized suffix tree the start and end indices k and p are not enough to
+uniquely identify a substring, we also need to keep track which string k and p
+are referring to.  So instead of using the three parameters :math:`s, (k, p)` we
+use the two parameters s and path, with path being a structure containing
+string, k, and p.
 
-See also: the implementation in C by Dan Gusfield et al.:
-http://web.cs.ucdavis.edu/%7Egusfield/strmat.html
+We also have two problems with indices:  The first is that Python indices start
+with 0 while Ukkonen's start with 1.  The second is that Python indices point to
+one beyond the end while Ukkonen's point to the end.  In conclusion: Ukkonen's
+1..2 becomes Python's [0:2].
 
-See also: Ukkonen's original paper:
-http://www.cs.helsinki.fi/u/ukkonen/SuffixT1withFigs.pdf
+
+.. [Ukkonen1995] Ukkonen, Esko.  On-line construction of suffix trees.  1995.
+                 Algorithmica 14:249-60.
+                 http://www.cs.helsinki.fi/u/ukkonen/SuffixT1withFigs.pdf
 
 """
 
-from .util import Path, debug
-from .node import Leaf
+from .util import Path, debug, debug_dot
+from .node import Internal, Leaf
+from . import builder
 
-class Builder (object):
+class Builder (builder.Builder):
     """Builds the suffix-tree using Ukkonen's Algorithm."""
 
-    def __init__ (self, tree):
-        self.tree = tree
+    def __init__ (self, tree, id_, path):
+        super ().__init__ (tree, id_, path)
+        self.aux  = None
 
-    def suffix_link_dance (self, node, beta):
-        """Go to the parent, follow the suffix link and do the skip/count trick."""
 
-        if node.suffix_link is not None:
-            # just follow the suffix link
-            debug ("Followed node's own suffix link to node %s" % (str (node.suffix_link)))
-            return node.suffix_link
+    def debug_dot (self, k, p):
+        """ Write a debug graph. """
+        debug_dot (self.tree, '/tmp/suffix_tree_ukkonen_%s_%d_%d' % (self.id, k, p))
 
-        if node.parent and node.parent.suffix_link:
-            l = len (beta)
-            # do the skip / count dance
-            debug ("Starting suffix link dance from node %s" % (str (node)))
-            sv = node.parent.suffix_link
-            debug ("The old node has len %d" % len (node))
-            debug ("The sv node has len %d"  % len (sv))
-            debug ("Skipping down to len %d" % l)
-            # use the skip/count trick to move down the tree.
-            while True:
-                child = sv.children[node.path[len (sv) + 1]]
-                if len (child) >= l:
-                    break
-                sv = child
-            debug ("Ended suffix link dance on node %s" % (str (sv)))
-            return sv
 
-        # fallback to the naive method
-        node, dummy_matched_len, dummy_child = self.tree.find_path (beta)
-        debug ("Found node %s using naive method" % (str (node)))
-        return node
+    def transition (self, s, k):
+        """let :math:`g'(s,(k',p')) = s'` be the :math:`t_k`-transition from :math:`s`.
 
-    def fixup_e (self, M):
-        """ Fixup :math:`e` on all leaves. """
-        def f (node):
-            """ helper """
-            if node.is_leaf ():
-                for path in node.indices.values ():
-                    # Turn the variable :math:`e` into a constant because
-                    # the next string added will use :math:`e` again.
-                    # pylint: disable=protected-access
-                    if path._end == Path.inf:
-                        path._end = M
+        return :math:`s', path'`
 
-        self.tree.root.pre_order (f)
+        """
+        assert s is not None
+        assert s.is_internal ()
+        assert k >= 0
 
-    def add_string (self, the_id, path):
-        """Add a string to the tree """
+        if s is self.aux:
+            # simulates line 2. from *Algorithm 2*.
+            return self.root, Path (self.path.S, 0, 1)
 
-        node = self.tree.root
-        M = len (path)
-        i = 0            # Ukkonen phase
-        j = 0            # Ukkonen extension
-        last_phase = -1  # for detection of repeated execution of extension
+        s_prime = s.children[self.path[k]]
+        path    = s_prime.path
 
-        while i <= M - 1:
+        return s_prime, Path (path.S, path.start + len (s), path.end)
 
-            # Single phase algorithm: SPA
-            #
-            # Begin
-            #
-            # 1. Increment index :math:`e` to :math:`i + 1`. (By Trick 3 this
-            #    correctly implements all implicit extensions 1 through
-            #    :math:`j_i`.)
-            #
-            # 2. Explicitly compute successive extensions (using algorithm SEA)
-            #    starting at :math:`j_i + 1` until reaching the first extension
-            #    :math:`j^*` where rule 3 applies or until all extensions are done
-            #    in this phase.  (By Trick 2, this correctly implements all the
-            #    additional implicit extensions :math:`j^* + 1` through :math:`i +
-            #    1`.)
-            #
-            # 3. Set :math:`j_{i + 1}` to :math:`j^* - 1`, to prepare for the next
-            #    phase.
-            #
-            # End
-            #
-            # [...] phase :math:`i + 1` ends knowing where string :math:`S[j^*..i
-            # + 1]` ends, so the repeated extension of :math:`j^*` in phase
-            # :math:`i + 2` can execute the suffix extension rule for :math:`j^*`
-            # without any up-walking, suffix traversals, or node skipping.
-            #
-            # -- [Gusfield1997]_, page 106
 
-            Path.e = i + 1 # adjust the 'open ended' marker for leaf nodes
-            Sip1 = path[i] # the character :math:`S(i + 1)`
+    def test_and_split (self, s, path, t):
+        """Tests whether or not a state with canonical reference pair :math:`(s, (k,
+        p))` is the end point, that is, a state that in :math:`STrie(T^{i−1})`
+        would have a :math:`t_i`–transition.  Symbol :math:`t_i` is given as
+        input parameter :math:`t`.  The test result is returned as the first
+        output parameter.  If :math:`(s, (k, p))` is not the end point, then
+        state :math:`(s, (k, p))` is made explicit (if not already so) by
+        splitting a transition.  The explicit state is returned as the second
+        output parameter.  [Ukkonen1995]_
 
-            w = dict ()    # Queue for nodes :math:`w` eventually created by
-                           # Rule2, see: SEA 4
-            sw = None      # The node :math:`s(w)`
+        Return True, if s is the end point.
 
-            debug ("\n\n=== Phase i=%d === extending [:%d] (%s) with %s" %
-                   (i, i, str (path[:i]), Sip1))
+        """
 
-            while j <= i:
+        assert s is not None
+        assert s.is_internal ()
 
-                # Single extension algorithm: SEA
-                #
-                # Putting these pieces together, when implemented using suffix
-                # links, extension :math:`j \gte 2` of phase :math:`i + 1` is:
-                #
-                # Begin
-                #
-                # 1. Find the first node :math:`v` at or above the end of
-                #    :math:`S[j - 1..i]` that either has a suffix link from it
-                #    or is the root.  This requires walking up at most one edge
-                #    from the end of :math:`S[j - 1..i]` in the current tree.
-                #    Let :math:`\gamma` (possibly empty) denote the string
-                #    between :math:`v` end the end of :math:`S[j - 1..i]`.
-                #
-                # 2. If :math:`v` is not the root traverse the suffix link from
-                #    :math:`v` to node :math:`s(v)` and then walk down from
-                #    :math:`s(v)` following the path for string :math:`\gamma`.
-                #    If :math:`v` is the root, then follow the path for
-                #    :math:`S[j..i]` from the root (as in the naive algorithm).
-                #
-                # 3. Using the extension rules, ensure that the string
-                #    :math:`S[j..i]S(i + 1)` is in the tree.
-                #
-                # 4. If a new internal node :math:`w` was created in extension
-                #    :math:`j - 1` (by extension rule 2), then by Lemma 6.1.1,
-                #    string :math:`\alpha` must end at node :math:`s(w)`, the
-                #    end node for the suffix link from :math:`w`.  Create the
-                #    suffix link :math:`(w, s(w))` from :math:`w` to
-                #    :math:`s(w)`.
-                #
-                # End.
-                #
-                # Assuming the algorithm keeps a pointer to the current full
-                # string :math:`S[1..i]`, the first extension of phase :math:`i
-                # + 1` need not do any up or down walking.
-                #
-                # -- [Gusfield1997]_, page 100
+        debug ('s="%s" %s t="%s"', s, path.ukko_str (), t)
+        if path:
+            s_prime, path_prime = self.transition (s, path.k)
+            debug ("s'=\"%s\" %s", s_prime, path_prime.ukko_str ())
 
-                ############################################
-                # Find the end of beta in the current tree #
-                ############################################
+            # debug ('path_prime[len (path)] = "%s"', path_prime[len (path)])
 
-                # node is positioned at the end of the last extension's beta.
+            if t == path_prime[len (path)]:
+                debug ('not split 1 return True, node "%s"', s)
+                return True, s
+            split_depth = len (s) + len (path)
+            r = s.split_edge (split_depth, s_prime)
+            debug ('SPLIT! return False, new node "%s"', r)
+            return False, r
+        else:
+            if s is self.aux:
+                debug ('not split 2 return True, node "%s"', s)
+                return True, s
+            if t in s.children:
+                debug ('not split 3 return True, node "%s"', s)
+                return True, s
+            debug ('not split 4 return False, node "%s"', s)
+            return False, s
 
-                beta = Path (path.S, j, i) # the string :math:`S[j..i]` aka. as :math:`beta`
-                l = len (beta)
 
-                debug ("\n--- Extension j=%d l=%d --- [%d:%d] extending (%s) with %s"
-                       % (j, l, j, i, str (beta), Sip1))
-                debug ("Now at node %s" % (str (node)))
+    def canonize (self, s, path):
+        r"""Given a reference pair :math:`(s, (k, p))` for some state :math:`r`, it finds
+        and returns state :math:`s'` and left link :math:`k'` such that
+        :math:`(s', (k', p))` is the canonical reference pair for :math:`r`.
+        State :math:`s'` is the closest explicit ancestor of :math:`r` (or
+        :math:`r` itself if :math:`r` is explicit).  Therefore the string that
+        leads from :math:`s'` to :math:`r` must be a suffix of the string
+        :math:`t_k\dots t_p` that leads from :math:`s` to :math:`r`.  Hence the
+        right link :math:`p` does not change but the left link :math:`k` can
+        become :math:`k', k' \gte k`.  [Ukkonen1995]_
 
-                if i != last_phase:
-                    # node is already at the right positon
-                    last_phase = i
-                    debug ("Re-executing extension %d from node %s" % (j, str (node)))
-                else:
-                    # do the suffix link dance: SEA steps 1 and 2
-                    node = self.suffix_link_dance (node, beta)
+        """
 
-                # oldnode = node
-                # node, matched_len, child = self.tree.find_path (beta)
-                # assert node == oldnode, ("node is %s, should be = %s" %
-                #                          (str (oldnode), str (node)))
+        assert s is not None
+        debug ('input  s="%s" %s', s, path.ukko_str ())
 
-                ##############################
-                # Perform a suffix extension #
-                ##############################
+        if not path:
+            debug ('return unchanged')
+            return s, path
 
-                # Let :math:`S[j..i] = \beta` be a suffix of :math:`S[1..i]`.
-                # In extension :math:`j`, when the algorithm finds the end of
-                # :math:`\beta` in the current tree, it extends :math:`\beta` to
-                # be sure the suffix :math:`\beta S(i + 1)` is in the tree.  It
-                # does this according to one of the following three rules:
-                #
-                # -- [Gusfield1997]_, page 96
+        # follow transitions starting from s until we get too far down the tree,
+        # then return the transition before the one that went too far
+        s_prime, path_prime = self.transition (s, path.k)
 
-                sw = node # target for suffix link
+        while len (path_prime) <= len (path):
+            # while the found transition ends higher on the tree, see if the
+            # next transition would lead us too far down the tree
+            path.start += len (path_prime)
+            s = s_prime
 
-                # We matched :math:`\beta`. Try matching :math:`\beta S(i + 1)`.
-                node, matched_len, child = node.find_path (Path (path.S, j, i + 1))
+            if path:
+                s_prime, path_prime = self.transition (s, path.k)
 
-                assert matched_len >= l, (
-                    r"Fatal: \beta not found in tree. l = %d, matched_len = %d" %
-                    (l, matched_len))
+        debug ('return s="%s" %s', s, path.ukko_str ())
+        return s, path
 
-                debug ("Performing suffix extension, l = %d, matched len = %d" %
-                       (l, matched_len))
 
-                # **Rule 1** In the current tree, path :math:`\beta` ends at a
-                # leaf.  That is, the path from the root labeled :math:`\beta`
-                # extends to the end of some leaf edge.  To update the tree,
-                # character :math:`S(i + 1)` is added to the end of the label of
-                # that leaf edge.
+    def update (self, s, path):
+        r"""[...] transforms :math:`STree(T^{i−1})` into :math:`STree(T^i)` by inserting
+        the :math:`t_i`–transitions in the second group.  The procedure uses
+        procedure canonize mentioned above, and procedure test–and–split that
+        tests whether or not a given reference pair refers to the end point.  If
+        it does not then the procedure creates and returns an explicit state for
+        the reference pair provided that the pair does not already represent an
+        explicit state.  Procedure update returns a reference pair for the end
+        point :math:`s_{j'}` (actually only the state and the left pointer of
+        the pair, as the second pointer remains :math:`i − 1` for all states on
+        the boundary path). [Ukkonen1995]_
 
-                if node.is_leaf ():
-                    node.indices[the_id] = Path (path.S, j, Path.inf)
-                    debug ("*** Applied Rule 1 -- extended leaf %s" % str (node))
+        :math;`s,(k,i - 1)` is the canonical reference pair for the active
+        point.
 
-                # **Rule 3** Some path from the end of string :math:`\beta`
-                # starts with character :math:`S(i + 1)`.  In this case the
-                # string :math:`\beta S(i + 1)`, is already in the current tree,
-                # so (remembering that in an implicit suffix tree the end of a
-                # suffix need not be explicitly marked) we do nothing.
+        Return a reference pair for the endpoint :math:`s_{j\prime}`.
 
-                # N.B.  In a *generalized* suffix tree rule 3 must fix up leaf
-                # nodes, because more than one string can end at a leaf.  We
-                # test for rule 3 after rule 1, so rule 1 fixed up the node for
-                # us.
+        """
 
-                if matched_len > l:
-                    # We did match :math:`\beta S(i + 1)`!
-                    debug ("*** Applied Rule 3 -- did nothing while at node %s" % str (node))
-                    # Trick 2: End any phase the first time that extension rule
-                    # 3 applies.
-                    break # SPA step 3: begin next phase, same extension
+        assert s is not None
 
-                # **Rule 2** No path from the end of string :math:`\beta` starts
-                # with character :math:`S(i + 1)`, but at least one labeled path
-                # continues from the end of :math:`\beta`.
-                #
-                # In this case a new leaf edge starting from the end of
-                # :math:`\beta` must be created and labeled with character
-                # :math:`S(i + 1)`.  A new node will also have to be created
-                # there if :math:`\beta` ends inside an edge.  The leaf at the
-                # end of the new leaf edge is given the number :math:`j`.
+        t_i = self.path[path.i]
+        debug ('s="%s" %s with "%s"', s, path.ukko_str (), t_i)
 
-                elif child is None and Sip1 not in node.children: # also catches root
-                    leaf = Leaf (node, the_id, Path (path.S, j, Path.inf))
-                    node.children[Sip1] = leaf
-                    debug ("*** Applied Rule 2.1 -- added new leaf %s to node %s"
-                           % (str (leaf), str (node)))
+        act_path = Path (path.S, path.start, path.end - 1)
 
-                elif child is not None:
-                    w[j] = sw = node = node.split_edge (matched_len, child)
-                    debug ("Setting w to the new internal node %s" % str (node))
-                    leaf = Leaf (node, the_id, Path (path.S, j, Path.inf))
-                    node.children[Sip1] = leaf
-                    debug ("*** Applied Rule 2.2 -- added new leaf %s and split node %s"
-                           % (str (leaf), str (node)))
-                else:
-                    assert True, "can't happen"
+        oldr = self.root
+        is_end_point, r = self.test_and_split (s, act_path, t_i)
 
-                #######################
-                # Create suffix links #
-                #######################
+        while not is_end_point:
+            start = path.p - len (r)
 
-                if w.get (j - 1) is not None:
-                    debug ("Giving w %s a suffix_link to %s" % (str (w[j - 1]), str (sw)))
-                    w[j - 1].suffix_link = sw
-                    del w[j - 1]
+            r_prime = Leaf (r, self.id, Path (self.path.S, start, Path.inf))
+            debug ('adding leaf "%s"', str (r_prime))
+            r.children[t_i] = r_prime
 
-                ####################################
-                # Continue with the next extension #
-                ####################################
+            if oldr is not self.root:
+                oldr.suffix_link = r
+            oldr = r
 
-                assert l == len (node), "l = %s, len (node) = %d" % (l, len (node))
+            assert s.is_internal (), 'Node "%s" is a leaf' % s
+            assert s.suffix_link is not None, 'Node "%s" has no suffix link' % s
+            debug ('follow suffix_link to node "%s"', s.suffix_link)
 
-                j += 1
+            self.debug_dot (act_path.k, act_path.p)
 
-            i += 1
+            s, act_path = self.canonize (s.suffix_link, act_path)
+            is_end_point, r = self.test_and_split (s, act_path, t_i)
 
-        self.fixup_e (M)
+        if oldr is not self.root:
+            oldr.suffix_link = s
+
+        self.debug_dot (act_path.k, act_path.p)
+
+        path.start = act_path.start
+
+        debug ("return node %s k=%d", s, path.k)
+        return s, path
+
+
+    def build (self):
+        """Add a string to the tree. """
+
+        # Rearranged a bit from *Algorithm 2* in Ukkonen's paper to include the
+        # END symbol in the tree.
+
+        debug ('string "%s"', self.path)
+
+        # create the auxiliary node only needed for Ukkonen's algorithm
+        aux = Internal (None, Path (tuple (), 0, 0), name = 'aux')
+        self.root.parent      = aux
+        self.root.suffix_link = aux
+        self.aux              = aux
+
+        s    = self.root
+        path = Path (self.path, 0, 1)
+        len_ = len (self.path)
+
+        while True:
+            debug ('enter main loop')
+
+            Path.e  = path.end
+            s, path = self.update   (s, path)
+            s, path = self.canonize (s, path)
+            debug ('active point is: s="%s" %s', s, path.ukko_str ())
+
+            if path.end == len_:
+                break
+
+            path.end += 1
+
+            debug ('exit main loop\n')
+
+        self.fixup_e (path.end)
+
+        # get rid of the auxiliary node only needed for Ukkonen's algorithm
+        self.root.parent      = None
+        self.root.suffix_link = None
+        self.aux              = None

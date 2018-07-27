@@ -1,6 +1,6 @@
 import setuptools
 
-VERSION="0.0.4"
+VERSION="0.0.5"
 
 with open ("README.rst", "r") as fh:
     long_description = fh.read ()
@@ -11,7 +11,7 @@ setuptools.setup (
     author="Marcello Perathoner",
     author_email="marcello@perathoner.de",
     description="A Generalized Suffix Tree for any iterable, with Lowest Common Ancestor retrieval",
-    keywords=['suffix', 'tree', 'suffixtree', 'ukkonen', 'lca'],
+    keywords=['suffix', 'tree', 'suffixtree', 'ukkonen', 'gusfield', 'lca'],
     long_description=long_description,
     long_description_content_type="text/x-rst",
     url="https://github.com/cceh/suffix-tree",

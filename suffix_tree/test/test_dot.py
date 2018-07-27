@@ -11,7 +11,23 @@ class TestFind (unittest.TestCase):
     def test_to_dot (self):
         # tree = Tree ({ 'A' : 'aaaaa' })
         # tree = Tree ({ 'A' : 'ababcabcdabdeaef' })
-        tree = Tree ({ 'A' : 'xabxac', 'B' : 'awyawxawxz' })
+        # tree = Tree ({ 'A' : 'xabxac' })
+        # tree = Tree ({ 'A' : 'xabxac', 'B' : 'awyawxawxz' })
+        # tree = Tree ({ 'A' : 'xabxac', 'B' : 'awyawxacxz' })
+        # tree = Tree ({
+        #     'A' : 'a',
+        #     'B' : 'ab',
+        #     'C' : 'abc',
+        #     'D' : 'abcd',
+        #     'E' : 'abcde',
+        # })
+        tree = Tree ({
+            'A' : 'abcde',
+            'B' : 'bcde',
+            'C' : 'cde',
+            'D' : 'de',
+            'E' : 'e',
+        })
         dot = tree.to_dot ()
         with open ('/tmp/suffix_tree.dot', 'w') as tmp:
             tmp.write (dot)

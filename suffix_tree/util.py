@@ -4,24 +4,64 @@
 """ Utilities for suffix tree. """
 
 import functools
+import logging
+import subprocess
 import sys
+
+DEBUG     = 0
+DEBUG_DOT = 0
 
 @functools.total_ordering
 class UniqueEndChar (object):
     """ A singleton object to signal end of sequence. """
+
+    def __init__ (self, id_):
+        self.id = id_
+
     def __str__ (self):
         return '$'
+
     def __lt__ (self, other):
         return False
 
+min_debug_depth = -1
+""" How deep we were in the stack when emitting the first debug message. """
 
-DEBUG = 0
-
-def debug (*a, **kw):
+def debug (msg, *args, **kwargs):
     """ Print a debug message to stderr. """
 
-    if DEBUG:
-        print (*a, file=sys.stderr, **kw)
+    if __debug__ and DEBUG:
+        global min_debug_depth
+
+        frame = sys._getframe (1)
+        function_name = frame.f_code.co_name
+        depth = 0
+        while frame.f_back:
+            frame = frame.f_back
+            depth += 1
+        if min_debug_depth == -1:
+            min_debug_depth = depth
+        depth -= min_debug_depth
+        msg = ("%s%s: " % ('  ' * depth, function_name)) + msg
+        logging.debug (msg, *args, **kwargs)
+
+
+def debug_dot (tree, fn):
+    """Write a dot and png file of the tree. """
+
+    if __debug__ and DEBUG_DOT:
+        dot = tree.to_dot ()
+        debug ("writing dot: %s", fn)
+        with open ('%s.dot' % fn, 'w') as tmp:
+            tmp.write (dot)
+        subprocess.check_output ("dot -Tpng %s.dot > %s.png" % (fn, fn), shell=True)
+
+
+def is_debug ():
+    """ Return True if debugging is on. """
+
+    return __debug__ and DEBUG
+
 
 class Pos (object):
     """ Represents a position in a string. """
@@ -70,6 +110,24 @@ class Path (object):
     def end (self, value):
         self._end = value
 
+    @property
+    def k (self):
+        """The start of the path in Ukkonen's preferred notation"""
+
+        return self.start
+
+    @property
+    def p (self):
+        """The end of the path in Ukkonen's preferred notation"""
+
+        return self.end - 1
+
+    @property
+    def i (self):
+        """Another end of the path in Ukkonen's preferred notation"""
+
+        return self.end - 1
+
     @classmethod
     def from_iterable (cls, iterable):
         """ Build a path froman iterable.
@@ -81,7 +139,7 @@ class Path (object):
         return Path (iterable, 0, len (iterable))
 
     def __str__ (self):
-        return ' '.join ([str (o) for o in self.S[self.start:self.end]])
+        return ' '.join (map (str, self.S[self.start:self.end]))
 
     def __len__ (self):
         return self.end - self.start
@@ -115,6 +173,10 @@ class Path (object):
             if self.S[offset1 + i] != path.S[offset2 + i]:
                 break
             i += 1
-        debug ("Comparing %s == %s at offsets %d => common len: %d" %
-               (str (self), str (path), offset, i))
+        debug ("Comparing %s == %s at offsets %d => common len: %d",
+               str (self), str (path), offset, i)
         return i
+
+    def ukko_str (self):
+        """ Debug path in Ukkonen's notation """
+        return 'k=%d p=%d k..p="%s"' % (self.k, self.p, self)

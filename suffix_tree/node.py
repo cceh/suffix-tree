@@ -11,8 +11,8 @@ class Node (lca_mixin.Node):
 
     """
 
-    def __init__ (self, parent, path):
-        super ().__init__ (parent, path)
+    def __init__ (self, parent, path, **kw):
+        super ().__init__ (parent, path, **kw)
 
         self.parent = parent
         """ The parent if this node.  Used by Ukkonen and LCA. """
@@ -24,6 +24,9 @@ class Node (lca_mixin.Node):
         """One arbitrarily selected path that traverses this node. (Usually the first
         one in tree construction order.)
         """
+
+        self.name = kw.get ('name', '')
+        """ A name can be given to the node for easier debugging. """
 
         self.C = -1
         r"""For any internal node :math:`v` of :math:`\mathcal{T}`, define :math:`C(v)` to be the
@@ -139,7 +142,7 @@ class Node (lca_mixin.Node):
         def f (node):
             """ Helper """
             if node.is_leaf ():
-                paths.extend (node.indices.items ())
+                paths.append ((node.strid, node.path))
         self.pre_order (f)
         return paths
 
@@ -162,21 +165,14 @@ class Leaf (lca_mixin.Leaf, Node):
 
     """
 
-    def __init__ (self, parent, id_, path):
-        super ().__init__ (parent, path) # Node
-        self.indices = {}
-        self.add (id_, path)
+    def __init__ (self, parent, strid, path, **kw):
+        super ().__init__ (parent, path, **kw) # Node
+        self.strid = strid
 
     def __str__ (self):
         # start + 1 makes it Gusfield-compatible for easier comparing with examples in the book
-        return ("^%s%s\n" % (str (self.path), super ().__str__ ()) +
-                '\n'.join (['%s:%d' % (id_, path.start + 1) for id_,
-                            path in self.indices.items ()]))
-
-    def add (self, id_, path):
-        """ Add a text id and suffix to the leaf node. """
-        assert isinstance (path, Path)
-        self.indices[id_] = path
+        return ("%s%s" % (self.name or str (self.path), super ().__str__ ())
+                + ' %s:%d' % (self.strid, self.path.start + 1))
 
     def is_leaf (self):
         return True
@@ -190,19 +186,18 @@ class Leaf (lca_mixin.Leaf, Node):
         return
 
     def compute_C (self):
-        id_set = set (self.indices.keys ())
-        self.C = len (id_set)
-        return id_set
+        self.C = 1
+        return set (self.strid)
 
     def compute_left_diverse (self):
         """ See description in Node """
         left_characters = set ()
-        for path in self.indices.values ():
-            if path.start > 0:
-                left_characters.add (path.S[path.start - 1])
-            else:
-                self.is_left_diverse = True
-                return None
+        if self.path.start > 0:
+            left_characters.add (self.path.S[self.path.start - 1])
+        else:
+            self.is_left_diverse = True
+            return None
+
         self.is_left_diverse = len (left_characters) > 1
         return None if self.is_left_diverse else left_characters
 
@@ -221,13 +216,13 @@ class Internal (lca_mixin.Internal, Node):
     Internal nodes have at least 2 children.
     """
 
-    def __init__ (self, parent, path):
-        super ().__init__ (parent, path)
+    def __init__ (self, parent, path, **kw):
+        super ().__init__ (parent, path, **kw)
         self.children = {}
         """ A dictionary of item => node """
 
     def __str__ (self):
-        return "^%s%s" % (str (self.path), super ().__str__ ())
+        return "%s%s" % (self.name or (str (self.path)), super ().__str__ ())
 
     def is_internal (self):
         return True
@@ -244,30 +239,31 @@ class Internal (lca_mixin.Internal, Node):
         f (self)
         return
 
-    def split_edge (self, new_len, node2):
+    def split_edge (self, new_len, child):
         """Split edge
 
-        Split self --> 2 into self --> new --> 2 and return the new node.
+        Split self --> child into self --> new_node --> child and return the new node.
         new_len is the string-depth of the new node.
 
         """
         p1 = self.path
-        p2 = node2.path
+        p2 = child.path
         assert len (p1) < new_len < len (p2), "split length %d->%d->%d" % (
             len (p1), new_len, len (p2))
         edge_start = p2.start + len (p1)
         edge_end   = p2.start + new_len
         # it is always safe to shorten a path
-        new = Internal (self, Path (p2.S, p2.start, edge_end))
+        new_node = Internal (self, Path (p2.S, p2.start, edge_end))
 
-        self.children[p2.S[edge_start]] = new     # substitute new node
-        new.children [p2.S[edge_end  ]] = node2
-        node2.parent = new
+        self.children[p2.S[edge_start]] = new_node     # substitute new node
+        new_node.children [p2.S[edge_end  ]] = child
+        child.parent = new_node
 
-        # debug ('Splitting %s:%s' % (str (self), str (node2)))
-        # debug ('Split Adding %s to node %s as [%s]' % (str (new), str (self), p2.S[edge_start]))
+        # debug ('Splitting %s:%s', str (self), str (child))
+        # debug ('Split Adding %s to node %s as [%s]',
+        #        str (new_node), str (self), p2.S[edge_start])
 
-        return new
+        return new_node
 
     def compute_C (self):
         id_set = set ()
@@ -299,6 +295,7 @@ class Internal (lca_mixin.Internal, Node):
     def to_dot (self, a):
         a.append ('"%s" [color=red];\n' % str (self))
         super ().to_dot (a)
-        for key, child in self.children.items ():
+        for key in sorted (self.children):
+            child = self.children[key]
             a.append ('"%s" -> "%s" [label="%s"];\n' % (str (self), str (child), str (key)))
             child.to_dot (a)

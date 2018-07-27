@@ -10,20 +10,23 @@ Chapter §5.4, page 93.
 
 """
 
-from .util import Path, debug
+from .util import Path, debug, debug_dot
 from .node import Leaf
+from . import builder
 
-class Builder (object):
+class Builder (builder.Builder):
     """Builds the suffix-tree using a naive algorithm."""
 
-    def __init__ (self, tree):
-        self.tree = tree
+    def debug_dot (self, i):
+        """ Write a debug graph. """
+        debug_dot (self.tree, '/tmp/suffix_tree_naive_%s_%d' % (self.id, i))
 
-    def add_string (self, the_id, the_path):
+
+    def build (self):
         """Add a string to the tree. """
 
-        for i in range (0, the_path.end):
-            path = Path (the_path.S, i, the_path.end)
+        for i in range (0, self.path.end):
+            path = Path (self.path.S, i, self.path.end)
 
             # find longest path from root
             node, matched_len, child = self.tree.find_path (path)
@@ -35,17 +38,10 @@ class Builder (object):
             assert matched_len == len (node), "Add String %d/%d" % (
                 matched_len, len (node))
 
-            if node.is_leaf ():
-                assert matched_len == len (path)
-                # In a generalized tree we may find a leaf is already there.  This
-                # is not possible in a non-generalized tree because of the unique
-                # ending character.
-                node.add (the_id, Path (path.S, path.start, path.end))
-                return node
             assert matched_len < len (path)
-            new_leaf = Leaf (node, the_id, Path (path.S, path.start, path.end))
+            new_leaf = Leaf (node, self.id, Path (path.S, path.start, path.end))
             assert path.S[path.start + matched_len] not in node.children # do not overwrite
             node.children[path.S[path.start + matched_len]] = new_leaf
-            debug ('Adding %s to node %s as [%s]' % (str (new_leaf), str (node),
-                                                     path.S[path.start + matched_len]))
-        return new_leaf
+            debug ('Adding %s to node %s as [%s]',
+                   str (new_leaf), str (node), path.S[path.start + matched_len])
+            self.debug_dot (i)

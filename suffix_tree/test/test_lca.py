@@ -4,12 +4,16 @@
 
 import unittest
 
+from parameterized import parameterized
+
 from suffix_tree import Tree
+from .tests import BUILDERS
 
 class TestLCA (unittest.TestCase):
 
-    def test_lca (self):
-        tree = Tree ({ 'A' : 'xabxac', 'B' : 'awyawxawxz' })
+    @parameterized.expand(BUILDERS)
+    def test_lca (self, _, builder):
+        tree = Tree ({ 'A' : 'xabxac', 'B' : 'awyawxawxz' }, builder = builder)
         tree.prepare_lca ()
         self.assertEqual (tree.lca (tree.nodemap['A'][1], tree.nodemap['B'][3]).id,  8)
         self.assertEqual (tree.lca (tree.nodemap['A'][0], tree.nodemap['B'][8]).id,  2)

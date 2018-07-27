@@ -10,13 +10,13 @@ See: README.rst.
 import collections
 import itertools
 
+from . import naive
 from . import ukkonen
+from . import ukkonen_gusfield
 from . import lca_mixin
 
 from .node import Internal
-from .util import Path, UniqueEndChar, DEBUG
-
-_END = UniqueEndChar ()
+from .util import Path, UniqueEndChar, is_debug
 
 class Tree (lca_mixin.Tree):
     """A suffix tree.
@@ -58,19 +58,19 @@ class Tree (lca_mixin.Tree):
 
         super ().__init__ (d)
 
-        self.builder = builder (self)
-
-        self.root = Internal (None, Path (tuple (), 0, 0))
+        self.root = Internal (None, Path (tuple (), 0, 0), name = 'root')
 
         for id_, S in d.items ():
-            # input is any iterable, make an immutable copy and add a unique
+            # input is any iterable, make an immutable copy with a unique
             # character at the end
-            path = Path.from_iterable (itertools.chain (S, [_END]))
+            path = Path.from_iterable (itertools.chain (S, [UniqueEndChar (id_)]))
+
+            self.builder = builder (self, id_, path)
 
             try:
-                self.builder.add_string (id_, path)
+                self.builder.build ()
             except:
-                if DEBUG:
+                if is_debug ():
                     with open ('/tmp/core.dot', 'w') as tmp:
                         tmp.write (self.to_dot ())
                 raise
@@ -180,7 +180,6 @@ class Tree (lca_mixin.Tree):
         2 a
         2 x
         2 x a
-        2 $
 
         See [Gusfield1997]_ §7.12.1, 144ff.
 

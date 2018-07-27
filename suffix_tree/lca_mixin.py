@@ -25,7 +25,10 @@ ancestor* of :math:`v` refers to an ancestor that is not :math:`v`.
 import collections
 import ctypes
 
-from .util import debug, DEBUG
+from .util import debug
+
+DEBUG_LABELS = 0
+""" Include more (potentially confusing) information in node labels. """
 
 def uint (x):
     """ Convert a number into unsigned 32-bit representation. """
@@ -94,7 +97,7 @@ def h (k):
 class Node (object):
     """ Mixin for Node to allow LCA retireval. """
 
-    def __init__ (self, parent, path): # pylint: disable=unused-argument
+    def __init__ (self, parent, path, **kw): # pylint: disable=unused-argument
         self.id = 0
         """Number of the node given in a depth-first traversal of the tree, starting
         with 1.  See [Gusfield1997]_ Figure 8.1, 182
@@ -139,7 +142,7 @@ class Leaf (Node):
     """ A mixin for leaf nodes to allow for LCA retrievals. """
 
     def __str__ (self):
-        if DEBUG:
+        if DEBUG_LABELS:
             return "\n%dh%d I=%dh%d A=0x%x\n" % (self.id, h (self.id), self.I, h (self.I), self.A)
         return ''
 
@@ -161,7 +164,7 @@ class Internal (Node):
     """ A mixin for internal nodes to allow for LCA retrievals. """
 
     def __str__ (self):
-        if DEBUG:
+        if DEBUG_LABELS:
             return "\n%dh%d I=%dh%d A=0x%x\n" % (self.id, h (self.id), self.I, h (self.I), self.A)
         return ''
 
@@ -214,8 +217,7 @@ class Tree (object):
         def f (node):
             """ Compute a nodemap """
             if node.is_leaf ():
-                for id_, path in node.indices.items ():
-                    self.nodemap[id_][path.start] = node
+                self.nodemap[node.strid][node.path.start] = node
         self.root.pre_order (f)
 
     def lca (self, x, y):
@@ -233,18 +235,18 @@ class Tree (object):
         """ Returns z, the lca of x and y. """
         # step 1 - §8.4, §8.8
         k = msb (x.I ^ y.I)
-        debug ("k = msb (%d ^ %d = %d) = %d" % (x.I, y.I, x.I ^ y.I, k))
+        debug ("k = msb (%d ^ %d = %d) = %d", x.I, y.I, x.I ^ y.I, k)
         # leave the msb 1-bit and zero all lower bits
         mask = ~0 << (k + 1)   # reset the k + 1 lowest bits in mask
-        debug ("x.I = %d, mask 0x%x" % (x.I, uint (mask)))
+        debug ("x.I = %d, mask 0x%x", x.I, uint (mask))
         b = (x.I & mask) | (1 << k)  # b = lca (x, y) in B
-        debug ("b = %d, h(b) = %d" % (b, h (b)))
+        debug ("b = %d, h(b) = %d", b, h (b))
 
         # step 2 - §8.8
         mask = ~0 << h (b)     # reset the h(b) lowest bits in mask
-        debug ("x.A = 0x%x, y.A = 0x%x, mask = 0x%x" % (x.A, y.A, uint (mask)))
+        debug ("x.A = 0x%x, y.A = 0x%x, mask = 0x%x", x.A, y.A, uint (mask))
         j = h (x.A & y.A & mask) # j = h(I(z))
-        debug ("j = %d" % j)
+        debug ("j = %d", j)
 
         # step 3 and 4
         def get_xy_bar (n):
@@ -256,14 +258,14 @@ class Tree (object):
             k = msb (n.A & mask)
             mask = ~0 << (k + 1)  # reset k + 1 lowest bits in mask
             Iw = (n.I & mask) | (1 << k)
-            debug ("Iw = %d" % Iw)
-            debug ("L[Iw] = %d" % self.L[Iw].id)
+            debug ("Iw = %d", Iw)
+            debug ("L[Iw] = %d", self.L[Iw].id)
             w = self.L[Iw]
             return w.parent
 
         xbar = get_xy_bar (x)
         ybar = get_xy_bar (y)
-        debug ("xbar = %d, ybar = %d" % (xbar.id, ybar.id))
+        debug ("xbar = %d, ybar = %d", xbar.id, ybar.id)
 
         # step 5
         if xbar.id < ybar.id:
