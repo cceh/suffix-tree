@@ -14,7 +14,7 @@ dist: test
 upload: dist
 	twine upload dist/*
 
-install: dist
+install: uninstall clean dist
 	sudo pip3 install --upgrade dist/*.whl
 
 uninstall:
@@ -23,4 +23,4 @@ uninstall:
 clean:
 	-rm -rf dist build *.egg-info
 	-rm *~ .*~ pylintgraph.dot
-	find . -name __pycache__ -type d -exec rm -r "{}" \;
+	-find . -name __pycache__ -type d -exec rm -r "{}" \;

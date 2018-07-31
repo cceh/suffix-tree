@@ -29,9 +29,10 @@ class Node (lca_mixin.Node):
         """ A name can be given to the node for easier debugging. """
 
         self.C = -1
-        r"""For any internal node :math:`v` of :math:`\mathcal{T}`, define :math:`C(v)` to be the
-        number of *distinct* string identifiers that appear at the leaves in the
-        subtree of :math:`v`.  [Gusfield1997]_ §7.6, 127ff
+        r"""For any internal node :math:`v` of :math:`\mathcal{T}`, define :math:`C(v)`
+        to be the number of *distinct* string identifiers that appear at the
+        leaves in the subtree of :math:`v`.  [Gusfield1997]_ §7.6, 127ff
+
         """
 
         self.is_left_diverse = None
@@ -49,9 +50,6 @@ class Node (lca_mixin.Node):
         N.B. This suffix tree operates on any python hashable object, not just
         characters, so left_characters usually are objects.
 
-        N.B. This being a generalized suffix tree, leafs *can be* left diverse,
-        if the left characters in two strings are different or the leafs are at
-        the beginning of the string.
         """
 
     def string_depth (self):
@@ -142,7 +140,7 @@ class Node (lca_mixin.Node):
         def f (node):
             """ Helper """
             if node.is_leaf ():
-                paths.append ((node.strid, node.path))
+                paths.append ((node.str_id, node.path))
         self.pre_order (f)
         return paths
 
@@ -165,14 +163,14 @@ class Leaf (lca_mixin.Leaf, Node):
 
     """
 
-    def __init__ (self, parent, strid, path, **kw):
+    def __init__ (self, parent, str_id, path, **kw):
         super ().__init__ (parent, path, **kw) # Node
-        self.strid = strid
+        self.str_id = str_id
 
     def __str__ (self):
         # start + 1 makes it Gusfield-compatible for easier comparing with examples in the book
         return ("%s%s" % (self.name or str (self.path), super ().__str__ ())
-                + ' %s:%d' % (self.strid, self.path.start + 1))
+                + ' %s:%d' % (self.str_id, self.path.start + 1))
 
     def is_leaf (self):
         return True
@@ -187,23 +185,15 @@ class Leaf (lca_mixin.Leaf, Node):
 
     def compute_C (self):
         self.C = 1
-        return set (self.strid)
+        return [self.str_id]
 
     def compute_left_diverse (self):
         """ See description in Node """
-        left_characters = set ()
-        if self.path.start > 0:
-            left_characters.add (self.path.S[self.path.start - 1])
-        else:
-            self.is_left_diverse = True
-            return None
-
-        self.is_left_diverse = len (left_characters) > 1
-        return None if self.is_left_diverse else left_characters
+        self.left_diverse = False
+        return [self.path.S[self.path.start - 1]] if self.path.start else None
 
     def maximal_repeats (self, a):
-        if self.is_left_diverse:
-            a.append ((self.C, self.path))
+        pass
 
     def to_dot (self, a):
         a.append ('"%s" [color=green];\n' % str (self))

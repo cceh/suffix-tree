@@ -175,8 +175,6 @@ class Tree (lca_mixin.Tree):
         ...    print (C, path)
         1 a w
         1 a w x
-        1 a w y a w x a w x z $
-        1 x a b x a c $
         2 a
         2 x
         2 x a
@@ -184,9 +182,10 @@ class Tree (lca_mixin.Tree):
         See [Gusfield1997]_ §7.12.1, 144ff.
 
         """
-        a = []
         self.root.compute_C ()
         self.root.compute_left_diverse ()
+
+        a = []
         for child in self.root.children.values ():
             child.maximal_repeats (a)
         return a

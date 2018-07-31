@@ -98,7 +98,7 @@ class Node (object):
     """ Mixin for Node to allow LCA retireval. """
 
     def __init__ (self, parent, path, **kw): # pylint: disable=unused-argument
-        self.id = 0
+        self.lca_id = 0
         """Number of the node given in a depth-first traversal of the tree, starting
         with 1.  See [Gusfield1997]_ Figure 8.1, 182
         """
@@ -143,15 +143,15 @@ class Leaf (Node):
 
     def __str__ (self):
         if DEBUG_LABELS:
-            return "\n%dh%d I=%dh%d A=0x%x\n" % (self.id, h (self.id), self.I, h (self.I), self.A)
+            return "\n%dh%d I=%dh%d A=0x%x\n" % (self.lca_id, h (self.lca_id), self.I, h (self.I), self.A)
         return ''
 
     def prepare_lca (self, counter):
-        self.id = counter
+        self.lca_id = counter
         return counter + 1
 
     def compute_I_and_L (self, L):
-        self.I = self.id
+        self.I = self.lca_id
         L[self.I] = self    # will be overwritten by the highest node in run
         return self.I
 
@@ -165,11 +165,11 @@ class Internal (Node):
 
     def __str__ (self):
         if DEBUG_LABELS:
-            return "\n%dh%d I=%dh%d A=0x%x\n" % (self.id, h (self.id), self.I, h (self.I), self.A)
+            return "\n%dh%d I=%dh%d A=0x%x\n" % (self.lca_id, h (self.lca_id), self.I, h (self.I), self.A)
         return ''
 
     def prepare_lca (self, counter):
-        self.id = counter
+        self.lca_id = counter
         counter += 1
         for dest in self.children.values (): # pylint: disable=no-member
             counter = dest.prepare_lca (counter)
@@ -177,7 +177,7 @@ class Internal (Node):
 
     def compute_I_and_L (self, L):
         # Find the node with the maximum I value in the subtree.
-        imax = self.id
+        imax = self.lca_id
         for child in self.children.values (): # pylint: disable=no-member
             ival = child.compute_I_and_L (L)
             if h (ival) > h (imax):
@@ -217,7 +217,7 @@ class Tree (object):
         def f (node):
             """ Compute a nodemap """
             if node.is_leaf ():
-                self.nodemap[node.strid][node.path.start] = node
+                self.nodemap[node.str_id][node.path.start] = node
         self.root.pre_order (f)
 
     def lca (self, x, y):
@@ -226,7 +226,7 @@ class Tree (object):
         >>> from suffix_tree import Tree
         >>> tree = Tree ({ 'A' : 'xabxac', 'B' : 'awyawxawxz' })
         >>> tree.prepare_lca ()
-        >>> tree.lca (tree.nodemap['A'][1], tree.nodemap['B'][3]).id
+        >>> tree.lca (tree.nodemap['A'][1], tree.nodemap['B'][3]).lca_id
         8
         """
         if x == y:
@@ -259,15 +259,15 @@ class Tree (object):
             mask = ~0 << (k + 1)  # reset k + 1 lowest bits in mask
             Iw = (n.I & mask) | (1 << k)
             debug ("Iw = %d", Iw)
-            debug ("L[Iw] = %d", self.L[Iw].id)
+            debug ("L[Iw] = %d", self.L[Iw].lca_id)
             w = self.L[Iw]
             return w.parent
 
         xbar = get_xy_bar (x)
         ybar = get_xy_bar (y)
-        debug ("xbar = %d, ybar = %d", xbar.id, ybar.id)
+        debug ("xbar = %d, ybar = %d", xbar.lca_id, ybar.lca_id)
 
         # step 5
-        if xbar.id < ybar.id:
+        if xbar.lca_id < ybar.lca_id:
             return xbar
         return ybar
