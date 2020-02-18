@@ -189,7 +189,6 @@ class Leaf (lca_mixin.Leaf, Node):
 
     def compute_left_diverse (self):
         """ See description in Node """
-        self.left_diverse = False
         return [self.path.S[self.path.start - 1]] if self.path.start else None
 
     def maximal_repeats (self, a):

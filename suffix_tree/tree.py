@@ -10,9 +10,9 @@ See: README.rst.
 import collections
 import itertools
 
-from . import naive
+# from . import naive
 from . import ukkonen
-from . import ukkonen_gusfield
+# from . import ukkonen_gusfield
 from . import lca_mixin
 
 from .node import Internal
@@ -51,29 +51,53 @@ class Tree (lca_mixin.Tree):
 
     """
 
-    def __init__ (self, d, builder = ukkonen.Builder):
-        """ Initialize and build the tree from dict of iterables.
+    def __init__ (self, d = None, builder = ukkonen.Builder):
+        """ Initialize and build the tree from a dict of iterables.
 
+        :param dict d: a dictionary of id: iterable
         """
+
+        d = d or {}
 
         super ().__init__ (d)
 
         self.root = Internal (None, Path (tuple (), 0, 0), name = 'root')
 
         for id_, S in d.items ():
-            # input is any iterable, make an immutable copy with a unique
-            # character at the end
-            path = Path.from_iterable (itertools.chain (S, [UniqueEndChar (id_)]))
+            self.add (id_, S, builder)
 
-            self.builder = builder (self, id_, path)
 
-            try:
-                self.builder.build ()
-            except:
-                if is_debug ():
-                    with open ('/tmp/core.dot', 'w') as tmp:
-                        tmp.write (self.to_dot ())
-                raise
+    def add (self, id_, S, builder = ukkonen.Builder):
+        """ Add items to tree from iterable
+
+        :param string id_: an id
+        :param iterable S: an iterable of hashables
+
+        >>> tree = Tree ()
+        >>> tree.add ('A', 'xabxac')
+        >>> tree.add ('B', 'awyawxawxz')
+        >>> tree.find ('abx')
+        True
+        >>> tree.find ('awx')
+        True
+        >>> tree.find ('abc')
+        False
+        """
+
+        # input is any iterable, make an immutable copy with a unique
+        # character at the end
+        path = Path.from_iterable (itertools.chain (S, [UniqueEndChar (id_)]))
+
+        self.builder = builder (self, id_, path)
+
+        try:
+            self.builder.build ()
+        except:
+            if is_debug ():
+                with open ('/tmp/core.dot', 'w') as tmp:
+                    tmp.write (self.to_dot ())
+            raise
+
 
     def find_path (self, path):
         """Find a path in the tree.
@@ -116,6 +140,26 @@ class Tree (lca_mixin.Tree):
             return []
         return (child or node).get_positions ()
 
+    def find_id (self, id_, iterable):
+        """ Return True if string is found with corresponding id
+
+        :param string id_: an id
+        :param iterable S: an iterable of hashables
+
+        >>> tree = Tree ({ 'A' : 'xabxac', 'B' : 'awyawxawxz' })
+        >>> tree.find_id ('A', 'abx')
+        True
+        >>> tree.find_id ('B', 'awx')
+        True
+        >>> tree.find_id ('B', 'abx')
+        False
+        """
+
+        for i, p in self.find_all (iterable):
+            if i == id_:
+                return True
+        return False
+
     def common_substrings (self):
         """Get a list of common substrings.
 
@@ -143,7 +187,7 @@ class Tree (lca_mixin.Tree):
         V = collections.defaultdict (lambda: (0, 'no_id', None)) # C => (string_depth, id, path)
         def f (node):
             """ Helper """
-            k = node.C
+            k = node.C                # no. of distinct strings in the subtree
             sd = node.string_depth ()
             if sd > V[k][0]:
                 for id_, path in node.get_positions ():

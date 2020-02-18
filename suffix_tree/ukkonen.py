@@ -22,6 +22,9 @@ one beyond the end while Ukkonen's point to the end.  In conclusion: Ukkonen's
                  Algorithmica 14:249-60.
                  http://www.cs.helsinki.fi/u/ukkonen/SuffixT1withFigs.pdf
 
+See also: Ukkonen's suffix tree algorithm in plain English
+https://stackoverflow.com/questions/9452701/
+
 """
 
 from .util import Path, debug, debug_dot

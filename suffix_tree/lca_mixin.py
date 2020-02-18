@@ -48,6 +48,8 @@ def nlz (x):
     0
 
     See: http://www.hackersdelight.org/hdcodetxt/nlz.c.txt
+
+    See: [Warren2013]_ pages 99ff
     """
     n = 32
     for shift in (16, 8, 4, 2, 1):
@@ -143,7 +145,8 @@ class Leaf (Node):
 
     def __str__ (self):
         if DEBUG_LABELS:
-            return "\n%dh%d I=%dh%d A=0x%x\n" % (self.lca_id, h (self.lca_id), self.I, h (self.I), self.A)
+            return "\n%dh%d I=%dh%d A=0x%x\n" % (
+                self.lca_id, h (self.lca_id), self.I, h (self.I), self.A)
         return ''
 
     def prepare_lca (self, counter):
@@ -165,7 +168,8 @@ class Internal (Node):
 
     def __str__ (self):
         if DEBUG_LABELS:
-            return "\n%dh%d I=%dh%d A=0x%x\n" % (self.lca_id, h (self.lca_id), self.I, h (self.I), self.A)
+            return "\n%dh%d I=%dh%d A=0x%x\n" % (
+                self.lca_id, h (self.lca_id), self.I, h (self.I), self.A)
         return ''
 
     def prepare_lca (self, counter):

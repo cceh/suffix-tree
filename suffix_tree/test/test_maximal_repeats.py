@@ -3,7 +3,6 @@
 # pylint: disable=missing-docstring
 
 import unittest
-import sys
 
 from parameterized import parameterized
 
@@ -51,6 +50,7 @@ class TestMaximalRepeats (unittest.TestCase):
 
     @parameterized.expand(BUILDERS)
     def test_maximal_repeats_3 (self, _, builder):
+        # pylint: disable=line-too-long
         tree = Tree ({
             'berlin-sb-lat-qu-931': ['157', '165', '167', '165'],
             'cava-dei-tirreni-bdb-4': ['232', '020b', '092', '093', '039', '061', '102', '135', '098', '099', '039', '040', '039', '040', '044', '141', '140', '098', '121', '098', '090', '095', '134', '135', '088', '104', '139', '140', '067', '091', '094', '158', '159', '161', '162', '163', '164', '165', '158', '165', '161'],
@@ -77,7 +77,6 @@ class TestMaximalRepeats (unittest.TestCase):
             'wien-oenb-ser-n-3761': ['157'],
             'wolfenbuettel-hab-blankenb-130': ['022', '043', '044', '060', '103', '097', '095', '067', '040', '020a', '112', '038', '023', '094', '041', '020a', '105', '098', '057', '014', '114', '039', '040', '039', '040', '139', '140', '156', '178', '143', '150', '138', '179', '174', '157', '160', '165', '228', '164', '163', '093', '166', '159', '102', '201', '158', '161', '093', '191', '192', '193', '201', '158', '180', '210', '211', '214', '219', '202', '022', '023', '095', '098', '041', '129', '043', '044', '094', '215', '131']}, builder = builder)
 
-        self.maxDiff = None
         self.maximal_repeats (
             tree, [
                 '4 022 023 095',

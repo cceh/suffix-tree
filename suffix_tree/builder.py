@@ -34,3 +34,8 @@ class Builder (object):
                     node.path._end = M
 
         self.tree.root.pre_order (f)
+
+
+    def build (self):
+        """Add a string to the tree. """
+        raise NotImplementedError

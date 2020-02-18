@@ -9,6 +9,17 @@ retrieval.
 
    pip install suffix-tree
 
+.. code-block:: python
+
+   from suffix_tree import Tree
+
+   >>> tree = Tree ({ 'A' : 'xabxac' })
+   >>> tree.find ('abx')
+   True
+   >>> tree.find ('abc')
+   False
+
+
 This suffix tree:
 
 - works with any Python iterable, not just strings, if the items are hashable,
