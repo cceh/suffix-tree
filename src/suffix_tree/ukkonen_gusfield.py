@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
-#
+r"""A tree builder that uses Gusfield's variant.
 
-r"""Ukkonen's Algorithm according to Gusfield
+This tree builder uses Gusfield's variant of Ukkonen's algorithm to build a suffix tree.
 
-Ukkonen's algorithm to build a suffix tree in linear time.
-
-Credits: This implementation of Ukkonen's algorithm in Python closely follows
-the description in [Gusfield1997]_ Chapter 6, 94ff.
+Credits: This implementation of Ukkonen's algorithm in Python closely follows the
+description in [Gusfield1997]_ Chapter 6, 94ff.
 
 See also: the implementation in C by Dan Gusfield et al.:
 http://web.cs.ucdavis.edu/%7Egusfield/strmat.html
@@ -16,56 +13,79 @@ http://www.cs.helsinki.fi/u/ukkonen/SuffixT1withFigs.pdf
 
 """
 
-from .util import Path, debug, debug_dot
-from .node import Leaf
-from . import builder
+from typing import Optional, cast
 
-class Builder (builder.Builder):
-    """Builds the suffix-tree using Ukkonen's Algorithm."""
-
-    def debug_dot (self, i, j):
-        """ Write a debug graph. """
-        debug_dot (self.tree, '/tmp/suffix_tree_ukkonen_gusfield_%s_%d_%d' % (self.id, i, j))
+from .util import Path, Symbol, debug, debug_dot
+from .node import Node, Internal, Leaf
+from . import util, builder
 
 
-    def suffix_link_dance (self, node, beta):
-        """Go to the parent, follow the suffix link and do the skip/count trick."""
+class Builder(builder.Builder):
+    """Builds the suffix-tree using Gusfield's Algorithm."""
+
+    name = "Gusfield"
+
+    def debug_dot(self, i: int, j: int):
+        """Write a debug graph."""
+        debug_dot(
+            self.tree, f"/tmp/suffix_tree_ukkonen_gusfield_{str(self.id)}_{i}_{j}"
+        )
+
+    def suffix_link_dance(self, node: Node, beta: Path) -> Internal:
+        """Go to the parent, follow the suffix link and do the skip/count trick.
+
+        See: [Gusfield1997]_, page 100
+        """
 
         if node.suffix_link is not None:
             # just follow the suffix link
-            debug ("Followed node's own suffix link to node %s", str (node.suffix_link))
+            if __debug__ and util.DEBUG:
+                debug(
+                    "Followed node's own suffix link to node %s", str(node.suffix_link)
+                )
             return node.suffix_link
 
         if node.parent and node.parent.suffix_link:
-            l = len (beta)
-            # do the skip / count dance
-            debug ("Starting suffix link dance from node %s", str (node))
-            sv = node.parent.suffix_link
-            debug ("The old node has len %d", len (node))
-            debug ("The sv node has len %d",  len (sv))
-            debug ("Skipping down to len %d", l)
+            # not root: do the skip / count dance
+            l = len(beta)
+            sv: Internal = node.parent.suffix_link
+            if __debug__ and util.DEBUG:
+                debug("Starting suffix link dance from node %s", str(node))
+                debug("The old node has len %d", len(node))
+                debug("The sv node has len %d", len(sv))
+                debug("Skipping down to len %d", l)
             # use the skip/count trick to move down the tree.
             while True:
-                child = sv.children[node.path[len (sv) + 1]]
-                if len (child) >= l:
+                child = sv.children[node.path[len(sv) + 1]]
+                if len(child) >= l:
                     break
-                sv = child
-            debug ("Ended suffix link dance on node %s", str (sv))
+                assert isinstance(sv, Internal)
+                sv = cast(Internal, child)
+            if __debug__ and util.DEBUG:
+                debug("Ended suffix link dance on node %s", str(sv))
             return sv
 
-        # fallback to the naive method
-        node, dummy_matched_len, dummy_child = self.tree.find_path (beta)
-        debug ("Found node %s using naive method", str (node))
-        return node
+        # fallback to the naive method if node is root
+        node, dummy_matched_len, dummy_child = self.tree.find_path(beta)
+        if __debug__ and util.DEBUG:
+            debug("Found node %s using naive method", str(node))
+        assert isinstance(node, Internal)
+        return cast(Internal, node)
 
-    def build (self):
-        """Add a string to the tree """
+    def build(self) -> None:
+        """Add a string to the tree."""
 
-        node = self.tree.root
-        M = len (self.path)
-        i = 0            # Ukkonen phase
-        j = 0            # Ukkonen extension
-        last_phase = -1  # for detection of repeated execution of extension
+        node: Internal = self.tree.root
+        M = len(self.path)
+        """Total length of sequence to insert"""
+        i = 0
+        """Ukkonen phase"""
+        j = 0
+        """Ukkonen extension"""
+        last_phase = -1
+        """for detection of repeated execution of extension"""
+        w: dict[int, Node] = {}
+        """Queue for nodes :math:`w` eventually created by Rule2, see: SEA 4"""
 
         while i <= M - 1:
 
@@ -96,19 +116,24 @@ class Builder (builder.Builder):
             #
             # -- [Gusfield1997]_, page 106
 
-            Path.e = i + 1 # adjust the 'open ended' marker for leaf nodes
-            Sip1 = self.path[i] # the character :math:`S(i + 1)`
+            self.path.set_open_end(i + 1)
+            Sip1: Symbol = self.path[i]  # the character :math:`S(i + 1)`
+            w.clear()
+            sw: Optional[Node] = None  # The node :math:`s(w)`
 
-            w = dict ()    # Queue for nodes :math:`w` eventually created by
-                           # Rule2, see: SEA 4
-            sw = None      # The node :math:`s(w)`
-
-            debug ("\n\n=== Phase i=%d === extending [:%d] (%s) with %s",
-                   i, i, str (self.path[:i]), Sip1)
+            if __debug__ and util.DEBUG:
+                debug(
+                    "\n\n=== Phase i=%d === extending [:%d] (%s) with %s",
+                    i,
+                    i,
+                    str(self.path.S[self.path.start : self.path.start + i]),
+                    Sip1,
+                )
 
             while j <= i:
 
-                self.debug_dot (i, j)
+                if __debug__ and util.DEBUG_DOT:
+                    self.debug_dot(i, j)
 
                 # Single extension algorithm: SEA
                 #
@@ -154,20 +179,30 @@ class Builder (builder.Builder):
 
                 # node is positioned at the end of the last extension's beta.
 
-                beta = Path (self.path.S, j, i) # the string :math:`S[j..i]` aka. as :math:`beta`
-                l = len (beta)
+                beta = Path(self.path, j, i)
+                """the string :math:`S[j..i]` aka. as :math:`beta`"""
+                l = len(beta)
 
-                debug ("\n--- Extension j=%d l=%d --- [%d:%d] extending (%s) with %s",
-                       j, l, j, i, str (beta), Sip1)
-                debug ("Now at node %s", str (node))
+                if __debug__ and util.DEBUG:
+                    debug(
+                        "\n--- Extension j=%d l=%d --- [%d:%d] extending (%s) with %s",
+                        j,
+                        l,
+                        j,
+                        i,
+                        str(beta),
+                        Sip1,
+                    )
+                    debug("Now at node %s", str(node))
 
                 if i != last_phase:
                     # node is already at the right positon
                     last_phase = i
-                    debug ("Re-executing extension %d from node %s", j, str (node))
+                    if __debug__ and util.DEBUG:
+                        debug("Re-executing extension %d from node %s", j, str(node))
                 else:
                     # do the suffix link dance: SEA steps 1 and 2
-                    node = self.suffix_link_dance (node, beta)
+                    node = self.suffix_link_dance(node, beta)
 
                 # oldnode = node
                 # node, matched_len, child = self.tree.find_path (beta)
@@ -186,26 +221,31 @@ class Builder (builder.Builder):
                 #
                 # -- [Gusfield1997]_, page 96
 
-                sw = node # target for suffix link
+                sw = node  # target for suffix link
 
                 # We matched :math:`\beta`. Try matching :math:`\beta S(i + 1)`.
-                node, matched_len, child = node.find_path (Path (self.path.S, j, i + 1))
+                tmp_node, matched_len, child = node.find_path(Path(self.path, j, i + 1))
+                assert isinstance(tmp_node, Internal)
+                node = cast(Internal, tmp_node)
 
                 assert matched_len >= l, (
-                    r"Fatal: \beta not found in tree. l = %d, matched_len = %d" %
-                    (l, matched_len))
+                    r"Fatal: \beta not found in tree. "
+                    + f"l = {l}, matched_len = {matched_len}"
+                )
 
-                debug ("Performing suffix extension, l = %d, matched len = %d",
-                       l, matched_len)
-
+                if __debug__ and util.DEBUG:
+                    debug(
+                        "Performing suffix extension, "
+                        + f"l = {l}, matched len = {matched_len}"
+                    )
                 # **Rule 1** In the current tree, path :math:`\beta` ends at a
                 # leaf.  That is, the path from the root labeled :math:`\beta`
                 # extends to the end of some leaf edge.  To update the tree,
                 # character :math:`S(i + 1)` is added to the end of the label of
                 # that leaf edge.
 
-                #if node.is_leaf ():
-                #    node.add (self.id, Path (self.path.S, j, Path.inf))
+                # if node.is_leaf ():
+                #    node.add (self.id, Path (self.path.S, j, None))
                 #    debug ("*** Applied Rule 1 -- extended leaf %s", str (node))
 
                 # **Rule 3** Some path from the end of string :math:`\beta`
@@ -221,10 +261,14 @@ class Builder (builder.Builder):
 
                 if matched_len > l:
                     # We did match :math:`\beta S(i + 1)`!
-                    debug ("*** Applied Rule 3 -- did nothing while at node %s", str (node))
+                    if __debug__ and util.DEBUG:
+                        debug(
+                            "*** Applied Rule 3 -- did nothing while at node %s",
+                            str(node),
+                        )
                     # Trick 2: End any phase the first time that extension rule
                     # 3 applies.
-                    break # SPA step 3: begin next phase, same extension
+                    break  # SPA step 3: begin next phase, same extension
 
                 # **Rule 2** No path from the end of string :math:`\beta` starts
                 # with character :math:`S(i + 1)`, but at least one labeled path
@@ -236,28 +280,39 @@ class Builder (builder.Builder):
                 # there if :math:`\beta` ends inside an edge.  The leaf at the
                 # end of the new leaf edge is given the number :math:`j`.
 
-                elif child is None and Sip1 not in node.children: # also catches root
-                    leaf = Leaf (node, self.id, Path (self.path.S, j, Path.inf))
+                if child is None and Sip1 not in node.children:  # also catches root
+                    leaf = Leaf(node, self.id, Path(self.path, j, None))
                     node.children[Sip1] = leaf
-                    debug ("*** Applied Rule 2.1 -- added new leaf %s to node %s",
-                           str (leaf), str (node))
+                    if __debug__ and util.DEBUG:
+                        debug(
+                            "*** Applied Rule 2.1 -- added new leaf %s to node %s",
+                            str(leaf),
+                            str(node),
+                        )
 
                 elif child is not None:
-                    w[j] = sw = node = node.split_edge (matched_len, child)
-                    debug ("Setting w to the new internal node %s", str (node))
-                    leaf = Leaf (node, self.id, Path (self.path.S, j, Path.inf))
+                    w[j] = sw = node = node.split_edge(matched_len, child)
+                    if __debug__ and util.DEBUG:
+                        debug("Setting w to the new internal node %s", str(node))
+                    leaf = Leaf(node, self.id, Path(self.path, j, None))
                     node.children[Sip1] = leaf
-                    debug ("*** Applied Rule 2.2 -- added new leaf %s and split node %s",
-                           str (leaf), str (node))
-                else:
+                    if __debug__ and util.DEBUG:
+                        debug(
+                            "*** Applied Rule 2.2 -- "
+                            + "added new leaf %s and split node %s",
+                            str(leaf),
+                            str(node),
+                        )
+                else:  # pragma: no cover
                     assert True, "can't happen"
 
                 #######################
                 # Create suffix links #
                 #######################
 
-                if w.get (j - 1) is not None:
-                    debug ("Giving w %s a suffix_link to %s", str (w[j - 1]), str (sw))
+                if j - 1 in w:
+                    if __debug__ and util.DEBUG:
+                        debug("Giving w %s a suffix_link to %s", str(w[j - 1]), str(sw))
                     w[j - 1].suffix_link = sw
                     del w[j - 1]
 
@@ -265,10 +320,10 @@ class Builder (builder.Builder):
                 # Continue with the next extension #
                 ####################################
 
-                assert l == len (node), "l = %s, len (node) = %d" % (l, len (node))
+                assert l == len(node), f"l = {l}, len (node) = {len(node)}"
 
                 j += 1
 
             i += 1
-
-        self.fixup_e (M)
+            if self.progress:
+                self.progress(i)

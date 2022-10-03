@@ -1,0 +1,10 @@
+black
+blackdoc
+coverage[toml]
+mypy
+pydocstyle
+pylint
+pytest
+toml
+tox
+twine

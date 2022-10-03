@@ -1,0 +1,90 @@
+[project]
+name = "suffix-tree"
+version = "0.1.0"
+authors = [
+  { name="Marcello Perathoner", email="marcello@perathoner.de" },
+]
+description = "A Generalized Suffix Tree for any iterable, with Lowest Common Ancestor retrieval"
+readme = "README.rst"
+requires-python = ">=3.9"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Text Processing :: Indexing",
+    "Topic :: Text Processing :: Linguistic",
+]
+keywords = [
+    "suffix",
+    "tree",
+    "suffixtree",
+    "ukkonen",
+    "gusfield",
+    "lca"
+]
+
+[project.urls]
+"Homepage"    = "https://github.com/cceh/suffix-tree"
+"Bug Tracker" = "https://github.com/cceh/suffix-tree/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.source]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/suffix_tree"]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplemented",
+]
+
+[tool.black]
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.pylint.basic]
+disable = [
+    "invalid-name",
+    "unspecified-encoding",
+    "pointless-string-statement",
+    "too-many-branches",
+    "too-many-statements"
+]
+
+[tool.pylint.format]
+max-line-length = 88
+
+[tool.pydocstyle]
+add_ignore = "D105,D107,D202"
+
+[tool.doc8]
+max-line-length = 88
+
+[tool.tox]
+legacy_tox_ini = """
+
+[tox]
+isolated_build = True
+envlist = py39,py310,py311
+
+[testenv]
+allowlist_externals = make
+deps = pytest
+commands = make test
+"""
