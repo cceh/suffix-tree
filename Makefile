@@ -44,6 +44,7 @@ dist: test
 	python3 -m build
 
 upload: dist
+	twine check dist/*
 	twine upload dist/*
 
 install:

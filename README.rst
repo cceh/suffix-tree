@@ -38,7 +38,7 @@ Being implemented in Python this tree is not very fast nor memory efficient.  Th
 building of the tree takes time proportional to the length of the string of symbols.
 The query time is proportional to the length of the query string.  You can get a rough
 idea of the performance under: `Time Complexity`_.  To get the best performance run with
-:program:`python -O`.
+python -O.
 
 PyPi: https://pypi.org/project/suffix-tree/
 
