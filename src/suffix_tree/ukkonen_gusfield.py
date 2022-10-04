@@ -28,7 +28,7 @@ class Builder(builder.Builder):
     def debug_dot(self, i: int, j: int):
         """Write a debug graph."""
         debug_dot(
-            self.tree, f"/tmp/suffix_tree_ukkonen_gusfield_{str(self.id)}_{i}_{j}"
+            self.tree, f"/tmp/suffix_tree_ukkonen_gusfield_{str(self.id)}_{i}_{j}.dot"
         )
 
     def suffix_link_dance(self, node: Node, beta: Path) -> Internal:

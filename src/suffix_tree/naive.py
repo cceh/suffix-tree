@@ -19,7 +19,7 @@ class Builder(builder.Builder):
 
     def debug_dot(self, i: int):
         """Write a debug graph."""
-        debug_dot(self.tree, f"/tmp/suffix_tree_naive_{str(self.id)}_{i}")
+        debug_dot(self.tree, f"/tmp/suffix_tree_naive_{str(self.id)}_{i}.dot")
 
     def build(self) -> None:
         """Add a string to the tree."""

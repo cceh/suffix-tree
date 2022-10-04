@@ -21,9 +21,9 @@ class TestFind:
     def test_to_dot(self, builder, tmp_path):
         tree = Tree({"A": "abcde"}, builder=builder, progress=self.progress)
         if util.is_debug():
-            util.debug_dot(tree, tmp_path / "suffix_tree")
+            util.debug_dot(tree, tmp_path / "suffix_tree.dot")
 
     def test_to_dot_debug(self, builder, tmp_path, debug_mode):
         tree = Tree({"A": "abcde"}, builder=builder, progress=self.progress)
         if util.is_debug():
-            util.debug_dot(tree, tmp_path / "suffix_tree")
+            util.debug_dot(tree, tmp_path / "suffix_tree.dot")

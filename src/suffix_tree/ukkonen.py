@@ -47,7 +47,7 @@ class Builder(builder.Builder):
 
     def debug_dot(self, k: int, p: int) -> None:
         """Write a debug graph."""
-        debug_dot(self.tree, f"/tmp/suffix_tree_ukkonen_{self.id}_{k}_{p}")
+        debug_dot(self.tree, f"/tmp/suffix_tree_ukkonen_{self.id}_{k}_{p}.dot")
 
     def transition(self, s: Internal, k: int) -> tuple[Node, Path]:
         """Let :math:`g'(s,(k',p')) = s'` be the :math:`t_k`-transition from :math:`s`.

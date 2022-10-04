@@ -2,7 +2,6 @@
 
 import collections
 import logging
-import subprocess
 import sys
 from typing import Optional, cast, overload
 
@@ -60,16 +59,13 @@ def debug(msg: str, *args, **kwargs) -> None:
 
 
 def debug_dot(tree, filename: str) -> None:
-    """Write a dot and png file of the tree."""
+    """Write a dot file of the tree."""
 
     if __debug__ and DEBUG_DOT:
         dot = tree.to_dot()
         debug("writing dot: %s", filename)
-        with open(f"{filename}.dot", "w") as tmp:
+        with open(filename, "w") as tmp:
             tmp.write(dot)
-        subprocess.check_output(
-            f"dot -Tpng {filename}.dot > {filename}.png", shell=True
-        )
 
 
 def is_debug() -> bool:
