@@ -3,11 +3,11 @@ r"""A tree builder that uses Ukkonen's Algorithm.
 Ukkonen's algorithm to build a suffix tree in linear time adapted to
 generalized suffix trees.
 
-In a generalized suffix tree the start and end indices k and p are not enough to
-uniquely identify a substring, we also need to keep track which string k and p
-are referring to.  So instead of using the three parameters :math:`s, (k, p)` we
-use the two parameters s and path, with path being a structure containing
-string, k, and p.
+In a generalized suffix tree the start and end indices :math:`k` and :math:`p` are not
+enough to uniquely identify a subsequence, we also need to keep track which sequence
+:math:`k` and :math:`p` are referring to.  So instead of using the three parameters
+:math:`s, (k, p)` we use the two parameters s and path, with path being a structure
+containing the string, :math:`k`, and :math:`p`.
 
 We also have two problems with indices:  The first is that Python indices start
 with 0 while Ukkonen's start with 1.  The second is that Python indices point to

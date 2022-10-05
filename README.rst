@@ -40,6 +40,8 @@ The query time is proportional to the length of the query string.  You can get a
 idea of the performance under: `Time Complexity`_.  To get the best performance run with
 python -O.
 
+Documentation: https://cceh.github.io/suffix-tree/
+
 PyPi: https://pypi.org/project/suffix-tree/
 
 
@@ -48,6 +50,7 @@ Usage examples:
 
 .. code-block:: python
 
+   >>> from suffix_tree import Tree
    >>> tree = Tree()
    >>> tree.add(1, "xabxac")
    >>> tree.add(2, "awyawxawxz")
@@ -98,23 +101,3 @@ Usage examples:
    2 a
    2 x
    2 x a
-
-
-Time Complexity
-===============
-
-.. _time-complexity:
-
-.. image:: docs/_images/graph_time_complexity.png
-   :width: 100%
-
-
-References
-==========
-
-.. [Ukkonen1995] Ukkonen, Esko.  On-line construction of suffix trees.  1995.
-                 Algorithmica 14:249-60.
-                 http://www.cs.helsinki.fi/u/ukkonen/SuffixT1withFigs.pdf
-
-.. [Gusfield1997] Gusfield, Dan.  Algorithms on strings, trees, and sequences.
-                  1997.  Cambridge University Press.

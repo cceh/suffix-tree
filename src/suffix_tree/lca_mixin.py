@@ -2,7 +2,7 @@ r"""A mixin that implements Constant-Time Lowest Common Ancestor Retrieval.
 
 "With the ability to solve lowest common ancestor queries in constant time,
 suffix trees can be used to solve many additional string problems."
-[Gusfield1997]_ §9, 196
+--- [Gusfield1997]_ §9, 196
 
 "**Definition** In a rooted tree :math:`\mathcal{T}`, a node :math:`u` is an
 *ancestor* of a node :math:`v` if :math:`u` is on the unique path from the root
@@ -12,7 +12,7 @@ ancestor* of :math:`v` refers to an ancestor that is not :math:`v`.
 **Definition** In a rooted tree :math:`\mathcal{T}`, the *lowest common ancestor
 (lca)* of two nodes :math:`x` and :math:`y` is the deepest node in
 :math:`\mathcal{T}` that is an ancestor to both :math:`x` and :math:`y`."
-[Gusfield1997]_ Chapter 8, 181ff
+--- [Gusfield1997]_ Chapter 8, 181ff
 """
 
 import collections
@@ -78,14 +78,14 @@ def h(k):
 
     "**Definition** For any number :math:`k`, :math:`h(k)` denotes the position
     (counting from the right) of the least-significant 1-bit in the binary
-    representation of :math:`k`." [Gusfield1997]_ §8.5, 184ff
+    representation of :math:`k`." --- [Gusfield1997]_ §8.5, 184ff
 
     "**Lemma 8.5.1.** For any node :math:`k` (node with path number k) in
     :math:`\mathcal{B}`, :math:`h(k)` equals the height of node :math:`k` in
     :math:`\mathcal{B}`.
 
     For example, node 8 (binary 1000) is at height 4, and the path from it to a
-    leaf has four nodes (three edges)." [Gusfield1997]_ §8.5, 184ff
+    leaf has four nodes (three edges)." --- [Gusfield1997]_ §8.5, 184ff
 
     N.B. in this implementation we start counting with 0, so you get:
 
@@ -116,10 +116,10 @@ class Node:
         r"""For a node :math:`v` of :math:`\mathcal{T}`, let :math:`I(v)` be a node
         :math:`w` in :math:`\mathcal{T}` such that :math:`h(w)` is maximum over
         all nodes in the subtree of :math:`v` (including :math:`v` itself).
-        [Gusfield1997]_ §8.5, 184ff
+        --- [Gusfield1997]_ §8.5, 184ff
 
         For any node :math:`v`, node :math:`I(v)` is the deepest node in the run
-        containing node :math:`v`.  [Gusfield1997]_ Lemma 8.6.1., 187
+        containing node :math:`v`. --- [Gusfield1997]_ Lemma 8.6.1., 187
 
         N.B. This is the id of the node :math:`I(v)`.
 
@@ -129,9 +129,9 @@ class Node:
         r"""Bit :math:`A_v(i)` is set to 1 if and only if node :math:`v` has some
         ancestor in :math:`\mathcal{T}` that maps to height :math:`i` in
         :math:`\mathcal{B}`, i.e. if and only if :math:`v` has an ancestor
-        :math:`u` such that :math:`h(I(u))=i`. [Gusfield1997]_ §8.7, 188f
+        :math:`u` such that :math:`h(I(u))=i`. --- [Gusfield1997]_ §8.7, 188f
 
-        N.B. A node is an ancestor of itself. [Gusfield1997]_ §8.1, 181
+        N.B. A node is an ancestor of itself. --- [Gusfield1997]_ §8.1, 181
         """
 
     def compute_A(self, A):
