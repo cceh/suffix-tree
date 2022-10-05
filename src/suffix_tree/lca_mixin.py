@@ -13,9 +13,6 @@ ancestor* of :math:`v` refers to an ancestor that is not :math:`v`.
 (lca)* of two nodes :math:`x` and :math:`y` is the deepest node in
 :math:`\mathcal{T}` that is an ancestor to both :math:`x` and :math:`y`."
 [Gusfield1997]_ Chapter 8, 181ff
-
-.. [Warren2013] Warren, H.S. Hacker's Delight, 2nd Edition 2013, Pearson, Westford, MA.
-
 """
 
 import collections
@@ -109,7 +106,7 @@ class Node:
 
     __slots__ = "lca_id", "I", "A"
 
-    def __init__(self, parent, path, **kw):  # pylint: disable=unused-argument
+    def __init__(self, parent, **kw):  # pylint: disable=unused-argument
         self.lca_id = 0
         """Number of the node given in a depth-first traversal of the tree, starting
         with 1.  See [Gusfield1997]_ Figure 8.1, 182
@@ -247,8 +244,8 @@ class Tree:
         # compute nodemap
         def func(node):
             """Compute a nodemap."""
-            if node.is_leaf():
-                self.nodemap[node.str_id][node.path.start] = node
+            if isinstance(node, Leaf):
+                self.nodemap[node.str_id][node.start] = node
 
         self.root.pre_order(func)
 

@@ -105,7 +105,7 @@ Time Complexity
 
 .. _time-complexity:
 
-.. image:: docs/graph_time_complexity.png
+.. image:: docs/_images/graph_time_complexity.png
    :width: 100%
 
 

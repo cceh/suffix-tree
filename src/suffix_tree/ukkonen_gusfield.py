@@ -1,6 +1,4 @@
-r"""A tree builder that uses Gusfield's variant.
-
-This tree builder uses Gusfield's variant of Ukkonen's algorithm to build a suffix tree.
+r"""A tree builder that uses Gusfield's variant of Ukkonen's algorithm.
 
 Credits: This implementation of Ukkonen's algorithm in Python closely follows the
 description in [Gusfield1997]_ Chapter 6, 94ff.
@@ -10,7 +8,6 @@ http://web.cs.ucdavis.edu/%7Egusfield/strmat.html
 
 See also: Ukkonen's original paper:
 http://www.cs.helsinki.fi/u/ukkonen/SuffixT1withFigs.pdf
-
 """
 
 from typing import Optional, cast
@@ -34,7 +31,7 @@ class Builder(builder.Builder):
     def suffix_link_dance(self, node: Node, beta: Path) -> Internal:
         """Go to the parent, follow the suffix link and do the skip/count trick.
 
-        See: [Gusfield1997]_, page 100
+        For a description see: [Gusfield1997]_, page 100
         """
 
         if node.suffix_link is not None:
@@ -56,7 +53,7 @@ class Builder(builder.Builder):
                 debug("Skipping down to len %d", l)
             # use the skip/count trick to move down the tree.
             while True:
-                child = sv.children[node.path[len(sv) + 1]]
+                child = sv.children[node[len(sv) + 1]]
                 if len(child) >= l:
                     break
                 assert isinstance(sv, Internal)
@@ -114,7 +111,7 @@ class Builder(builder.Builder):
             # :math:`i + 2` can execute the suffix extension rule for :math:`j^*`
             # without any up-walking, suffix traversals, or node skipping.
             #
-            # -- [Gusfield1997]_, page 106
+            # --- [Gusfield1997]_, page 106
 
             self.path.set_open_end(i + 1)
             Sip1: Symbol = self.path[i]  # the character :math:`S(i + 1)`
@@ -171,7 +168,7 @@ class Builder(builder.Builder):
                 # string :math:`S[1..i]`, the first extension of phase :math:`i
                 # + 1` need not do any up or down walking.
                 #
-                # -- [Gusfield1997]_, page 100
+                # --- [Gusfield1997]_, page 100
 
                 ############################################
                 # Find the end of beta in the current tree #
@@ -219,7 +216,7 @@ class Builder(builder.Builder):
                 # be sure the suffix :math:`\beta S(i + 1)` is in the tree.  It
                 # does this according to one of the following three rules:
                 #
-                # -- [Gusfield1997]_, page 96
+                # --- [Gusfield1997]_, page 96
 
                 sw = node  # target for suffix link
 
@@ -244,7 +241,7 @@ class Builder(builder.Builder):
                 # character :math:`S(i + 1)` is added to the end of the label of
                 # that leaf edge.
 
-                # if node.is_leaf ():
+                # if isinstance(Leaf, node):
                 #    node.add (self.id, Path (self.path.S, j, None))
                 #    debug ("*** Applied Rule 1 -- extended leaf %s", str (node))
 

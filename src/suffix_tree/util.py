@@ -89,11 +89,11 @@ class Path:
 
     @overload
     def __init__(self, S: Symbols, start: int, end: int):
-        ... # pragma: no cover
+        ...  # pragma: no cover
 
     @overload
     def __init__(self, S: "Path", start: int, end: Optional[int]):
-        ... # pragma: no cover
+        ...  # pragma: no cover
 
     def __init__(self, S, start, end):
         """Initialize a path from a sequence of symbols or another path.
@@ -126,11 +126,6 @@ class Path:
 
         """
         return self._end[0]
-
-    @end.setter
-    def end(self, value: int) -> None:
-        """Set a new array used only by this path."""
-        self._end = [value]
 
     def set_open_end(self, value: int) -> None:
         """Set the open end marker.
@@ -175,7 +170,7 @@ class Path:
         return " ".join(map(str, self.S[self.start : self.end]))
 
     def __len__(self) -> int:
-        return self.end - self.start
+        return self._end[0] - self.start
 
     def __lt__(self, other) -> bool:
         """Return True if self less than other.
@@ -193,27 +188,6 @@ class Path:
         Also we don't need negative indices.
         """
         return self.S[self.start + i]
-
-    def compare(self, path: "Path", offset: int = 0) -> int:
-        """Compare a path against another, return the matched length."""
-        length = min(len(self), len(path)) - offset
-        offset1 = self.start + offset
-        offset2 = path.start + offset
-        i = 0
-
-        while i < length:
-            if self.S[offset1 + i] != path.S[offset2 + i]:
-                break
-            i += 1
-        if __debug__ and DEBUG:
-            debug(
-                "Comparing %s == %s at offsets %d => common len: %d",
-                str(self),
-                str(path),
-                offset,
-                i,
-            )
-        return i
 
     def ukko_str(self) -> str:
         """Debug path in Ukkonen's notation."""

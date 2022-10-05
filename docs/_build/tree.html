@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tree &mdash; suffix-tree 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Node" href="node.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> suffix-tree
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node.html">Node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builder.html">Builder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.naive">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen_gusfield">Gusfield Builder</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#time-complexity">Time Complexity</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">suffix-tree</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Tree</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tree.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-suffix_tree.tree">
+<span id="tree"></span><h1>Tree<a class="headerlink" href="#module-suffix_tree.tree" title="Permalink to this headline"></a></h1>
+<p>A Generalized Suffix Tree.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="suffix_tree.tree.Tree">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.tree.</span></span><span class="sig-name descname"><span class="pre">Tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">d:</span> <span class="pre">typing.Optional[dict[object,</span> <span class="pre">collections.abc.Sequence[collections.abc.Hashable]]]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">builder=&lt;class</span> <span class="pre">'suffix_tree.ukkonen.Builder'&gt;,</span> <span class="pre">progress:</span> <span class="pre">typing.Optional[typing.Callable[[int],</span> <span class="pre">None]]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree" title="Permalink to this definition"></a></dt>
+<dd><p>A generalized suffix tree.</p>
+<p>The key feature of the suffix tree is that for any leaf <span class="math notranslate nohighlight">\(i\)</span>, the
+concatenation of the edgle-labels on the path from the root to leaf
+<span class="math notranslate nohighlight">\(i\)</span> exactly spells out the suffix of <span class="math notranslate nohighlight">\(S\)</span> that starts at point
+<span class="math notranslate nohighlight">\(i\)</span>.  That is, it spells out <span class="math notranslate nohighlight">\(S[i..m]\)</span>.</p>
+<p>Initialize and interrogate the tree:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">suffix_tree</span> <span class="kn">import</span> <span class="n">Tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;xabxac&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;abx&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;abc&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;xabxac&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="s2">&quot;awyawxacxz&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">id_</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;xac&quot;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="go">A : x a c $</span>
+<span class="go">B : x a c x z $</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;abc&quot;</span><span class="p">)</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">suffix_tree</span> <span class="kn">import</span> <span class="n">naive</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;xabxac&quot;</span><span class="p">},</span> <span class="n">naive</span><span class="o">.</span><span class="n">Builder</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;abx&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;abc&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.tree.Tree.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">d:</span> <span class="pre">typing.Optional[dict[object,</span> <span class="pre">collections.abc.Sequence[collections.abc.Hashable]]]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">builder=&lt;class</span> <span class="pre">'suffix_tree.ukkonen.Builder'&gt;,</span> <span class="pre">progress:</span> <span class="pre">typing.Optional[typing.Callable[[int],</span> <span class="pre">None]]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize and optionally build the tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> (<em>dict</em><em>[</em><em>Id</em><em>, </em><em>Symbols</em><em>]</em>) – a dictionary of ids to sequences of symbols or None</p></li>
+<li><p><strong>builder</strong> (<a class="reference internal" href="builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><em>builder.Builder</em></a>) – a builder
+(default = <a class="reference internal" href="builder.html#suffix_tree.ukkonen.Builder" title="suffix_tree.ukkonen.Builder"><code class="xref py py-class docutils literal notranslate"><span class="pre">suffix_tree.ukkonen.Builder</span></code></a>)</p></li>
+<li><p><strong>progress</strong> (<em>Callable</em>) – a progress function (default = None).  The function
+gets called at regular intervals during tree construction with one
+parameter: the current phase.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.tree.Tree.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id_:</span> <span class="pre">object,</span> <span class="pre">S:</span> <span class="pre">collections.abc.Sequence[collections.abc.Hashable],</span> <span class="pre">builder:</span> <span class="pre">typing.Type[suffix_tree.builder.Builder]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'suffix_tree.ukkonen.Builder'&gt;,</span> <span class="pre">progress:</span> <span class="pre">typing.Optional[typing.Callable[[int],</span> <span class="pre">None]]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree.add" title="Permalink to this definition"></a></dt>
+<dd><p>Add a sequence of symbols to the tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>object</em>) – an object (probably a str or int) serving as an id for the
+sequence</p></li>
+<li><p><strong>S</strong> (<em>Sequence</em>) – a sequence of symbols</p></li>
+<li><p><strong>builder</strong> (<a class="reference internal" href="builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><em>builder.Builder</em></a>) – a builder
+(default = <a class="reference internal" href="builder.html#suffix_tree.ukkonen.Builder" title="suffix_tree.ukkonen.Builder"><code class="xref py py-class docutils literal notranslate"><span class="pre">suffix_tree.ukkonen.Builder</span></code></a>)</p></li>
+<li><p><strong>progress</strong> (<em>Callable</em>) – a progress function (default = None).  The function
+gets called at regular intervals during tree construction with one
+parameter: the current phase.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">suffix_tree</span> <span class="kn">import</span> <span class="n">Tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;xabxac&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;awyawxawxz&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;abx&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;awx&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;abc&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.tree.Tree.find_path">
+<span class="sig-name descname"><span class="pre">find_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="node.html#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="node.html#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_path" title="Permalink to this definition"></a></dt>
+<dd><p>Find a path in the tree.</p>
+<p>See: <a class="reference internal" href="node.html#suffix_tree.node.Internal.find_path" title="suffix_tree.node.Internal.find_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">suffix_tree.node.Internal.find_path()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.tree.Tree.find">
+<span class="sig-name descname"><span class="pre">find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find" title="Permalink to this definition"></a></dt>
+<dd><p>Find a sequence in the tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>S</strong> (<em>Sequence</em>) – a sequence of symbols</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the sequence was found in the tree.</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">suffix_tree</span> <span class="kn">import</span> <span class="n">Tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;xabxac&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;abx&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;abc&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.tree.Tree.find_all">
+<span class="sig-name descname"><span class="pre">find_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_all" title="Permalink to this definition"></a></dt>
+<dd><p>Find all occurences of a sequence in a tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>S</strong> (<em>Sequence</em>) – a sequence of symbols</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of positions</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">suffix_tree</span> <span class="kn">import</span> <span class="n">Tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;xabxac&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">id_</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;ab&quot;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="go">A : a b x a c $</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;abc&quot;</span><span class="p">)</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.tree.Tree.find_id">
+<span class="sig-name descname"><span class="pre">find_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_id" title="Permalink to this definition"></a></dt>
+<dd><p>Find a sequence in the tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>object</em>) – the id of a sequence in the tree</p></li>
+<li><p><strong>S</strong> (<em>Sequence</em>) – a given sequence of symbols</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the given sequence was found in the tree in the sequence
+labeled with id_.</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">suffix_tree</span> <span class="kn">import</span> <span class="n">Tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;xabxac&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="s2">&quot;awyawxawxz&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find_id</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;abx&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find_id</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;awx&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find_id</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;abx&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.tree.Tree.pre_order">
+<span class="sig-name descname"><span class="pre">pre_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.pre_order" title="Permalink to this definition"></a></dt>
+<dd><p>Walk the tree visiting each node before its children.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>f</strong> (<em>Callable</em>) – the visitor function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.tree.Tree.post_order">
+<span class="sig-name descname"><span class="pre">post_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.post_order" title="Permalink to this definition"></a></dt>
+<dd><p>Walk the tree visiting each node after its children.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>f</strong> (<em>Callable</em>) – the visitor function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.tree.Tree.common_substrings">
+<span class="sig-name descname"><span class="pre">common_substrings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.common_substrings" title="Permalink to this definition"></a></dt>
+<dd><p>Get a list of common substrings.</p>
+<p><strong>Definition</strong> Let <span class="math notranslate nohighlight">\(K\)</span> be the number of sequences in the tree.  For each
+<span class="math notranslate nohighlight">\(k\)</span> between 2 and <span class="math notranslate nohighlight">\(K\)</span>, we define <span class="math notranslate nohighlight">\(l(k)\)</span> to be the length of
+the <em>longest substring common to at least</em> <span class="math notranslate nohighlight">\(k\)</span> <em>of the strings.</em>
+— <a class="reference internal" href="references.html#gusfield1997" id="id1"><span>[Gusfield1997]</span></a> §7.6, page 127ff</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a list of tuples containing <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(l(k)\)</span>, and the Path.</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">suffix_tree</span> <span class="kn">import</span> <span class="n">Tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;sandollar&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="s2">&quot;sandlot&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="s2">&quot;handler&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="s2">&quot;grand&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="s2">&quot;pantry&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">common_substrings</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">2 4 s a n d</span>
+<span class="go">3 3 a n d</span>
+<span class="go">4 3 a n d</span>
+<span class="go">5 2 a n</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.tree.Tree.maximal_repeats">
+<span class="sig-name descname"><span class="pre">maximal_repeats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.maximal_repeats" title="Permalink to this definition"></a></dt>
+<dd><p>Get a list of the maximal repeats in the tree.</p>
+<p><strong>Definition</strong> A <em>maximal pair</em> in a string <span class="math notranslate nohighlight">\(S\)</span> is a pair of identical
+substrings <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in <span class="math notranslate nohighlight">\(S\)</span> such that the character
+to immediate left (right) of <span class="math notranslate nohighlight">\(\alpha\)</span> is different from the character to
+the immediate left (right) of <span class="math notranslate nohighlight">\(\beta\)</span>.  That is, extending <span class="math notranslate nohighlight">\(\alpha\)</span>
+and <span class="math notranslate nohighlight">\(\beta\)</span> in either direction would destroy the equality of the two
+strings.  A <em>maximal repeat</em> <span class="math notranslate nohighlight">\(\alpha\)</span> is a <em>substring</em> of <span class="math notranslate nohighlight">\(S\)</span> that
+occurs in a maximal pair in <span class="math notranslate nohighlight">\(S\)</span>. — <a class="reference internal" href="references.html#gusfield1997" id="id2"><span>[Gusfield1997]</span></a> §7.12, page 143ff.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a list of tuples of <span class="math notranslate nohighlight">\(C\)</span> and path, where <span class="math notranslate nohighlight">\(C\)</span> is the number
+of distinct sequences in the tree that contain the maximal repeat.</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">suffix_tree</span> <span class="kn">import</span> <span class="n">Tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;xabxac&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="s2">&quot;awyawxawxz&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">C</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">maximal_repeats</span><span class="p">()):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">1 a w</span>
+<span class="go">1 a w x</span>
+<span class="go">2 a</span>
+<span class="go">2 x</span>
+<span class="go">2 x a</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.tree.Tree.to_dot">
+<span class="sig-name descname"><span class="pre">to_dot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.to_dot" title="Permalink to this definition"></a></dt>
+<dd><p>Output the tree in GraphViz .dot format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the tree in GraphViz dot format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="node.html" class="btn btn-neutral float-right" title="Node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-22, Marcello Perathoner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

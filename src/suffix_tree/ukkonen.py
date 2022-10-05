@@ -14,11 +14,6 @@ with 0 while Ukkonen's start with 1.  The second is that Python indices point to
 one beyond the end while Ukkonen's point to the end.  In conclusion: Ukkonen's
 1..2 becomes Python's [0:2].
 
-
-.. [Ukkonen1995] Ukkonen, Esko.  On-line construction of suffix trees.  1995.
-                 Algorithmica 14:249-60.
-                 http://www.cs.helsinki.fi/u/ukkonen/SuffixT1withFigs.pdf
-
 See also: Ukkonen's suffix tree algorithm in plain English
 https://stackoverflow.com/questions/9452701/
 
@@ -62,9 +57,7 @@ class Builder(builder.Builder):
             return self.root, Path(self.path, 0, 1)
 
         s_prime = s.children[self.path[k]]
-        path = s_prime.path
-
-        return s_prime, Path(path, path.start + len(s), path.end)
+        return s_prime, Path(s_prime.S, s_prime.start + len(s), s_prime.end)
 
     def test_and_split(
         self, s: Internal, path: Path, t: Symbol
@@ -80,7 +73,7 @@ class Builder(builder.Builder):
         output parameter.  If :math:`(s, (k, p))` is not the end point, then
         state :math:`(s, (k, p))` is made explicit (if not already so) by
         splitting a transition.  The explicit state is returned as the second
-        output parameter."  [Ukkonen1995]_
+        output parameter." --- [Ukkonen1995]_
         """
 
         assert isinstance(s, Internal)
@@ -117,14 +110,14 @@ class Builder(builder.Builder):
     def canonize(self, s: Internal, path: Path) -> tuple[Internal, Path]:
         r"""Canonize a reference pair.
 
-        "Given a reference pair :math:`(s, (k, p))` for some state :math:`r`, it finds
+        r"Given a reference pair :math:`(s, (k, p))` for some state :math:`r`, it finds
         and returns state :math:`s'` and left link :math:`k'` such that :math:`(s', (k',
         p))` is the canonical reference pair for :math:`r`.  State :math:`s'` is the
         closest explicit ancestor of :math:`r` (or :math:`r` itself if :math:`r` is
         explicit).  Therefore the string that leads from :math:`s'` to :math:`r` must be
         a suffix of the string :math:`t_k\dots t_p` that leads from :math:`s` to
         :math:`r`.  Hence the right link :math:`p` does not change but the left link
-        :math:`k` can become :math:`k', k' \gte k`."  [Ukkonen1995]_
+        :math:`k` can become :math:`k', k' \gte k`."  --- [Ukkonen1995]_
         """
 
         assert isinstance(s, Internal)
@@ -166,12 +159,12 @@ class Builder(builder.Builder):
         explicit state.  Procedure update returns a reference pair for the end
         point :math:`s_{j'}` (actually only the state and the left pointer of
         the pair, as the second pointer remains :math:`i - 1` for all states on
-        the boundary path)." [Ukkonen1995]_
+        the boundary path)." --- [Ukkonen1995]_
 
-        :math;`s,(k,i - 1)` is the canonical reference pair for the active
+        :math:`s,(k,i - 1)` is the canonical reference pair for the active
         point.
 
-        Return a reference pair for the endpoint :math:`s_{j\prime}`.
+        :return: a reference pair for the endpoint :math:`s_{j\prime}`.
         """
 
         assert isinstance(s, Internal)
@@ -231,25 +224,26 @@ class Builder(builder.Builder):
         s = self.root
         len_ = len(self.path)
 
-        path = Path(self.path, 0, 1)  # initial path of 1 symbol
+        i = 1
+        path = Path(self.path, 0, i)  # initial path of 1 symbol
 
         while True:
             if self.progress:
-                self.progress(path.end)
+                self.progress(i)
 
             if __debug__ and util.DEBUG:
                 debug("enter main loop")
 
-            path.set_open_end(path.end)
             s, path = self.update(s, path)
             s, path = self.canonize(s, path)
             if __debug__ and util.DEBUG:
                 debug('active point is: s="%s" %s', s, path.ukko_str())
 
-            if path.end == len_:
+            if i == len_:
                 break
 
-            path.end += 1
+            i += 1
+            path.set_open_end(i)
 
             if __debug__ and util.DEBUG:
                 debug("exit main loop\n")

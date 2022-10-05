@@ -5,6 +5,8 @@ mypy
 pydocstyle
 pylint
 pytest
+sphinx
+sphinx-rtd-theme
 toml
 tox
 twine

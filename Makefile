@@ -1,4 +1,4 @@
-.PHONY: lint test dist upload
+.PHONY: lint test dist upload docs
 
 DIRS=src/ tests/unit/ tests/performance/ scripts/
 BROWSER=firefox
@@ -27,7 +27,7 @@ pydocstyle:
 lint: black blackdoc pylint mypy pydocstyle
 
 test:
-	python3 -m $(PYTEST) src/ tests/ README.rst
+	python3 -m $(PYTEST) src/ tests/ docs/ README.rst
 
 test-performance:
 	python3 -m $(PYTEST) --performance tests/performance/
@@ -39,6 +39,12 @@ coverage:
 	coverage report
 	coverage html
 	$(BROWSER) htmlcov/index.html
+
+profile:
+	python3 -O -m scripts.profile
+
+docs:
+	cd docs; make html
 
 dist: test
 	python3 -m build

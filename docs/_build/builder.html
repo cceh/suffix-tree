@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Builder &mdash; suffix-tree 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Utilities" href="util.html" />
+    <link rel="prev" title="LCA Mixin" href="lca.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> suffix-tree
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tree.html">Tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node.html">Node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Builder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-suffix_tree.naive">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-suffix_tree.ukkonen">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-suffix_tree.ukkonen_gusfield">Gusfield Builder</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#time-complexity">Time Complexity</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">suffix-tree</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Builder</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/builder.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-suffix_tree.builder">
+<span id="builder"></span><h1>Builder<a class="headerlink" href="#module-suffix_tree.builder" title="Permalink to this headline"></a></h1>
+<p>The base class for all builders.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="suffix_tree.builder.Builder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.builder.</span></span><span class="sig-name descname"><span class="pre">Builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.builder.Builder" title="Permalink to this definition"></a></dt>
+<dd><p>Base class for all builders.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.builder.Builder.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.builder.Builder.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.builder.Builder.set_progress_function">
+<span class="sig-name descname"><span class="pre">set_progress_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.builder.Builder.set_progress_function" title="Permalink to this definition"></a></dt>
+<dd><p>Set a progress indicator function.</p>
+<p>The function gets called at regular intervals with the current phase as
+parameter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.builder.Builder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.builder.Builder.build" title="Permalink to this definition"></a></dt>
+<dd><p>Add a string to the tree.</p>
+</dd></dl>
+
+</dd></dl>
+
+<section id="module-suffix_tree.naive">
+<span id="naive-builder"></span><h2>Naive Builder<a class="headerlink" href="#module-suffix_tree.naive" title="Permalink to this headline"></a></h2>
+<p>A naive tree builder.</p>
+<p>This builder uses a naive algorithm to build a suffix tree using
+<span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span> time.</p>
+<p>Credits: This implementation closely follows the description in <a class="reference internal" href="references.html#gusfield1997" id="id1"><span>[Gusfield1997]</span></a>
+Chapter §5.4, page 93.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="suffix_tree.naive.Builder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.naive.</span></span><span class="sig-name descname"><span class="pre">Builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.naive.Builder" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the suffix-tree using a naive algorithm.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.naive.Builder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.naive.Builder.build" title="Permalink to this definition"></a></dt>
+<dd><p>Add a string to the tree.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-suffix_tree.ukkonen">
+<span id="ukkonen-builder"></span><h2>Ukkonen Builder<a class="headerlink" href="#module-suffix_tree.ukkonen" title="Permalink to this headline"></a></h2>
+<p>A tree builder that uses Ukkonen’s Algorithm.</p>
+<p>Ukkonen’s algorithm to build a suffix tree in linear time adapted to
+generalized suffix trees.</p>
+<p>In a generalized suffix tree the start and end indices k and p are not enough to
+uniquely identify a substring, we also need to keep track which string k and p
+are referring to.  So instead of using the three parameters <span class="math notranslate nohighlight">\(s, (k, p)\)</span> we
+use the two parameters s and path, with path being a structure containing
+string, k, and p.</p>
+<p>We also have two problems with indices:  The first is that Python indices start
+with 0 while Ukkonen’s start with 1.  The second is that Python indices point to
+one beyond the end while Ukkonen’s point to the end.  In conclusion: Ukkonen’s
+1..2 becomes Python’s [0:2].</p>
+<p>See also: Ukkonen’s suffix tree algorithm in plain English
+<a class="reference external" href="https://stackoverflow.com/questions/9452701/">https://stackoverflow.com/questions/9452701/</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="suffix_tree.ukkonen.Builder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.ukkonen.</span></span><span class="sig-name descname"><span class="pre">Builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.ukkonen.Builder" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the suffix-tree using Ukkonen’s Algorithm.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.ukkonen.Builder.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.ukkonen.Builder.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.ukkonen.Builder.transition">
+<span class="sig-name descname"><span class="pre">transition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="node.html#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="node.html#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.ukkonen.Builder.transition" title="Permalink to this definition"></a></dt>
+<dd><p>Let <span class="math notranslate nohighlight">\(g'(s,(k',p')) = s'\)</span> be the <span class="math notranslate nohighlight">\(t_k\)</span>-transition from <span class="math notranslate nohighlight">\(s\)</span>.</p>
+<p>return <span class="math notranslate nohighlight">\(s', path'\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.ukkonen.Builder.test_and_split">
+<span class="sig-name descname"><span class="pre">test_and_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="node.html#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Hashable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="node.html#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.ukkonen.Builder.test_and_split" title="Permalink to this definition"></a></dt>
+<dd><p>Test if endpoint and eventually split a transition.</p>
+<p>Return True, if s is the end point.</p>
+<p>“Tests whether or not a state with canonical reference pair <span class="math notranslate nohighlight">\((s, (k,
+p))\)</span> is the end point, that is, a state that in <span class="math notranslate nohighlight">\(STrie(T^{i-1})\)</span>
+would have a <span class="math notranslate nohighlight">\(t_i\)</span>-transition.  Symbol <span class="math notranslate nohighlight">\(t_i\)</span> is given as
+input parameter <span class="math notranslate nohighlight">\(t\)</span>.  The test result is returned as the first
+output parameter.  If <span class="math notranslate nohighlight">\((s, (k, p))\)</span> is not the end point, then
+state <span class="math notranslate nohighlight">\((s, (k, p))\)</span> is made explicit (if not already so) by
+splitting a transition.  The explicit state is returned as the second
+output parameter.” — <a class="reference internal" href="references.html#ukkonen1995" id="id2"><span>[Ukkonen1995]</span></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.ukkonen.Builder.canonize">
+<span class="sig-name descname"><span class="pre">canonize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="node.html#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="node.html#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.ukkonen.Builder.canonize" title="Permalink to this definition"></a></dt>
+<dd><p>Canonize a reference pair.</p>
+<p>r”Given a reference pair <span class="math notranslate nohighlight">\((s, (k, p))\)</span> for some state <span class="math notranslate nohighlight">\(r\)</span>, it finds
+and returns state <span class="math notranslate nohighlight">\(s'\)</span> and left link <span class="math notranslate nohighlight">\(k'\)</span> such that <span class="math notranslate nohighlight">\((s', (k',
+p))\)</span> is the canonical reference pair for <span class="math notranslate nohighlight">\(r\)</span>.  State <span class="math notranslate nohighlight">\(s'\)</span> is the
+closest explicit ancestor of <span class="math notranslate nohighlight">\(r\)</span> (or <span class="math notranslate nohighlight">\(r\)</span> itself if <span class="math notranslate nohighlight">\(r\)</span> is
+explicit).  Therefore the string that leads from <span class="math notranslate nohighlight">\(s'\)</span> to <span class="math notranslate nohighlight">\(r\)</span> must be
+a suffix of the string <span class="math notranslate nohighlight">\(t_k\dots t_p\)</span> that leads from <span class="math notranslate nohighlight">\(s\)</span> to
+<span class="math notranslate nohighlight">\(r\)</span>.  Hence the right link <span class="math notranslate nohighlight">\(p\)</span> does not change but the left link
+<span class="math notranslate nohighlight">\(k\)</span> can become <span class="math notranslate nohighlight">\(k', k' \gte k\)</span>.”  — <a class="reference internal" href="references.html#ukkonen1995" id="id3"><span>[Ukkonen1995]</span></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.ukkonen.Builder.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="node.html#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="node.html#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.ukkonen.Builder.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update the tree.</p>
+<p>“[…] transforms <span class="math notranslate nohighlight">\(STree(T^{i-1})\)</span> into <span class="math notranslate nohighlight">\(STree(T^i)\)</span> by inserting
+the <span class="math notranslate nohighlight">\(t_i\)</span>-transitions in the second group.  The procedure uses
+procedure canonize mentioned above, and procedure test-and-split that
+tests whether or not a given reference pair refers to the end point.  If
+it does not then the procedure creates and returns an explicit state for
+the reference pair provided that the pair does not already represent an
+explicit state.  Procedure update returns a reference pair for the end
+point <span class="math notranslate nohighlight">\(s_{j'}\)</span> (actually only the state and the left pointer of
+the pair, as the second pointer remains <span class="math notranslate nohighlight">\(i - 1\)</span> for all states on
+the boundary path).” — <a class="reference internal" href="references.html#ukkonen1995" id="id4"><span>[Ukkonen1995]</span></a></p>
+<p><span class="math notranslate nohighlight">\(s,(k,i - 1)\)</span> is the canonical reference pair for the active
+point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a reference pair for the endpoint <span class="math notranslate nohighlight">\(s_{j\prime}\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.ukkonen.Builder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.ukkonen.Builder.build" title="Permalink to this definition"></a></dt>
+<dd><p>Add a string to the tree.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-suffix_tree.ukkonen_gusfield">
+<span id="gusfield-builder"></span><h2>Gusfield Builder<a class="headerlink" href="#module-suffix_tree.ukkonen_gusfield" title="Permalink to this headline"></a></h2>
+<p>A tree builder that uses Gusfield’s variant of Ukkonen’s algorithm.</p>
+<p>Credits: This implementation of Ukkonen’s algorithm in Python closely follows the
+description in <a class="reference internal" href="references.html#gusfield1997" id="id5"><span>[Gusfield1997]</span></a> Chapter 6, 94ff.</p>
+<p>See also: the implementation in C by Dan Gusfield et al.:
+<a class="reference external" href="http://web.cs.ucdavis.edu/%7Egusfield/strmat.html">http://web.cs.ucdavis.edu/%7Egusfield/strmat.html</a></p>
+<p>See also: Ukkonen’s original paper:
+<a class="reference external" href="http://www.cs.helsinki.fi/u/ukkonen/SuffixT1withFigs.pdf">http://www.cs.helsinki.fi/u/ukkonen/SuffixT1withFigs.pdf</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="suffix_tree.ukkonen_gusfield.Builder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.ukkonen_gusfield.</span></span><span class="sig-name descname"><span class="pre">Builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.ukkonen_gusfield.Builder" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the suffix-tree using Gusfield’s Algorithm.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.ukkonen_gusfield.Builder.suffix_link_dance">
+<span class="sig-name descname"><span class="pre">suffix_link_dance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="node.html#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="node.html#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></span></span><a class="headerlink" href="#suffix_tree.ukkonen_gusfield.Builder.suffix_link_dance" title="Permalink to this definition"></a></dt>
+<dd><p>Go to the parent, follow the suffix link and do the skip/count trick.</p>
+<p>For a description see: <a class="reference internal" href="references.html#gusfield1997" id="id6"><span>[Gusfield1997]</span></a>, page 100</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.ukkonen_gusfield.Builder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.ukkonen_gusfield.Builder.build" title="Permalink to this definition"></a></dt>
+<dd><p>Add a string to the tree.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lca.html" class="btn btn-neutral float-left" title="LCA Mixin" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="util.html" class="btn btn-neutral float-right" title="Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-22, Marcello Perathoner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
