@@ -278,7 +278,7 @@ class Builder(builder.Builder):
                 # end of the new leaf edge is given the number :math:`j`.
 
                 if child is None and Sip1 not in node.children:  # also catches root
-                    leaf = Leaf(node, self.id, Path(self.path, j, None))
+                    leaf = Leaf(node, self.id, self.path.S, j, self.path._end)
                     node.children[Sip1] = leaf
                     if __debug__ and util.DEBUG:
                         debug(
@@ -291,7 +291,7 @@ class Builder(builder.Builder):
                     w[j] = sw = node = node.split_edge(matched_len, child)
                     if __debug__ and util.DEBUG:
                         debug("Setting w to the new internal node %s", str(node))
-                    leaf = Leaf(node, self.id, Path(self.path, j, None))
+                    leaf = Leaf(node, self.id, self.path.S, j, self.path._end)
                     node.children[Sip1] = leaf
                     if __debug__ and util.DEBUG:
                         debug(

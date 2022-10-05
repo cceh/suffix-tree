@@ -40,7 +40,7 @@ class Builder(builder.Builder):
             assert matched_len == len(node), f"Add String {matched_len}/{len(node)}"
 
             assert matched_len < len(path)
-            new_leaf = Leaf(node, self.id, Path(path, path.start, path.end))
+            new_leaf = Leaf(node, self.id, path.S, path.start, path._end)
             assert (
                 path.S[path.start + matched_len] not in node.children
             )  # do not overwrite

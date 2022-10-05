@@ -14,28 +14,39 @@ class Node(lca_mixin.Node):
     __slots__ = (
         "parent",
         "suffix_link",
-        "_path",
+        "S",
+        "start",
+        "_end",
         "name",
     )
 
-    def __init__(self, parent, path, **kw):
+    def __init__(self, parent: Optional["Internal"], S: Symbols, start: int, end: list[int], **kw):
         super().__init__(parent, **kw)
 
-        self.parent: Internal = parent
+        self.parent = parent
         """The parent of this node.  Used by Ukkonen and LCA."""
+
+        self.S = S
+        self.start = start
+        self._end = end
 
         self.suffix_link: Optional[Internal] = None
         """Used by the Ukkonen algorithm while constructing the tree."""
-
-        self._path: Path = path
-        """One arbitrarily selected path that traverses this node. (Usually the first
-        one in tree construction order.)
-        """
 
         self.name: str = kw.get("name", EMPTY_STR)
         """A name that can be given to the node.  The name is used only for debugging.
         It is reported in the debug dot graph.
         """
+
+    @property
+    def end(self) -> int:
+        """Return the end of the path.
+
+        This is a calculated property because sometimes the end is 'infinity', which
+        means that the end is assumed to be the end of the current phase.
+
+        """
+        return self._end[0]
 
     def string_depth(self) -> int:
         """Return the string-depth of this node.
@@ -52,22 +63,7 @@ class Node(lca_mixin.Node):
 
     def __len__(self) -> int:
         """Return the string depth of this node."""
-        return len(self._path)
-
-    @property
-    def S(self) -> Symbols:
-        """Return the start of the path."""
-        return self._path.S
-
-    @property
-    def start(self) -> int:
-        """Return the start of the path."""
-        return self._path.start
-
-    @property
-    def end(self) -> int:
-        """Return the end of the path."""
-        return self._path.end
+        return self._end[0] - self.start
 
     def __getitem__(self, i: int) -> Symbol:
         """Return the symol at position i.
@@ -75,7 +71,7 @@ class Node(lca_mixin.Node):
         Note: this should implement slices but we don't need them.
         Also we don't need negative indices.
         """
-        return self._path.S[self._path.start + i]
+        return self.S[self.start + i]
 
     def compare(self, other: Path, offset: int = 0) -> int:
         """Compare this node against a path, return the matched length."""
@@ -155,17 +151,17 @@ class Leaf(lca_mixin.Leaf, Node):
 
     __slots__ = ("str_id",)
 
-    def __init__(self, parent: Node, str_id: Id, path, **kw):
-        super().__init__(parent, path, **kw)  # Node
+    def __init__(self, parent: "Internal", str_id: Id, S: Symbols, start: int, end: list[int], **kw):
+        super().__init__(parent, S, start, end, **kw)  # Node
         self.str_id = str_id
 
     def __str__(self) -> str:
         # start + 1 makes it Gusfield-compatible
         # for easier comparing with examples in the book
         return (
-            (self.name or str(self._path))
+            (self.name or " ".join(map(str, self.S[self.start : self.end])))
             + super().__str__()
-            + f" {str(self.str_id)}:{self._path.start + 1}"
+            + f" {str(self.str_id)}:{self.start + 1}"
         )
 
     def pre_order(self, f) -> None:
@@ -175,13 +171,13 @@ class Leaf(lca_mixin.Leaf, Node):
         f(self)
 
     def add_position(self, l: list[tuple[Id, Path]]) -> None:
-        l.append((self.str_id, self._path))
+        l.append((self.str_id, Path(self.S, self.start, self.end)))
 
     def compute_C(self) -> set[Id]:
         return set([self.str_id])
 
     def compute_left_diverse(self):
-        return [self._path.S[self._path.start - 1]] if self._path.start else None
+        return [self.S[self.start - 1]] if self.start else None
 
     def maximal_repeats(self, a: list):
         return
@@ -203,8 +199,8 @@ class Internal(lca_mixin.Internal, Node):
         "C",
     )
 
-    def __init__(self, parent, path, **kw):
-        super().__init__(parent, path, **kw)
+    def __init__(self, parent: Optional["Internal"], S: Symbols, start: int, end: list[int], **kw):
+        super().__init__(parent, S, start, end, **kw)
 
         self.children: dict[object, Node] = {}
         """ A dictionary of item => node """
@@ -231,7 +227,7 @@ class Internal(lca_mixin.Internal, Node):
         """
 
     def __str__(self) -> str:
-        return (self.name or str(self._path)) + super().__str__()
+        return (self.name or " ".join(map(str, self.S[self.start : self.end]))) + super().__str__()
 
     def add_position(self, l: list[tuple[Id, Path]]) -> None:
         return
@@ -294,7 +290,7 @@ class Internal(lca_mixin.Internal, Node):
         edge_start = child.start + l1
         edge_end = child.start + new_len
         # it is always safe to shorten a path
-        new_node = Internal(self, Path(child.S, child.start, edge_end))
+        new_node = Internal(self, child.S, child.start, [edge_end])
 
         self.children[child.S[edge_start]] = new_node  # substitute new node
         new_node.children[child.S[edge_end]] = child
@@ -345,7 +341,7 @@ class Internal(lca_mixin.Internal, Node):
 
     def maximal_repeats(self, a: list[tuple[int, Path]]):
         if self.is_left_diverse:
-            a.append((self.C, self._path))
+            a.append((self.C, Path(self.S, self.start, self.end)))
         for child in self.children.values():
             child.maximal_repeats(a)
 

@@ -35,7 +35,7 @@ class Builder(builder.Builder):
         super().__init__(tree, id_, path)
 
         # create the auxiliary node only needed for Ukkonen's algorithm
-        aux = Internal(None, Path.from_iterable([]), name="aux")
+        aux = Internal(None, [], 0, [0], name="aux")
         self.root.parent = aux
         self.root.suffix_link = aux
         self.aux = aux
@@ -181,7 +181,7 @@ class Builder(builder.Builder):
         while not is_end_point:
             start = path.p - len(r)
 
-            r_prime = Leaf(r, self.id, Path(self.path, start, None))
+            r_prime = Leaf(r, self.id, self.path.S, start, self.path._end)
             if __debug__ and util.DEBUG:
                 debug('adding leaf "%s"', str(r_prime))
             r.children[t_i] = r_prime

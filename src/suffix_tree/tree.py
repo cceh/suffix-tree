@@ -67,7 +67,7 @@ class Tree(lca_mixin.Tree):
 
         super().__init__(d)
 
-        self.root = Internal(None, Path(tuple(), 0, 0), name="root")
+        self.root = Internal(None, tuple(), 0, [0], name="root")
 
         for id_, S in d.items():
             self.add(id_, S, builder, progress)
