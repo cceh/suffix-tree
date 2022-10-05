@@ -87,7 +87,7 @@
 <p>A mixin that implements Constant-Time Lowest Common Ancestor Retrieval.</p>
 <p>“With the ability to solve lowest common ancestor queries in constant time,
 suffix trees can be used to solve many additional string problems.”
-<a class="reference internal" href="references.html#gusfield1997" id="id1"><span>[Gusfield1997]</span></a> §9, 196</p>
+— <a class="reference internal" href="references.html#gusfield1997" id="id1"><span>[Gusfield1997]</span></a> §9, 196</p>
 <p>“<strong>Definition</strong> In a rooted tree <span class="math notranslate nohighlight">\(\mathcal{T}\)</span>, a node <span class="math notranslate nohighlight">\(u\)</span> is an
 <em>ancestor</em> of a node <span class="math notranslate nohighlight">\(v\)</span> if <span class="math notranslate nohighlight">\(u\)</span> is on the unique path from the root
 to <span class="math notranslate nohighlight">\(v\)</span>.  With this definition a node is an ancestor of itself.  A <em>proper
@@ -95,7 +95,7 @@ ancestor</em> of <span class="math notranslate nohighlight">\(v\)</span> refers 
 <p><strong>Definition</strong> In a rooted tree <span class="math notranslate nohighlight">\(\mathcal{T}\)</span>, the <em>lowest common ancestor
 (lca)</em> of two nodes <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> is the deepest node in
 <span class="math notranslate nohighlight">\(\mathcal{T}\)</span> that is an ancestor to both <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.”
-<a class="reference internal" href="references.html#gusfield1997" id="id2"><span>[Gusfield1997]</span></a> Chapter 8, 181ff</p>
+— <a class="reference internal" href="references.html#gusfield1997" id="id2"><span>[Gusfield1997]</span></a> Chapter 8, 181ff</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.uint">
 <span class="sig-prename descclassname"><span class="pre">suffix_tree.lca_mixin.</span></span><span class="sig-name descname"><span class="pre">uint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.uint" title="Permalink to this definition"></a></dt>
@@ -143,12 +143,12 @@ starting from 0.</p>
 <dd><p>Return the h value.</p>
 <p>“<strong>Definition</strong> For any number <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(h(k)\)</span> denotes the position
 (counting from the right) of the least-significant 1-bit in the binary
-representation of <span class="math notranslate nohighlight">\(k\)</span>.” <a class="reference internal" href="references.html#gusfield1997" id="id4"><span>[Gusfield1997]</span></a> §8.5, 184ff</p>
+representation of <span class="math notranslate nohighlight">\(k\)</span>.” — <a class="reference internal" href="references.html#gusfield1997" id="id4"><span>[Gusfield1997]</span></a> §8.5, 184ff</p>
 <p>“<strong>Lemma 8.5.1.</strong> For any node <span class="math notranslate nohighlight">\(k\)</span> (node with path number k) in
 <span class="math notranslate nohighlight">\(\mathcal{B}\)</span>, <span class="math notranslate nohighlight">\(h(k)\)</span> equals the height of node <span class="math notranslate nohighlight">\(k\)</span> in
 <span class="math notranslate nohighlight">\(\mathcal{B}\)</span>.</p>
 <p>For example, node 8 (binary 1000) is at height 4, and the path from it to a
-leaf has four nodes (three edges).” <a class="reference internal" href="references.html#gusfield1997" id="id5"><span>[Gusfield1997]</span></a> §8.5, 184ff</p>
+leaf has four nodes (three edges).” — <a class="reference internal" href="references.html#gusfield1997" id="id5"><span>[Gusfield1997]</span></a> §8.5, 184ff</p>
 <p>N.B. in this implementation we start counting with 0, so you get:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">0</span>
@@ -180,9 +180,9 @@ with 1.  See <a class="reference internal" href="references.html#gusfield1997" i
 <dd><p>For a node <span class="math notranslate nohighlight">\(v\)</span> of <span class="math notranslate nohighlight">\(\mathcal{T}\)</span>, let <span class="math notranslate nohighlight">\(I(v)\)</span> be a node
 <span class="math notranslate nohighlight">\(w\)</span> in <span class="math notranslate nohighlight">\(\mathcal{T}\)</span> such that <span class="math notranslate nohighlight">\(h(w)\)</span> is maximum over
 all nodes in the subtree of <span class="math notranslate nohighlight">\(v\)</span> (including <span class="math notranslate nohighlight">\(v\)</span> itself).
-<a class="reference internal" href="references.html#gusfield1997" id="id7"><span>[Gusfield1997]</span></a> §8.5, 184ff</p>
+— <a class="reference internal" href="references.html#gusfield1997" id="id7"><span>[Gusfield1997]</span></a> §8.5, 184ff</p>
 <p>For any node <span class="math notranslate nohighlight">\(v\)</span>, node <span class="math notranslate nohighlight">\(I(v)\)</span> is the deepest node in the run
-containing node <span class="math notranslate nohighlight">\(v\)</span>.  <a class="reference internal" href="references.html#gusfield1997" id="id8"><span>[Gusfield1997]</span></a> Lemma 8.6.1., 187</p>
+containing node <span class="math notranslate nohighlight">\(v\)</span>. — <a class="reference internal" href="references.html#gusfield1997" id="id8"><span>[Gusfield1997]</span></a> Lemma 8.6.1., 187</p>
 <p>N.B. This is the id of the node <span class="math notranslate nohighlight">\(I(v)\)</span>.</p>
 </dd></dl>
 
@@ -192,8 +192,8 @@ containing node <span class="math notranslate nohighlight">\(v\)</span>.  <a cla
 <dd><p>Bit <span class="math notranslate nohighlight">\(A_v(i)\)</span> is set to 1 if and only if node <span class="math notranslate nohighlight">\(v\)</span> has some
 ancestor in <span class="math notranslate nohighlight">\(\mathcal{T}\)</span> that maps to height <span class="math notranslate nohighlight">\(i\)</span> in
 <span class="math notranslate nohighlight">\(\mathcal{B}\)</span>, i.e. if and only if <span class="math notranslate nohighlight">\(v\)</span> has an ancestor
-<span class="math notranslate nohighlight">\(u\)</span> such that <span class="math notranslate nohighlight">\(h(I(u))=i\)</span>. <a class="reference internal" href="references.html#gusfield1997" id="id9"><span>[Gusfield1997]</span></a> §8.7, 188f</p>
-<p>N.B. A node is an ancestor of itself. <a class="reference internal" href="references.html#gusfield1997" id="id10"><span>[Gusfield1997]</span></a> §8.1, 181</p>
+<span class="math notranslate nohighlight">\(u\)</span> such that <span class="math notranslate nohighlight">\(h(I(u))=i\)</span>. — <a class="reference internal" href="references.html#gusfield1997" id="id9"><span>[Gusfield1997]</span></a> §8.7, 188f</p>
+<p>N.B. A node is an ancestor of itself. — <a class="reference internal" href="references.html#gusfield1997" id="id10"><span>[Gusfield1997]</span></a> §8.1, 181</p>
 </dd></dl>
 
 <dl class="py method">

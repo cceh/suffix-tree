@@ -135,11 +135,11 @@ Chapter §5.4, page 93.</p>
 <p>A tree builder that uses Ukkonen’s Algorithm.</p>
 <p>Ukkonen’s algorithm to build a suffix tree in linear time adapted to
 generalized suffix trees.</p>
-<p>In a generalized suffix tree the start and end indices k and p are not enough to
-uniquely identify a substring, we also need to keep track which string k and p
-are referring to.  So instead of using the three parameters <span class="math notranslate nohighlight">\(s, (k, p)\)</span> we
-use the two parameters s and path, with path being a structure containing
-string, k, and p.</p>
+<p>In a generalized suffix tree the start and end indices <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(p\)</span> are not
+enough to uniquely identify a subsequence, we also need to keep track which sequence
+<span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(p\)</span> are referring to.  So instead of using the three parameters
+<span class="math notranslate nohighlight">\(s, (k, p)\)</span> we use the two parameters s and path, with path being a structure
+containing the string, <span class="math notranslate nohighlight">\(k\)</span>, and <span class="math notranslate nohighlight">\(p\)</span>.</p>
 <p>We also have two problems with indices:  The first is that Python indices start
 with 0 while Ukkonen’s start with 1.  The second is that Python indices point to
 one beyond the end while Ukkonen’s point to the end.  In conclusion: Ukkonen’s

@@ -46,8 +46,12 @@ profile:
 docs:
 	cd docs; make html
 
-dist: test
+badges: test coverage
+	python -m scripts.make_badges
+
+dist: test coverage badges
 	python3 -m build
+	twine check dist/*
 
 upload: dist
 	twine check dist/*

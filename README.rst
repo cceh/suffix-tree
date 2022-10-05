@@ -2,6 +2,16 @@
  A Generalized Suffix Tree
 ===========================
 
+.. |py39| image:: docs/_images/tox-py39.svg
+
+.. |py310| image:: docs/_images/tox-py310.svg
+
+.. |py311| image:: docs/_images/tox-py311.svg
+
+.. |coverage| image:: docs/_images/coverage.svg
+
+|py39| |py310| |py311| |coverage|
+
 A Generalized Suffix Tree for any Python sequence, with Lowest Common Ancestor
 retrieval.
 
@@ -28,17 +38,10 @@ This suffix tree:
 - builds the tree in linear time with Ukkonen's algorithm,
 - does constant-time Lowest Common Ancestor retrieval.
 
-Three different builders have been implemented:
-
-- one that follows Ukkonen's original paper ([Ukkonen1995]_),
-- one that follows Gusfield's variant ([Gusfield1997]_),
-- and one simple naive algorithm.
-
 Being implemented in Python this tree is not very fast nor memory efficient.  The
 building of the tree takes time proportional to the length of the string of symbols.
-The query time is proportional to the length of the query string.  You can get a rough
-idea of the performance under: `Time Complexity`_.  To get the best performance run with
-python -O.
+The query time is proportional to the length of the query string.  To get the best
+performance run with python -O.
 
 Documentation: https://cceh.github.io/suffix-tree/
 
