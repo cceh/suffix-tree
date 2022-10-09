@@ -3,29 +3,35 @@
 from typing import Callable, Optional
 
 from .node import Internal
-from .util import Path, Id
+from .util import Id, Symbols
 
 
 class Builder:
-    """Base class for all builders."""
+    """The base class for all builders."""
 
     name = "Builder"
 
-    def __init__(self, tree, id_: Id, path: Path):
-        self.tree = tree
-        self.id: Id = id_
-        self.path: Path = path
-        self.root: Internal = tree.root
+    def __init__(self):
+        self.root: Internal
+        self.id: Id
+        self.S: Symbols
         self.progress: Optional[Callable[[int], None]] = None
+        self.progress_tick = 1
 
-    def set_progress_function(self, progress: Callable[[int], None] = None):
-        """Set a progress indicator function.
+    def build(self, root: Internal, id_: Id, S: Symbols) -> None:
+        """Adds the sequence to the tree."""
+        self.root = root
+        self.id = id_
+        self.S = S
 
-        The function gets called at regular intervals with the current phase as
-        parameter.
+    def set_progress_function(self, tick: int, callback: Callable[[int], None] = None):
+        """Set a progress indicator callback function.
+
+        You should not change the tree in this callback.
+
+        :param int tick:          call the callback every tick rounds
+        :param Callable callback: The function is called with the index of the current
+                                  round as parameter.
         """
-        self.progress = progress
-
-    def build(self) -> None:
-        """Add a string to the tree."""
-        raise NotImplementedError
+        self.progress_tick = tick
+        self.progress = callback

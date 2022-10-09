@@ -58,34 +58,21 @@ def debug(msg: str, *args, **kwargs) -> None:
         logging.debug(msg, *args, **kwargs)
 
 
-def debug_dot(tree, filename: str) -> None:
-    """Write a dot file of the tree."""
-
-    if __debug__ and DEBUG_DOT:
-        dot = tree.to_dot()
-        debug("writing dot: %s", filename)
-        with open(filename, "w") as tmp:
-            tmp.write(dot)
-
-
 def is_debug() -> bool:
     """Return True if debugging is on."""
 
     return __debug__ and DEBUG
 
 
+def ukko_str(S: Symbols, start: int, end: int) -> str:
+    """Debug path in Ukkonen's preferred notation."""
+    return f'k={start} p={end-1} k..p="{str(S[start:end])}"'
+
+
 class Path:
-    """A path in a suffix tree.
+    """A path in a suffix tree."""
 
-    Paths come in two flavors: closed and open-ended.  A closed path has a fixed end.
-    In an open-ended path the end is implicitly equivalent to the current phase. When
-    the current phase of the builder increments, the end of all open-ended paths gets
-    incremented too.  This is implemented by the property :code:`end` pointing to a
-    mutable integer (an integer stored in an array, so we can replace the integer in the
-    array).
-    """
-
-    __slots__ = "S", "start", "_end"
+    __slots__ = "S", "start", "end"
 
     @overload
     def __init__(self, S: Symbols, start: int, end: int):
@@ -104,54 +91,15 @@ class Path:
         if isinstance(S, Path):
             self.S: Symbols = S.S
             self.start: int = start
-            self._end: list[int] = [end] if end is not None else S._end
-            """_end emulates a mutable integer.
-            See: Gusfield, 6.1.5 Single Phase Algorithm, Pg. 106, step 1 and
-            6.1.6 Creating the true suffix tree."""
+            self.end: int = end if end is not None else S.end
         else:
             self.S = S
             self.start = start
-            self._end = [end]
+            self.end = end
 
         assert (
             0 <= start <= self.end <= len(self.S)
         ), f"Path: 0 <= {start} <= {self.end} <= {len(self.S)}"
-
-    @property
-    def end(self) -> int:
-        """Return the end of the path.
-
-        This is a calculated property because sometimes the end is 'infinity', which
-        means that the end is assumed to be the end of the current phase.
-
-        """
-        return self._end[0]
-
-    def set_open_end(self, value: int) -> None:
-        """Set the open end marker.
-
-        This puts the value in an array used by many paths.  We can replace the value in
-        the array.
-        """
-        self._end[0] = value
-
-    @property
-    def k(self) -> int:
-        """Return the start of the path in Ukkonen's preferred notation."""
-
-        return self.start
-
-    @property
-    def p(self) -> int:
-        """Return the end of the path in Ukkonen's preferred notation."""
-
-        return self._end[0] - 1
-
-    @property
-    def i(self) -> int:
-        """Another end of the path in Ukkonen's preferred notation."""
-
-        return self._end[0] - 1
 
     @classmethod
     def from_iterable(cls, iterable: collections.abc.Iterable[Symbol]) -> "Path":
@@ -170,7 +118,7 @@ class Path:
         return " ".join(map(str, self.S[self.start : self.end]))
 
     def __len__(self) -> int:
-        return self._end[0] - self.start
+        return self.end - self.start
 
     def __lt__(self, other) -> bool:
         """Return True if self less than other.
@@ -188,7 +136,3 @@ class Path:
         Also we don't need negative indices.
         """
         return self.S[self.start + i]
-
-    def ukko_str(self) -> str:
-        """Debug path in Ukkonen's notation."""
-        return f'k={self.k} p={self.p} k..p="{str(self)}"'

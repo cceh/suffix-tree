@@ -35,13 +35,14 @@ This suffix tree:
 - works with any Python sequence, not just strings, if the items are hashable,
 - is a generalized suffix tree for sets of sequences,
 - is implemented in pure Python,
-- builds the tree in linear time with Ukkonen's algorithm,
+- builds the tree in time proportional to the length of the input,
 - does constant-time Lowest Common Ancestor retrieval.
 
 Being implemented in Python this tree is not very fast nor memory efficient.  The
 building of the tree takes time proportional to the length of the string of symbols.
-The query time is proportional to the length of the query string.  To get the best
-performance run with python -O.
+The query time is proportional to the length of the query string.
+
+To get the best performance turn the python optimizer on: python -O.
 
 Documentation: https://cceh.github.io/suffix-tree/
 

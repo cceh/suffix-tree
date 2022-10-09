@@ -106,7 +106,7 @@ class Node:
 
     __slots__ = "lca_id", "I", "A"
 
-    def __init__(self, parent, **kw):  # pylint: disable=unused-argument
+    def __init__(self):
         self.lca_id = 0
         """Number of the node given in a depth-first traversal of the tree, starting
         with 1.  See [Gusfield1997]_ Figure 8.1, 182

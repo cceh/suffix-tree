@@ -5,7 +5,7 @@
 import pytest
 
 from suffix_tree import Tree
-from suffix_tree.tree import BUILDERS
+from suffix_tree.builder_factory import BUILDERS
 
 
 @pytest.mark.parametrize("builder", BUILDERS)

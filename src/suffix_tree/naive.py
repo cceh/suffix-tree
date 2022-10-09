@@ -1,14 +1,13 @@
 r"""A naive tree builder.
 
-This builder uses a naive algorithm to build a suffix tree using
+This builder uses a naive algorithm to build a suffix tree in
 :math:`\mathcal{O}(n^2)` time.
 
-Credits: This implementation closely follows the description in [Gusfield1997]_
-Chapter §5.4, page 93.
+This implementation closely follows the description in [Gusfield1997]_ §5.4 page 93.
 """
 
-from .util import Path, debug, debug_dot
-from .node import Leaf
+from .util import Id, Symbols, debug
+from .node import Leaf, Internal
 from . import builder, util
 
 
@@ -17,40 +16,51 @@ class Builder(builder.Builder):
 
     name = "Naive"
 
-    def debug_dot(self, i: int):
+    def debug_dot(self, start: int):
         """Write a debug graph."""
-        debug_dot(self.tree, f"/tmp/suffix_tree_naive_{str(self.id)}_{i}.dot")
+        self.root.debug_dot(f"/tmp/suffix_tree_naive_{str(self.id)}_{start}.dot")
 
-    def build(self) -> None:
-        """Add a string to the tree."""
+    def build(self, root: Internal, id_: Id, S: Symbols) -> None:
+        """Add a sequence to the tree.
 
-        for i in range(0, self.path.end):
-            if self.progress:
-                self.progress(i)
+        :param node.Internal root: the root node of the tree
+        :param Id id_: the id of the sequence
+        :param Symbols S: the sequence to insert
+        """
+        super().build(root, id_, S)
 
-            path = Path(self.path, i, self.path.end)
+        S = list(self.S)
+        end = len(S)
+
+        node: Internal
+        for start in range(end):
+            if self.progress and start % self.progress_tick == 0:
+                self.progress(start)
 
             # find longest path from root
-            node, matched_len, child = self.tree.find_path(path)
+            node, matched_len, child = root.find_path(S, start, end)  # type: ignore
 
             if child is not None:
                 # the path ended in the middle of an edge
                 node = node.split_edge(matched_len, child)
 
-            assert matched_len == len(node), f"Add String {matched_len}/{len(node)}"
-
-            assert matched_len < len(path)
-            new_leaf = Leaf(node, self.id, path.S, path.start, path._end)
             assert (
-                path.S[path.start + matched_len] not in node.children
-            )  # do not overwrite
-            node.children[path.S[path.start + matched_len]] = new_leaf
+                matched_len == node.depth()
+            ), f"Add String {matched_len}/{node.depth()}"
+            assert matched_len < (end - start)
+
+            new_leaf = Leaf(node, self.id, S, start, [end])
+
+            assert S[start + matched_len] not in node.children  # do not overwrite
+
+            node.children[S[start + matched_len]] = new_leaf
+
             if __debug__ and util.DEBUG:
                 debug(
                     "Adding %s to node %s as [%s]",
                     str(new_leaf),
                     str(node),
-                    path.S[path.start + matched_len],
+                    S[start + matched_len],
                 )
             if __debug__ and util.DEBUG_DOT:
-                self.debug_dot(i)
+                self.debug_dot(start)

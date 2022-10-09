@@ -13,10 +13,11 @@ from typing import Optional
 import pytest
 
 from suffix_tree import Tree, util
-from suffix_tree.tree import BUILDERS
+from suffix_tree.builder_factory import BUILDERS
 from .. import performance_test
 
 SIZE = 16_000
+TICK = 1_000
 FACTORS = [16, 8, 4, 2, 1]
 FUZZ = 1.2
 WORDLIST = "/usr/share/dict/words"
@@ -75,17 +76,18 @@ class TestTimeComplexity:
         print(f"\ntesting {builder.name}")
         gc.disable()
 
-        def timer(sequence) -> list[float]:
+        def timer(sequence) -> list[tuple[int, float]]:
             tree = Tree()
             elapsed = []
             start: float = time.process_time()
+            builder.set_progress_function(
+                TICK, lambda i: elapsed.append((i, time.process_time() - start))
+            )
             tree.add(
                 "A",
                 sequence,
                 builder=builder,
-                progress=lambda x: elapsed.append(time.process_time() - start),
             )
-            elapsed.append(time.process_time() - start)
             return elapsed
 
         # cProfile.runctx("timer(CHARS)", globals(), locals())

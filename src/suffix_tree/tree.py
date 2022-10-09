@@ -2,14 +2,15 @@
 
 import collections
 import itertools
-from typing import Optional, Callable, Type
+from typing import Optional, TypeAlias, Union
 
-from . import lca_mixin, naive, ukkonen, ukkonen_gusfield
+from . import lca_mixin
 from .builder import Builder
+from .builder_factory import builder_factory
 from .node import Node, Internal
 from .util import Path, UniqueEndChar, Id, Symbols
 
-BUILDERS = [naive.Builder, ukkonen.Builder, ukkonen_gusfield.Builder]
+builder_type: TypeAlias = Union[Builder, type, str, None]
 
 
 class Tree(lca_mixin.Tree):
@@ -39,7 +40,7 @@ class Tree(lca_mixin.Tree):
     []
 
     >>> from suffix_tree import naive
-    >>> tree = Tree({"A": "xabxac"}, naive.Builder)
+    >>> tree = Tree({"A": "xabxac"}, builder=naive.Builder)
     >>> tree.find("abx")
     True
     >>> tree.find("abc")
@@ -50,13 +51,13 @@ class Tree(lca_mixin.Tree):
     def __init__(
         self,
         d: dict[Id, Symbols] = None,
-        builder=ukkonen.Builder,
-        progress: Callable[[int], None] = None,
+        *,
+        builder: builder_type = None,
     ):
         """Initialize and optionally build the tree.
 
         :param dict[Id, Symbols] d: a dictionary of ids to sequences of symbols or None
-        :param builder.Builder builder: a builder
+        :param Builder builder: a builder
             (default = :py:class:`suffix_tree.ukkonen.Builder`)
         :param Callable progress: a progress function (default = None).  The function
             gets called at regular intervals during tree construction with one
@@ -67,24 +68,25 @@ class Tree(lca_mixin.Tree):
 
         super().__init__(d)
 
-        self.root = Internal(None, tuple(), 0, [0], name="root")
+        self.root = Internal(None, tuple(), 0, 0)
+        self.root.name = "root"
 
         for id_, S in d.items():
-            self.add(id_, S, builder, progress)
+            self.add(id_, S, builder=builder)
 
     def add(
         self,
         id_: Id,
         S: Symbols,
-        builder: Type[Builder] = ukkonen.Builder,
-        progress: Callable[[int], None] = None,
+        *,
+        builder: builder_type = None,
     ):
         """Add a sequence of symbols to the tree.
 
         :param object id_: an object (probably a str or int) serving as an id for the
             sequence
         :param Sequence S: a sequence of symbols
-        :param builder.Builder builder: a builder
+        :param Builder builder: a builder
             (default = :py:class:`suffix_tree.ukkonen.Builder`)
         :param Callable progress: a progress function (default = None).  The function
             gets called at regular intervals during tree construction with one
@@ -103,13 +105,14 @@ class Tree(lca_mixin.Tree):
         False
         """
 
-        # input is any iterable, make an immutable copy with a unique
-        # character at the end
-        path = Path.from_iterable(itertools.chain(S, [UniqueEndChar(id_)]))
-
-        self.builder = builder(self, id_, path)
-        self.builder.set_progress_function(progress)
-        self.builder.build()
+        if builder is None:
+            builder = builder_factory("ukkonen")
+        if isinstance(builder, str):
+            builder = builder_factory(builder)
+        if isinstance(builder, type):
+            builder = builder()
+        if isinstance(builder, Builder):
+            builder.build(self.root, id_, itertools.chain(S, [UniqueEndChar(id_)]))
 
     def find_path(self, path: Path) -> tuple[Node, int, Optional[Node]]:
         """Find a path in the tree.
@@ -117,7 +120,7 @@ class Tree(lca_mixin.Tree):
         See: :py:func:`suffix_tree.node.Internal.find_path`
 
         """
-        return self.root.find_path(path)
+        return self.root.find_path(path.S, path.start, path.end)
 
     def find(self, S: Symbols) -> bool:
         """Find a sequence in the tree.
@@ -157,7 +160,9 @@ class Tree(lca_mixin.Tree):
         node, matched_len, child = self.find_path(path)
         if matched_len < len(path):
             return []
-        return (child or node).get_positions()
+        if child is not None:
+            return child.get_positions()
+        return node.get_positions()
 
     def find_id(self, id_: Id, S: Symbols) -> bool:
         r"""Find a sequence in the tree.
@@ -229,7 +234,7 @@ class Tree(lca_mixin.Tree):
 
         V: dict[int, tuple[int, Id, Path]] = collections.defaultdict(
             lambda: (0, "no_id", None)  # type: ignore
-        )  # C => (string_depth, id, path)
+        )  # C => (depth, id, path)
 
         self.root.common_substrings(V)  #  pre_order(f)
 
@@ -277,14 +282,3 @@ class Tree(lca_mixin.Tree):
         for child in self.root.children.values():
             child.maximal_repeats(l)
         return l
-
-    def to_dot(self) -> str:
-        """Output the tree in GraphViz .dot format.
-
-        :return: the tree in GraphViz dot format.
-        """
-        dot = []
-        dot.append("strict digraph G {\n")
-        self.root.to_dot(dot)
-        dot.append("}\n")
-        return "".join(dot)

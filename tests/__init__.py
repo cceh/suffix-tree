@@ -2,7 +2,7 @@
 
 import pytest
 
-from suffix_tree.tree import BUILDERS
+from suffix_tree.builder_factory import BUILDERS
 
 performance_test = pytest.mark.skipif(
     "not config.getoption('--performance')", reason="performance tests not requested"
