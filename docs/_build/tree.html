@@ -7,6 +7,8 @@
   <title>Tree &mdash; suffix-tree 0.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon-cceh-blue.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,7 +17,8 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"macros": {"bs": ["\\boldsymbol"], "suf": ["\\mathrm{\\bf suf}_{\\mkern 1mu\\bs{#1}}", 1], "head": ["\\mathrm{\\bf head}_{\\mkern 1mu\\bs{#1}}", 1], "tail": ["\\mathrm{\\bf tail}_{\\mkern 1mu\\bs{#1}}", 1]}}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -29,6 +32,7 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> suffix-tree
+            <img src="_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,15 +48,18 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">Node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="builder.html">Builder</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.naive">Naive Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen">Ukkonen Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen_gusfield">Gusfield Builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builders.html">Builders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/naive.html">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="performance.html#time-complexity">Time Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#python-3-10-7">Python 3.10.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#pypy-7-3-9">PyPy 7.3.9</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -87,7 +94,7 @@
 <p>A Generalized Suffix Tree.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.tree.</span></span><span class="sig-name descname"><span class="pre">Tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">d:</span> <span class="pre">typing.Optional[dict[object,</span> <span class="pre">collections.abc.Sequence[collections.abc.Hashable]]]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">builder=&lt;class</span> <span class="pre">'suffix_tree.ukkonen.Builder'&gt;,</span> <span class="pre">progress:</span> <span class="pre">typing.Optional[typing.Callable[[int],</span> <span class="pre">None]]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><span class="pre">suffix_tree.builder.Builder</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree" title="Permalink to this definition"></a></dt>
 <dd><p>A generalized suffix tree.</p>
 <p>The key feature of the suffix tree is that for any leaf <span class="math notranslate nohighlight">\(i\)</span>, the
 concatenation of the edgle-labels on the path from the root to leaf
@@ -113,7 +120,7 @@ concatenation of the edgle-labels on the path from the root to leaf
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">suffix_tree</span> <span class="kn">import</span> <span class="n">naive</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;xabxac&quot;</span><span class="p">},</span> <span class="n">naive</span><span class="o">.</span><span class="n">Builder</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;xabxac&quot;</span><span class="p">},</span> <span class="n">builder</span><span class="o">=</span><span class="n">naive</span><span class="o">.</span><span class="n">Builder</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;abx&quot;</span><span class="p">)</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;abc&quot;</span><span class="p">)</span>
@@ -122,14 +129,14 @@ concatenation of the edgle-labels on the path from the root to leaf
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">d:</span> <span class="pre">typing.Optional[dict[object,</span> <span class="pre">collections.abc.Sequence[collections.abc.Hashable]]]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">builder=&lt;class</span> <span class="pre">'suffix_tree.ukkonen.Builder'&gt;,</span> <span class="pre">progress:</span> <span class="pre">typing.Optional[typing.Callable[[int],</span> <span class="pre">None]]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><span class="pre">suffix_tree.builder.Builder</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree.__init__" title="Permalink to this definition"></a></dt>
 <dd><p>Initialize and optionally build the tree.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>d</strong> (<em>dict</em><em>[</em><em>Id</em><em>, </em><em>Symbols</em><em>]</em>) – a dictionary of ids to sequences of symbols or None</p></li>
-<li><p><strong>builder</strong> (<a class="reference internal" href="builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><em>builder.Builder</em></a>) – a builder
-(default = <a class="reference internal" href="builder.html#suffix_tree.ukkonen.Builder" title="suffix_tree.ukkonen.Builder"><code class="xref py py-class docutils literal notranslate"><span class="pre">suffix_tree.ukkonen.Builder</span></code></a>)</p></li>
+<li><p><strong>d</strong> (<em>Dict</em><em>[</em><em>Id</em><em>, </em><em>Symbols</em><em>]</em>) – a dictionary of ids to sequences of symbols or None</p></li>
+<li><p><strong>builder</strong> (<a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><em>builder.Builder</em></a>) – a builder
+(default = <a class="reference internal" href="builder/ukkonen.html#suffix_tree.ukkonen.Builder" title="suffix_tree.ukkonen.Builder"><code class="xref py py-class docutils literal notranslate"><span class="pre">suffix_tree.ukkonen.Builder</span></code></a>)</p></li>
 <li><p><strong>progress</strong> (<em>Callable</em>) – a progress function (default = None).  The function
 gets called at regular intervals during tree construction with one
 parameter: the current phase.</p></li>
@@ -140,7 +147,7 @@ parameter: the current phase.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.add">
-<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id_:</span> <span class="pre">object,</span> <span class="pre">S:</span> <span class="pre">collections.abc.Sequence[collections.abc.Hashable],</span> <span class="pre">builder:</span> <span class="pre">typing.Type[suffix_tree.builder.Builder]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'suffix_tree.ukkonen.Builder'&gt;,</span> <span class="pre">progress:</span> <span class="pre">typing.Optional[typing.Callable[[int],</span> <span class="pre">None]]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree.add" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><span class="pre">suffix_tree.builder.Builder</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree.add" title="Permalink to this definition"></a></dt>
 <dd><p>Add a sequence of symbols to the tree.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -148,8 +155,8 @@ parameter: the current phase.</p></li>
 <li><p><strong>id</strong> (<em>object</em>) – an object (probably a str or int) serving as an id for the
 sequence</p></li>
 <li><p><strong>S</strong> (<em>Sequence</em>) – a sequence of symbols</p></li>
-<li><p><strong>builder</strong> (<a class="reference internal" href="builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><em>builder.Builder</em></a>) – a builder
-(default = <a class="reference internal" href="builder.html#suffix_tree.ukkonen.Builder" title="suffix_tree.ukkonen.Builder"><code class="xref py py-class docutils literal notranslate"><span class="pre">suffix_tree.ukkonen.Builder</span></code></a>)</p></li>
+<li><p><strong>builder</strong> (<a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><em>builder.Builder</em></a>) – a builder
+(default = <a class="reference internal" href="builder/ukkonen.html#suffix_tree.ukkonen.Builder" title="suffix_tree.ukkonen.Builder"><code class="xref py py-class docutils literal notranslate"><span class="pre">suffix_tree.ukkonen.Builder</span></code></a>)</p></li>
 <li><p><strong>progress</strong> (<em>Callable</em>) – a progress function (default = None).  The function
 gets called at regular intervals during tree construction with one
 parameter: the current phase.</p></li>
@@ -172,14 +179,14 @@ parameter: the current phase.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.find_path">
-<span class="sig-name descname"><span class="pre">find_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="node.html#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="node.html#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_path" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="node.html#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="node.html#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_path" title="Permalink to this definition"></a></dt>
 <dd><p>Find a path in the tree.</p>
 <p>See: <a class="reference internal" href="node.html#suffix_tree.node.Internal.find_path" title="suffix_tree.node.Internal.find_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">suffix_tree.node.Internal.find_path()</span></code></a></p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.find">
-<span class="sig-name descname"><span class="pre">find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find" title="Permalink to this definition"></a></dt>
 <dd><p>Find a sequence in the tree.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -201,7 +208,7 @@ parameter: the current phase.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.find_all">
-<span class="sig-name descname"><span class="pre">find_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_all" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_all" title="Permalink to this definition"></a></dt>
 <dd><p>Find all occurences of a sequence in a tree.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -225,7 +232,7 @@ parameter: the current phase.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.find_id">
-<span class="sig-name descname"><span class="pre">find_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_id" title="Permalink to this definition"></a></dt>
 <dd><p>Find a sequence in the tree.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -275,7 +282,7 @@ labeled with id_.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.common_substrings">
-<span class="sig-name descname"><span class="pre">common_substrings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.common_substrings" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">common_substrings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.common_substrings" title="Permalink to this definition"></a></dt>
 <dd><p>Get a list of common substrings.</p>
 <p><strong>Definition</strong> Let <span class="math notranslate nohighlight">\(K\)</span> be the number of sequences in the tree.  For each
 <span class="math notranslate nohighlight">\(k\)</span> between 2 and <span class="math notranslate nohighlight">\(K\)</span>, we define <span class="math notranslate nohighlight">\(l(k)\)</span> to be the length of
@@ -309,7 +316,7 @@ the <em>longest substring common to at least</em> <span class="math notranslate 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.maximal_repeats">
-<span class="sig-name descname"><span class="pre">maximal_repeats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.maximal_repeats" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">maximal_repeats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.maximal_repeats" title="Permalink to this definition"></a></dt>
 <dd><p>Get a list of the maximal repeats in the tree.</p>
 <p><strong>Definition</strong> A <em>maximal pair</em> in a string <span class="math notranslate nohighlight">\(S\)</span> is a pair of identical
 substrings <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in <span class="math notranslate nohighlight">\(S\)</span> such that the character
@@ -336,17 +343,6 @@ of distinct sequences in the tree that contain the maximal repeat.</p>
 <span class="go">2 x a</span>
 </pre></div>
 </div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.tree.Tree.to_dot">
-<span class="sig-name descname"><span class="pre">to_dot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.to_dot" title="Permalink to this definition"></a></dt>
-<dd><p>Output the tree in GraphViz .dot format.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the tree in GraphViz dot format.</p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>

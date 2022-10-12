@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Naive Builder &mdash; suffix-tree 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon-cceh-blue.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script>window.MathJax = {"tex": {"macros": {"bs": ["\\boldsymbol"], "suf": ["\\mathrm{\\bf suf}_{\\mkern 1mu\\bs{#1}}", 1], "head": ["\\mathrm{\\bf head}_{\\mkern 1mu\\bs{#1}}", 1], "tail": ["\\mathrm{\\bf tail}_{\\mkern 1mu\\bs{#1}}", 1]}}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Base Class for Builders" href="builder.html" />
+    <link rel="prev" title="Ukkonen Builder" href="ukkonen.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> suffix-tree
+            <img src="../_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tree.html">Tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node.html">Node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lca.html">LCA Mixin</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../builders.html">Builders</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mccreight.html">McCreight Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder.html">Base Class for Builders</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance.html">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html#time-complexity">Time Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html#python-3-10-7">Python 3.10.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html#pypy-7-3-9">PyPy 7.3.9</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">suffix-tree</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../builders.html">Builders</a> &raquo;</li>
+      <li>Naive Builder</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/builder/naive.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-suffix_tree.naive">
+<span id="naive-builder"></span><h1>Naive Builder<a class="headerlink" href="#module-suffix_tree.naive" title="Permalink to this headline"></a></h1>
+<p>A naive tree builder.</p>
+<p>This builder uses a naive algorithm to build a suffix tree in <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span> time.</p>
+<p>This implementation closely follows the description in <a class="reference internal" href="../references.html#gusfield1997" id="id1"><span>[Gusfield1997]</span></a> §5.4 page 93.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="suffix_tree.naive.Builder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Builder</span></span><a class="headerlink" href="#suffix_tree.naive.Builder" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the suffix-tree using a naive algorithm.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.naive.Builder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../node.html#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.naive.Builder.build" title="Permalink to this definition"></a></dt>
+<dd><p>Add a sequence to the tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference internal" href="../node.html#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><em>node.Internal</em></a>) – the root node of the tree</p></li>
+<li><p><strong>id</strong> (<em>Id</em>) – the id of the sequence</p></li>
+<li><p><strong>S</strong> (<em>Symbols</em>) – the sequence to insert</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ukkonen.html" class="btn btn-neutral float-left" title="Ukkonen Builder" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="builder.html" class="btn btn-neutral float-right" title="Base Class for Builders" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-22, Marcello Perathoner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

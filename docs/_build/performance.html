@@ -7,6 +7,8 @@
   <title>Performance &mdash; suffix-tree 0.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon-cceh-blue.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,6 +17,8 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script>window.MathJax = {"tex": {"macros": {"bs": ["\\boldsymbol"], "suf": ["\\mathrm{\\bf suf}_{\\mkern 1mu\\bs{#1}}", 1], "head": ["\\mathrm{\\bf head}_{\\mkern 1mu\\bs{#1}}", 1], "tail": ["\\mathrm{\\bf tail}_{\\mkern 1mu\\bs{#1}}", 1]}}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,6 +32,7 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> suffix-tree
+            <img src="_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -43,15 +48,17 @@
 <li class="toctree-l1"><a class="reference internal" href="tree.html">Tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">Node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="builder.html">Builder</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.naive">Naive Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen">Ukkonen Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen_gusfield">Gusfield Builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builders.html">Builders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/naive.html">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Performance</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#time-complexity">Time Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-3-10-7">Python 3.10.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypy-7-3-9">PyPy 7.3.9</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -82,10 +89,18 @@
            <div itemprop="articleBody">
              
   <section id="performance">
-<h1>Performance<a class="headerlink" href="#performance" title="Permalink to this headline"></a></h1>
-<section id="time-complexity">
-<span id="id1"></span><h2>Time Complexity<a class="headerlink" href="#time-complexity" title="Permalink to this headline"></a></h2>
+<span id="id1"></span><h1>Performance<a class="headerlink" href="#performance" title="Permalink to this headline"></a></h1>
+<p>Both McCreight’s and Ukkonen’s algorithms build the suffix tree in <span class="math notranslate nohighlight">\(\mathcal O(\lvert
+S\rvert)\)</span> time, with <span class="math notranslate nohighlight">\(\lvert S\rvert\)</span> being the length of the input sequence.  This may
+not be strictly true for this implementation, especially for large alphabets, since the
+library use Python dictionaries to store symbols and those dictionaries are not linear.</p>
+<section id="python-3-10-7">
+<h2>Python 3.10.7<a class="headerlink" href="#python-3-10-7" title="Permalink to this headline"></a></h2>
 <a class="reference internal image-reference" href="_images/graph_time_complexity.png"><img alt="_images/graph_time_complexity.png" src="_images/graph_time_complexity.png" style="width: 100%;" /></a>
+</section>
+<section id="pypy-7-3-9">
+<h2>PyPy 7.3.9<a class="headerlink" href="#pypy-7-3-9" title="Permalink to this headline"></a></h2>
+<a class="reference internal image-reference" href="_images/graph_time_complexity_pypy38.png"><img alt="_images/graph_time_complexity_pypy38.png" src="_images/graph_time_complexity_pypy38.png" style="width: 100%;" /></a>
 </section>
 </section>
 

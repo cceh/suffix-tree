@@ -6,6 +6,8 @@
   <title>Python Module Index &mdash; suffix-tree 0.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon-cceh-blue.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -19,6 +21,10 @@
     <link rel="search" title="Search" href="search.html" />
  
 
+    <script>
+      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
+    </script>
+
 
 </head>
 
@@ -28,6 +34,7 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> suffix-tree
+            <img src="_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -43,15 +50,17 @@
 <li class="toctree-l1"><a class="reference internal" href="tree.html">Tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">Node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="builder.html">Builder</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.naive">Naive Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen">Ukkonen Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen_gusfield">Gusfield Builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builders.html">Builders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/naive.html">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="performance.html#time-complexity">Time Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#python-3-10-7">Python 3.10.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#pypy-7-3-9">PyPy 7.3.9</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -84,57 +93,71 @@
    <h1>Python Module Index</h1>
 
    <div class="modindex-jumpbox">
-   <a href="#cap-s"><strong>s</strong></a>
+   <a href="#cap-b"><strong>b</strong></a> | 
+   <a href="#cap-l"><strong>l</strong></a> | 
+   <a href="#cap-m"><strong>m</strong></a> | 
+   <a href="#cap-n"><strong>n</strong></a> | 
+   <a href="#cap-t"><strong>t</strong></a> | 
+   <a href="#cap-u"><strong>u</strong></a>
    </div>
 
    <table class="indextable modindextable">
      <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-s"><td></td><td>
-       <strong>s</strong></td><td></td></tr>
+     <tr class="cap" id="cap-b"><td></td><td>
+       <strong>b</strong></td><td></td></tr>
      <tr>
-       <td><img src="_static/minus.png" class="toggler"
-              id="toggle-1" style="display: none" alt="-" /></td>
+       <td></td>
        <td>
-       <code class="xref">suffix_tree</code></td><td>
+       <a href="builder/builder.html#module-suffix_tree.builder"><code class="xref">suffix_tree.builder</code></a></td><td>
        <em></em></td></tr>
-     <tr class="cg-1">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-l"><td></td><td>
+       <strong>l</strong></td><td></td></tr>
+     <tr>
        <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="builder.html#module-suffix_tree.builder"><code class="xref">suffix_tree.builder</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
+       <td>
        <a href="lca.html#module-suffix_tree.lca_mixin"><code class="xref">suffix_tree.lca_mixin</code></a></td><td>
        <em></em></td></tr>
-     <tr class="cg-1">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-m"><td></td><td>
+       <strong>m</strong></td><td></td></tr>
+     <tr>
        <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="builder.html#module-suffix_tree.naive"><code class="xref">suffix_tree.naive</code></a></td><td>
+       <td>
+       <a href="builder/mccreight.html#module-suffix_tree.mccreight"><code class="xref">suffix_tree.mccreight</code></a></td><td>
        <em></em></td></tr>
-     <tr class="cg-1">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-n"><td></td><td>
+       <strong>n</strong></td><td></td></tr>
+     <tr>
        <td></td>
-       <td>&#160;&#160;&#160;
+       <td>
+       <a href="builder/naive.html#module-suffix_tree.naive"><code class="xref">suffix_tree.naive</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
        <a href="node.html#module-suffix_tree.node"><code class="xref">suffix_tree.node</code></a></td><td>
        <em></em></td></tr>
-     <tr class="cg-1">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-t"><td></td><td>
+       <strong>t</strong></td><td></td></tr>
+     <tr>
        <td></td>
-       <td>&#160;&#160;&#160;
+       <td>
        <a href="tree.html#module-suffix_tree.tree"><code class="xref">suffix_tree.tree</code></a></td><td>
        <em></em></td></tr>
-     <tr class="cg-1">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-u"><td></td><td>
+       <strong>u</strong></td><td></td></tr>
+     <tr>
        <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="builder.html#module-suffix_tree.ukkonen"><code class="xref">suffix_tree.ukkonen</code></a></td><td>
+       <td>
+       <a href="builder/ukkonen.html#module-suffix_tree.ukkonen"><code class="xref">suffix_tree.ukkonen</code></a></td><td>
        <em></em></td></tr>
-     <tr class="cg-1">
+     <tr>
        <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="builder.html#module-suffix_tree.ukkonen_gusfield"><code class="xref">suffix_tree.ukkonen_gusfield</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
+       <td>
        <a href="util.html#module-suffix_tree.util"><code class="xref">suffix_tree.util</code></a></td><td>
        <em></em></td></tr>
    </table>

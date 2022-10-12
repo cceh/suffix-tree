@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>McCreight Builder &mdash; suffix-tree 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon-cceh-blue.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script>window.MathJax = {"tex": {"macros": {"bs": ["\\boldsymbol"], "suf": ["\\mathrm{\\bf suf}_{\\mkern 1mu\\bs{#1}}", 1], "head": ["\\mathrm{\\bf head}_{\\mkern 1mu\\bs{#1}}", 1], "tail": ["\\mathrm{\\bf tail}_{\\mkern 1mu\\bs{#1}}", 1]}}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ukkonen Builder" href="ukkonen.html" />
+    <link rel="prev" title="Builders" href="../builders.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> suffix-tree
+            <img src="../_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tree.html">Tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node.html">Node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lca.html">LCA Mixin</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../builders.html">Builders</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">McCreight Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="naive.html">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder.html">Base Class for Builders</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance.html">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html#time-complexity">Time Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html#python-3-10-7">Python 3.10.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html#pypy-7-3-9">PyPy 7.3.9</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">suffix-tree</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../builders.html">Builders</a> &raquo;</li>
+      <li>McCreight Builder</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/builder/mccreight.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mccreight-builder">
+<h1>McCreight Builder<a class="headerlink" href="#mccreight-builder" title="Permalink to this headline"></a></h1>
+<p>The original and mathematically precise exposition (in blockquotes) is taken from the
+excellent paper by McCreight <a class="reference internal" href="../references.html#mccreight1976" id="id1"><span>[McCreight1976]</span></a>.  The comments are by me, trying to
+understand the paper and translate it into language suited for mere mortals.</p>
+<p>First McCreight defines:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>extension</dt><dd><p>An extension of a string <span class="math notranslate nohighlight">\(\bs\alpha\)</span> is any string of which <span class="math notranslate nohighlight">\(\bs\alpha\)</span> is a prefix.</p>
+</dd>
+<dt>locus</dt><dd><p>The locus of a string is the node at the end of the path named by the string.
+The locus may not exist.</p>
+</dd>
+<dt>extended locus</dt><dd><p>The extended locus of a string <span class="math notranslate nohighlight">\(\bs\alpha\)</span> is the locus of the shortest extension of
+<span class="math notranslate nohighlight">\(\bs\alpha\)</span> whose locus is defined.  This may be the locus itself.</p>
+</dd>
+<dt>contracted locus</dt><dd><p>The contracted locus of a string <span class="math notranslate nohighlight">\(\bs\alpha\)</span> is the locus of the longest prefix of
+<span class="math notranslate nohighlight">\(\bs\alpha\)</span> whose locus is defined.  This may be the locus itself.</p>
+</dd>
+<dt><span class="math notranslate nohighlight">\(\suf{\imath}\)</span></dt><dd><p>is the suffix of <span class="math notranslate nohighlight">\(\bf S\)</span> beginning at character position <span class="math notranslate nohighlight">\(i\)</span> (beginning with
+1).</p>
+</dd>
+<dt><span class="math notranslate nohighlight">\(\head{\imath}\)</span></dt><dd><p><span class="math notranslate nohighlight">\(\head{\imath}\)</span> is the longest prefix of <span class="math notranslate nohighlight">\(\suf{\imath}\)</span> which is also a prefix of <span class="math notranslate nohighlight">\(\suf{\jmath}\)</span> for
+some <span class="math notranslate nohighlight">\(j &lt; i\)</span>. Equivalently, <span class="math notranslate nohighlight">\(\head{\imath}\)</span> is the longest prefix of <span class="math notranslate nohighlight">\(\suf{\imath}\)</span> whose
+extended locus exists within the tree <span class="math notranslate nohighlight">\(T_{\imath-1}\)</span>.</p>
+</dd>
+<dt><span class="math notranslate nohighlight">\(\tail{\imath}\)</span></dt><dd><p>We define <span class="math notranslate nohighlight">\(\tail{\imath}\)</span> as <span class="math notranslate nohighlight">\(\suf{\imath}-\head{\imath}\)</span>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>The McCreight algorithm inserts all suffixes of <span class="math notranslate nohighlight">\(\bf S\)</span> in order beginning with the longest.</p>
+<p>In each step it inserts one suffix and creates one leaf node and at most one internal
+node. For each internal node it will also create a suffix link in the next step.</p>
+<p>To insert one suffix <span class="math notranslate nohighlight">\(\suf{}\)</span>, we search the tree from the root until we get a mismatch. If
+the mismatch happens on a node, we call that node the <span class="math notranslate nohighlight">\(\head{}\)</span>. If the mismatch happens in
+the middle of an edge, we split the edge and insert a new node, and call this new node
+the <span class="math notranslate nohighlight">\(\head{}\)</span>.  Then we append the <span class="math notranslate nohighlight">\(\tail{}\)</span> to the <span class="math notranslate nohighlight">\(\head{}\)</span>.  This procedure is slow because we
+have to search starting from the root over and over again.</p>
+<p>McCreight shows us how to warp from <span class="math notranslate nohighlight">\(\head{\imath-1}\)</span> to <span class="math notranslate nohighlight">\(\head{\imath}\)</span> in linear time using suffix
+links and “rescanning”. He demonstrates how suffix links can be set and exploited in
+linear time:</p>
+<blockquote>
+<div><p>LEMMA 1. If <span class="math notranslate nohighlight">\(\head{\imath-1}\)</span> can be written as <span class="math notranslate nohighlight">\(\bf x\bs{\delta}\)</span> for some character <span class="math notranslate nohighlight">\(\bf x\)</span> and some
+(possibly empty) string <span class="math notranslate nohighlight">\(\bs\delta\)</span>, then <span class="math notranslate nohighlight">\(\bs\delta\)</span> is a prefix of <span class="math notranslate nohighlight">\(\head{\imath}\)</span>.</p>
+<p>PROOF. By induction on <span class="math notranslate nohighlight">\(i\)</span>. Suppose <span class="math notranslate nohighlight">\(\head{\imath-1}=\bf x\bs{\delta}\)</span>.
+This means that there is a <span class="math notranslate nohighlight">\(j,\, j &lt; i\)</span>, such that <span class="math notranslate nohighlight">\(\bf x\bs{\delta}\)</span> is a prefix both
+of <span class="math notranslate nohighlight">\(\suf{\imath-1}\)</span> and of <span class="math notranslate nohighlight">\(\suf{\jmath-1}\)</span>. Thus <span class="math notranslate nohighlight">\(\bs\delta\)</span> is a prefix both of <span class="math notranslate nohighlight">\(\suf{\imath}\)</span> and of <span class="math notranslate nohighlight">\(\suf{\jmath}\)</span>.
+Therefore by the definition of <span class="math notranslate nohighlight">\(\head{}\)</span>, <span class="math notranslate nohighlight">\(\bs\delta\)</span> is a prefix of <span class="math notranslate nohighlight">\(\head{\imath}\)</span>.
+<span class="math notranslate nohighlight">\(\quad\square\)</span></p>
+</div></blockquote>
+<p>Rephrasing that for mere mortals:</p>
+<p>LEMMA 1:  If the locus of <span class="math notranslate nohighlight">\(\head{\imath-1}\)</span> was not the root node, then in step <span class="math notranslate nohighlight">\(i\)</span> we
+will find or create a node <span class="math notranslate nohighlight">\(c\)</span> that is on the path to <span class="math notranslate nohighlight">\(\head{\imath}\)</span>.  Therefore in step
+<span class="math notranslate nohighlight">\(i\)</span> it will be possible link to <span class="math notranslate nohighlight">\(\head{\imath-1}\)</span> to <span class="math notranslate nohighlight">\(c\)</span> with a suffix link.</p>
+<p>PROOF: at the end of step <span class="math notranslate nohighlight">\(i-1\)</span> the locus of <span class="math notranslate nohighlight">\(\head{\imath-1}\)</span> can exists only if <span class="math notranslate nohighlight">\(\suf{\imath-1}\)</span>
+and some previous suffix <span class="math notranslate nohighlight">\(\suf{\jmath-1}\)</span> diverged at <span class="math notranslate nohighlight">\(\bf x\bs{\delta}\)</span>.  But then, in step <span class="math notranslate nohighlight">\(i\)</span>,
+<span class="math notranslate nohighlight">\(\suf{\imath}\)</span> must diverge with the previously inserted <span class="math notranslate nohighlight">\(\suf{\jmath}\)</span> at <span class="math notranslate nohighlight">\(\bs\delta\)</span>.</p>
+<blockquote>
+<div><p>To exploit this relationship, auxiliary links are added to our tree structure. From
+each nonterminal node which is the locus of <span class="math notranslate nohighlight">\(\bf x\bs{\delta}\)</span>, where <span class="math notranslate nohighlight">\(\bf x\)</span> is a character and
+<span class="math notranslate nohighlight">\(\bs\delta\)</span> is a string, a suffix link is introduced pointing to the locus of <span class="math notranslate nohighlight">\(\bs\delta\)</span>.
+(Note that the locus of <span class="math notranslate nohighlight">\(\bs\delta\)</span> is never within the subtree rooted at the locus of
+<span class="math notranslate nohighlight">\(\bf x\bs{\delta}\)</span>.) […]  These links enable the algorithm in step <span class="math notranslate nohighlight">\(i\)</span> to do a short-cut
+search for the locus of <span class="math notranslate nohighlight">\(\head{\imath}\)</span> beginning at the locus of <span class="math notranslate nohighlight">\(\head{\imath-1}\)</span> which it has
+visited in the previous step.  The following semiformal presentation of the
+algorithm will prove by induction on <span class="math notranslate nohighlight">\(i\)</span> that</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(P1\)</span>: in tree <span class="math notranslate nohighlight">\(T_{\imath}\)</span> only the locus of <span class="math notranslate nohighlight">\(\head{\imath}\)</span> could fail to have a valid
+suffix link, and that</p>
+<p><span class="math notranslate nohighlight">\(P2\)</span>: in step <span class="math notranslate nohighlight">\(i\)</span> the algorithm visits the contracted locus of
+<span class="math notranslate nohighlight">\(\head{\imath}\)</span> in <span class="math notranslate nohighlight">\(T_{\imath-1}\)</span>.</p>
+</div></blockquote>
+<p>Properties <span class="math notranslate nohighlight">\(P1\)</span> and <span class="math notranslate nohighlight">\(P2\)</span> clearly obtain if <span class="math notranslate nohighlight">\(i = 1\)</span>. Now suppose
+<span class="math notranslate nohighlight">\(i &gt; 1\)</span>. In step <span class="math notranslate nohighlight">\(i\)</span> the algorithm does the following:</p>
+</div></blockquote>
+<p>It follows a description of the algorithm:</p>
+<p>Substep A. Let us write down <span class="math notranslate nohighlight">\(\head{\imath-1}\)</span> as the concatenation of three strings
+<span class="math notranslate nohighlight">\(\bs{\chi\alpha\beta}\)</span>.  Let us also write down <span class="math notranslate nohighlight">\(\head{\imath}\)</span> in the same way as <span class="math notranslate nohighlight">\(\bs{\alpha\beta\gamma}\)</span>.</p>
+<p><span class="math notranslate nohighlight">\(\bs\chi\)</span> was the first character in <span class="math notranslate nohighlight">\(\suf{\imath-1}\)</span> and is of no more importance when we insert
+<span class="math notranslate nohighlight">\(\suf{\imath}\)</span>.  <span class="math notranslate nohighlight">\(\bs\alpha\)</span> is that part of <span class="math notranslate nohighlight">\(\suf{\imath}\)</span> we can short-circuit with a suffix link.  <span class="math notranslate nohighlight">\(\bs\beta\)</span>
+is the next part of <span class="math notranslate nohighlight">\(\suf{\imath}\)</span> which we can fast-forward by “rescanning”.  <span class="math notranslate nohighlight">\(\bs\gamma\)</span> is the
+third part of <span class="math notranslate nohighlight">\(\suf{\imath}\)</span> for which we have to use slow “scanning”. (And <span class="math notranslate nohighlight">\(\tail{\imath}\)</span> is the last
+part of <span class="math notranslate nohighlight">\(\suf{\imath}\)</span>.)</p>
+<p>We go to the first ancestor-or-self of <span class="math notranslate nohighlight">\(\head{\imath-1}\)</span> that has a suffix link.  (That would be
+<span class="math notranslate nohighlight">\(\bs{\chi\alpha}\)</span>.)  We then follow the suffix link to the locus of <span class="math notranslate nohighlight">\(\bs\alpha\)</span> and call that node
+<span class="math notranslate nohighlight">\(c\)</span>.  Goto substep B.</p>
+<p>Note that if we set the suffix link of root to root itself we don’t have to special case
+an empty <span class="math notranslate nohighlight">\(\bs\alpha\)</span>.</p>
+<blockquote>
+<div><p>Substep A. First the algorithm identifies three strings <span class="math notranslate nohighlight">\(\bs\chi\)</span>, <span class="math notranslate nohighlight">\(\bs\alpha\)</span>, and <span class="math notranslate nohighlight">\(\bs\beta\)</span>,
+with the following properties:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\head{\imath-1}\)</span> can be represented as <span class="math notranslate nohighlight">\(\bs{\chi\alpha\beta}\)</span>.</p></li>
+<li><p>If the contracted locus of <span class="math notranslate nohighlight">\(\head{\imath-1}\)</span> in <span class="math notranslate nohighlight">\(T_{\imath-2}\)</span> is not the root, it is the
+locus of <span class="math notranslate nohighlight">\(\bs{\chi\alpha}\)</span>. Otherwise <span class="math notranslate nohighlight">\(\bs\alpha\)</span> is empty.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bs\chi\)</span> is a string of at most one character which is empty only if <span class="math notranslate nohighlight">\(\head{\imath+1}\)</span> is
+empty.</p></li>
+</ol>
+</div></blockquote>
+<p>Lemma 1 guarantees that <span class="math notranslate nohighlight">\(\head{\imath}\)</span> may be represented as <span class="math notranslate nohighlight">\(\bs{\alpha\beta\gamma}\)</span> for some
+(possibly empty) string <span class="math notranslate nohighlight">\(\bs\gamma\)</span>. The algorithm now chooses the appropriate case of
+the following two:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\bs\alpha\)</span> empty: The algorithm calls the root node <span class="math notranslate nohighlight">\(c\)</span> and goes to substep
+B.  Note that <span class="math notranslate nohighlight">\(c\)</span> is defined as the locus of <span class="math notranslate nohighlight">\(\bs\alpha\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bs\alpha\)</span> nonempty: By definition, the locus of <span class="math notranslate nohighlight">\(\bs{\chi\alpha}\)</span> must have existed in
+the tree <span class="math notranslate nohighlight">\(T_{\imath-2}\)</span>. By <span class="math notranslate nohighlight">\(P1\)</span> the suffix link of that (nonterminal) locus node
+must be defined in tree <span class="math notranslate nohighlight">\(T_{\imath-1}\)</span>, since the node itself must have been constructed
+before step <span class="math notranslate nohighlight">\(i-1\)</span>. By <span class="math notranslate nohighlight">\(P2\)</span> the algorithm visited that node in step
+<span class="math notranslate nohighlight">\(i-1\)</span>. The algorithm follows its suffix link to a nonterminal node
+called <span class="math notranslate nohighlight">\(c\)</span> and goes to substep B. Note that <span class="math notranslate nohighlight">\(c\)</span> is defined as the
+locus of <span class="math notranslate nohighlight">\(\bs\alpha\)</span>.</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p>Substep B.  This is the second time-saving trick devised by McCreight.</p>
+<p>From the node <span class="math notranslate nohighlight">\(c\)</span>, the locus of <span class="math notranslate nohighlight">\(\bs\alpha\)</span>, we search the locus of <span class="math notranslate nohighlight">\(\bs{\alpha\beta}\)</span>.  We
+save time by what McCreight calls “rescanning”:  We already know that all characters in
+<span class="math notranslate nohighlight">\(\bs\beta\)</span> must match so we need to examine only the first character of each edge (to decide
+which edge to follow).</p>
+<p>If we overshoot the length of <span class="math notranslate nohighlight">\(\bs\beta\)</span> we have to split the edge as usual.  When found or
+created, we call that node <span class="math notranslate nohighlight">\(d\)</span>.  Goto Substep C.  Note that if <span class="math notranslate nohighlight">\(\bs\gamma\)</span> is not
+empty the edge will already be split.</p>
+<blockquote>
+<div><p>Substep B.  This is called “rescanning,” and is the key idea of algorithm M.  Since
+<span class="math notranslate nohighlight">\(\bs{\alpha\beta\gamma}\)</span> is defined as <span class="math notranslate nohighlight">\(\head{\imath}\)</span>, by the definition of <span class="math notranslate nohighlight">\(\head{}\)</span> we know that the
+extended locus of <span class="math notranslate nohighlight">\(\bs{\alpha\beta}\)</span> exists in the tree <span class="math notranslate nohighlight">\(T_{\imath-1}\)</span>.  This means that there is a
+sequence of arcs downward from node <span class="math notranslate nohighlight">\(c\)</span> (the locus of <span class="math notranslate nohighlight">\(\bs\alpha\)</span>) which spells
+out some extension of <span class="math notranslate nohighlight">\(\bs\beta\)</span>. To rescan <span class="math notranslate nohighlight">\(\bs\beta\)</span> the algorithm finds the child arc
+<span class="math notranslate nohighlight">\(\bs\rho\)</span> of <span class="math notranslate nohighlight">\(c\)</span> which begins with the first character of <span class="math notranslate nohighlight">\(\bs\beta\)</span> and leads to a
+node which we shall call <span class="math notranslate nohighlight">\(f\)</span>.  It compares the <em>lengths</em> of <span class="math notranslate nohighlight">\(\bs\beta\)</span> and <span class="math notranslate nohighlight">\(\bs\rho\)</span>.
+If <span class="math notranslate nohighlight">\(\bs\beta\)</span> is longer, then a recursive rescan of <span class="math notranslate nohighlight">\(\beta - \rho\)</span> is begun from
+node <span class="math notranslate nohighlight">\(f\)</span>.  If <span class="math notranslate nohighlight">\(\bs\beta\)</span> is the same length or shorter, then <span class="math notranslate nohighlight">\(\bs\beta\)</span> is a prefix of
+<span class="math notranslate nohighlight">\(\bs\rho\)</span>, the algorithm has found the extended locus of <span class="math notranslate nohighlight">\(\bs{\alpha\beta}\)</span> and the rescan is
+complete.  It has been accomplished in time linear in the number of nodes
+encountered.  A new nonterminal node is constructed to be the locus of <span class="math notranslate nohighlight">\(\bs{\alpha\beta}\)</span>
+if one does not already exist.  The algorithm calls <span class="math notranslate nohighlight">\(d\)</span> the locus of
+<span class="math notranslate nohighlight">\(\bs{\alpha\beta}\)</span> and goes to substep C. (Note that substep B constructs a new node to be
+the locus of <span class="math notranslate nohighlight">\(\bs{\alpha\beta}\)</span> only if <span class="math notranslate nohighlight">\(\bs\gamma\)</span> is empty.)</p>
+</div></blockquote>
+<p>Substep C.  Back to the naive algorithm.</p>
+<p>First we set the suffix link on <span class="math notranslate nohighlight">\(\bs{\chi\alpha\beta}\)</span> to point to <span class="math notranslate nohighlight">\(\bs{\alpha\beta}\)</span>.  Then from the
+locus of <span class="math notranslate nohighlight">\(\bs{\alpha\beta}\)</span> we scan the slow way to <span class="math notranslate nohighlight">\(\bs{\alpha\beta\gamma}\)</span> comparing each character
+until we get a mismatch.  If the mismatch happens on a node, we call that node <span class="math notranslate nohighlight">\(\head{\imath}\)</span>.
+If the mismatch happens in the middle of an edge, we split the edge and insert a new
+node, and call the new node <span class="math notranslate nohighlight">\(\head{\imath}\)</span>.  Then we append the unmatched rest <span class="math notranslate nohighlight">\(\tail{\imath}\)</span> to
+<span class="math notranslate nohighlight">\(\head{\imath}\)</span>.  Increment <span class="math notranslate nohighlight">\(i\)</span> and goto Substep A.</p>
+<blockquote>
+<div><p>Substep C. This is called “scanning.” If the suffix link of the locus of
+<span class="math notranslate nohighlight">\(\bs{\chi\alpha\beta}\)</span> is currently undefined, the algorithm first defines that link to
+point to node <span class="math notranslate nohighlight">\(d\)</span>. This and inductive hypothesis establish the truth of
+<span class="math notranslate nohighlight">\(P1\)</span> in <span class="math notranslate nohighlight">\(T_{\imath}\)</span>. Then the algorithm begins searching from node <span class="math notranslate nohighlight">\(d\)</span> deeper
+into the tree to find the extended locus of <span class="math notranslate nohighlight">\(\bs{\alpha\beta\gamma}\)</span>. The major difference
+between scanning and rescanning is that in rescanning the length of <span class="math notranslate nohighlight">\(\bs\beta\)</span> is known
+beforehand (because it has already been scanned), while in scanning the length of
+<span class="math notranslate nohighlight">\(\bs\gamma\)</span> is not known beforehand. Thus the algorithm must travel downward into the
+tree in response to the characters of <span class="math notranslate nohighlight">\(\tail{\imath}\)</span> (of which <span class="math notranslate nohighlight">\(\bs\gamma\)</span> is a prefix) one by
+one from left to right. When the algorithm “falls out of the tree” (as constraint
+<span class="math notranslate nohighlight">\(S1\)</span> guarantees that it must), it has found the extended locus of
+<span class="math notranslate nohighlight">\(\bs{\alpha\beta\gamma}\)</span>. The last node of <span class="math notranslate nohighlight">\(T_{\imath-1}\)</span> encountered in this downward trek of
+rescanning and scanning is the contracted locus of <span class="math notranslate nohighlight">\(\head{\imath}\)</span> in <span class="math notranslate nohighlight">\(T_{\imath-1}\)</span> ; this
+establishes the truth of <span class="math notranslate nohighlight">\(P2\)</span>. A new nonterminal node is constructed to be the
+locus of <span class="math notranslate nohighlight">\(\bs{\alpha\beta\gamma}\)</span> if one does not already exist.  Finally a new arc labeled
+<span class="math notranslate nohighlight">\(\tail{\imath}\)</span>, is constructed from the locus of <span class="math notranslate nohighlight">\(\bs{\alpha\beta\gamma}\)</span> to a new terminal node.
+Step <span class="math notranslate nohighlight">\(i\)</span> is now finished.</p>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../references.html#mccreight1976" id="id2"><span>[McCreight1976]</span></a></p>
+<p><a class="reference external" href="https://www.cs.helsinki.fi/u/tpkarkka/opetus/10s/spa/lectures.pdf">https://www.cs.helsinki.fi/u/tpkarkka/opetus/10s/spa/lectures.pdf</a></p>
+</div>
+<span class="target" id="module-suffix_tree.mccreight"></span><p>A tree builder that uses McCreight’s Algorithm.</p>
+<p>This module implements McCreight’s algorithm to build a suffix tree in linear time,
+adapted to generalized suffix trees.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="suffix_tree.mccreight.Builder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Builder</span></span><a class="headerlink" href="#suffix_tree.mccreight.Builder" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the suffix-tree using McCreight’s Algorithm.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.mccreight.Builder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../node.html#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.mccreight.Builder.build" title="Permalink to this definition"></a></dt>
+<dd><p>Add a sequence to the tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference internal" href="../node.html#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><em>node.Internal</em></a>) – the root node of the tree</p></li>
+<li><p><strong>id</strong> (<em>Id</em>) – the id of the sequence</p></li>
+<li><p><strong>S</strong> (<em>Symbols</em>) – the sequence to insert</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../builders.html" class="btn btn-neutral float-left" title="Builders" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ukkonen.html" class="btn btn-neutral float-right" title="Ukkonen Builder" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-22, Marcello Perathoner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

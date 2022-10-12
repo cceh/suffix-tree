@@ -58,11 +58,3 @@ with open(f"{DESTDIR}{filename}", "w") as dest:
     dest.write(badge)
     print(f"{filename}")
     badges["coverage"] = f"{REFDIR}{filename}"
-
-# write a template to include in README.rst
-
-with open(f"{DESTDIR}/badges.rst.include", "w") as dest:
-    for name, filename in badges.items():
-        dest.write(f".. |{name}| image:: {filename}\n\n")
-
-    dest.write(" ".join(f"|{name}|" for name in badges) + "\n\n")

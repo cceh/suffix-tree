@@ -7,6 +7,8 @@
   <title>Utilities &mdash; suffix-tree 0.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon-cceh-blue.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -19,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Performance" href="performance.html" />
-    <link rel="prev" title="Builder" href="builder.html" /> 
+    <link rel="prev" title="Base Class for Builders" href="builder/builder.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -28,6 +30,7 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> suffix-tree
+            <img src="_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -43,15 +46,18 @@
 <li class="toctree-l1"><a class="reference internal" href="tree.html">Tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">Node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="builder.html">Builder</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.naive">Naive Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen">Ukkonen Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen_gusfield">Gusfield Builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builders.html">Builders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/naive.html">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="performance.html#time-complexity">Time Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#python-3-10-7">Python 3.10.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#pypy-7-3-9">PyPy 7.3.9</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -86,25 +92,25 @@
 <p>Utilities for suffix tree.</p>
 <dl class="py data">
 <dt class="sig sig-object py" id="suffix_tree.util.DEBUG">
-<span class="sig-prename descclassname"><span class="pre">suffix_tree.util.</span></span><span class="sig-name descname"><span class="pre">DEBUG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#suffix_tree.util.DEBUG" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEBUG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#suffix_tree.util.DEBUG" title="Permalink to this definition"></a></dt>
 <dd><p>Print lots of debug information.</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="suffix_tree.util.DEBUG_DOT">
-<span class="sig-prename descclassname"><span class="pre">suffix_tree.util.</span></span><span class="sig-name descname"><span class="pre">DEBUG_DOT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#suffix_tree.util.DEBUG_DOT" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEBUG_DOT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#suffix_tree.util.DEBUG_DOT" title="Permalink to this definition"></a></dt>
 <dd><p>Write out dot files of the tree at the end of each phase.</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="suffix_tree.util.DEBUG_LABELS">
-<span class="sig-prename descclassname"><span class="pre">suffix_tree.util.</span></span><span class="sig-name descname"><span class="pre">DEBUG_LABELS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#suffix_tree.util.DEBUG_LABELS" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEBUG_LABELS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#suffix_tree.util.DEBUG_LABELS" title="Permalink to this definition"></a></dt>
 <dd><p>Include more (potentially confusing) information in node labels.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="suffix_tree.util.UniqueEndChar">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.util.</span></span><span class="sig-name descname"><span class="pre">UniqueEndChar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.util.UniqueEndChar" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UniqueEndChar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.util.UniqueEndChar" title="Permalink to this definition"></a></dt>
 <dd><p>A singleton object to signal end of sequence.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.util.UniqueEndChar.__init__">
@@ -121,81 +127,47 @@
 
 <dl class="py data">
 <dt class="sig sig-object py" id="suffix_tree.util.min_debug_depth">
-<span class="sig-prename descclassname"><span class="pre">suffix_tree.util.</span></span><span class="sig-name descname"><span class="pre">min_debug_depth</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#suffix_tree.util.min_debug_depth" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">min_debug_depth</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#suffix_tree.util.min_debug_depth" title="Permalink to this definition"></a></dt>
 <dd><p>How deep we were in the stack when emitting the first debug message.</p>
 <p>Used to print the interesting part of the stack.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="suffix_tree.util.debug">
-<span class="sig-prename descclassname"><span class="pre">suffix_tree.util.</span></span><span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.util.debug" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.util.debug" title="Permalink to this definition"></a></dt>
 <dd><p>Print a debug message to stderr.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="suffix_tree.util.is_debug">
-<span class="sig-prename descclassname"><span class="pre">suffix_tree.util.</span></span><span class="sig-name descname"><span class="pre">is_debug</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#suffix_tree.util.is_debug" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">is_debug</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#suffix_tree.util.is_debug" title="Permalink to this definition"></a></dt>
 <dd><p>Return True if debugging is on.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="suffix_tree.util.ukko_str">
+<span class="sig-name descname"><span class="pre">ukko_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#suffix_tree.util.ukko_str" title="Permalink to this definition"></a></dt>
+<dd><p>Debug path in Ukkonen’s preferred notation.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="suffix_tree.util.Path">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.util.</span></span><span class="sig-name descname"><span class="pre">Path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.util.Path" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.util.Path" title="Permalink to this definition"></a></dt>
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.util.</span></span><span class="sig-name descname"><span class="pre">Path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>A path in a suffix tree.</p>
-<p>Paths come in two flavors: closed and open-ended.  A closed path has a fixed end.
-In an open-ended path the end is implicitly equivalent to the current phase. When
-the current phase of the builder increments, the end of all open-ended paths gets
-incremented too.  This is implemented by the property <code class="code docutils literal notranslate"><span class="pre">end</span></code> pointing to a
-mutable integer (an integer stored in an array, so we can replace the integer in the
-array).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.util.Path.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.util.Path.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.util.Path.__init__" title="Permalink to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Initialize a path from a sequence of symbols or another path.</p>
 <p>If end is None it is copied from the other path.</p>
 </dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="suffix_tree.util.Path.end">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#suffix_tree.util.Path.end" title="Permalink to this definition"></a></dt>
-<dd><p>Return the end of the path.</p>
-<p>This is a calculated property because sometimes the end is ‘infinity’, which
-means that the end is assumed to be the end of the current phase.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.util.Path.set_open_end">
-<span class="sig-name descname"><span class="pre">set_open_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.util.Path.set_open_end" title="Permalink to this definition"></a></dt>
-<dd><p>Set the open end marker.</p>
-<p>This puts the value in an array used by many paths.  We can replace the value in
-the array.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="suffix_tree.util.Path.k">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">k</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#suffix_tree.util.Path.k" title="Permalink to this definition"></a></dt>
-<dd><p>Return the start of the path in Ukkonen’s preferred notation.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="suffix_tree.util.Path.p">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">p</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#suffix_tree.util.Path.p" title="Permalink to this definition"></a></dt>
-<dd><p>Return the end of the path in Ukkonen’s preferred notation.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="suffix_tree.util.Path.i">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">i</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#suffix_tree.util.Path.i" title="Permalink to this definition"></a></dt>
-<dd><p>Another end of the path in Ukkonen’s preferred notation.</p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.util.Path.from_iterable">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_iterable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></span><a class="headerlink" href="#suffix_tree.util.Path.from_iterable" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_iterable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></span><a class="headerlink" href="#suffix_tree.util.Path.from_iterable" title="Permalink to this definition"></a></dt>
 <dd><p>Build a path from an iterable.</p>
 </dd></dl>
 
@@ -221,12 +193,6 @@ used in tree construction.</p>
 Also we don’t need negative indices.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.util.Path.ukko_str">
-<span class="sig-name descname"><span class="pre">ukko_str</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#suffix_tree.util.Path.ukko_str" title="Permalink to this definition"></a></dt>
-<dd><p>Debug path in Ukkonen’s notation.</p>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -235,7 +201,7 @@ Also we don’t need negative indices.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="builder.html" class="btn btn-neutral float-left" title="Builder" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="builder/builder.html" class="btn btn-neutral float-left" title="Base Class for Builders" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="performance.html" class="btn btn-neutral float-right" title="Performance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

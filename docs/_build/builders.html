@@ -4,9 +4,11 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; suffix-tree 0.1.0 documentation</title>
+  <title>Builders &mdash; suffix-tree 0.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon-cceh-blue.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,7 +19,9 @@
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="McCreight Builder" href="builder/mccreight.html" />
+    <link rel="prev" title="LCA Mixin" href="lca.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -26,6 +30,7 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> suffix-tree
+            <img src="_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -36,20 +41,23 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tree.html">Tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">Node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="builder.html">Builder</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.naive">Naive Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen">Ukkonen Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen_gusfield">Gusfield Builder</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Builders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/naive.html">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="performance.html#time-complexity">Time Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#python-3-10-7">Python 3.10.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#pypy-7-3-9">PyPy 7.3.9</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -69,9 +77,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>&lt;no title&gt;</li>
+      <li>Builders</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/badges.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/builders.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -79,12 +87,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <p><img alt="py39" src="docs/_images/tox-py39.svg" /> <img alt="py310" src="docs/_images/tox-py310.svg" /> <img alt="py311" src="docs/_images/tox-py311.svg" /> <img alt="coverage" src="docs/_images/coverage.svg" /></p>
+  <section id="builders">
+<span id="id1"></span><h1>Builders<a class="headerlink" href="#builders" title="Permalink to this headline"></a></h1>
+<p>Which builder should I choose?</p>
+<p>tl;dr: McCreight’s</p>
+<p>McCreight’s builder is the fastest in this implementation.</p>
+<p>Ukkonen’s builder has no real advantage over McCreight’s except if your symbols come
+from a source that is slow relative to your CPU.  In that case Ukkonen’s will do one
+round after each character has arrived and have the tree always ready.</p>
+<p>The naive builder is present only for educational purposes.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builder/naive.html">Naive Builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a></li>
+</ul>
+</div>
+</section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lca.html" class="btn btn-neutral float-left" title="LCA Mixin" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="builder/mccreight.html" class="btn btn-neutral float-right" title="McCreight Builder" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

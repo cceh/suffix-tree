@@ -7,6 +7,8 @@
   <title>suffix-tree Documentation &mdash; suffix-tree 0.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon-cceh-blue.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,6 +17,8 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script>window.MathJax = {"tex": {"macros": {"bs": ["\\boldsymbol"], "suf": ["\\mathrm{\\bf suf}_{\\mkern 1mu\\bs{#1}}", 1], "head": ["\\mathrm{\\bf head}_{\\mkern 1mu\\bs{#1}}", 1], "tail": ["\\mathrm{\\bf tail}_{\\mkern 1mu\\bs{#1}}", 1]}}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,6 +31,7 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="#" class="icon icon-home"> suffix-tree
+            <img src="_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -42,15 +47,17 @@
 <li class="toctree-l1"><a class="reference internal" href="tree.html">Tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">Node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="builder.html">Builder</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.naive">Naive Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen">Ukkonen Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen_gusfield">Gusfield Builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builders.html">Builders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/naive.html">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="performance.html#time-complexity">Time Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#python-3-10-7">Python 3.10.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#pypy-7-3-9">PyPy 7.3.9</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -88,20 +95,20 @@ Ancestor retrieval.  It:</p>
 <li><p>works with any Python sequence, not just strings, if the items are hashable,</p></li>
 <li><p>is a generalized suffix tree for sets of sequences,</p></li>
 <li><p>is implemented in pure Python,</p></li>
-<li><p>builds the tree in linear time with Ukkonen’s algorithm,</p></li>
+<li><p>builds the tree in time proportional to the length of the input,</p></li>
 <li><p>does constant-time Lowest Common Ancestor retrieval.</p></li>
 </ul>
-<p>Three different builders have been implemented:</p>
+<p>Three different <a class="reference internal" href="builders.html#builders"><span class="std std-ref">builders</span></a> have been implemented:</p>
 <ul class="simple">
-<li><p>one that follows Ukkonen’s original paper (<a class="reference internal" href="references.html#ukkonen1995" id="id1"><span>[Ukkonen1995]</span></a>),</p></li>
-<li><p>one that follows Gusfield’s variant (<a class="reference internal" href="references.html#gusfield1997" id="id2"><span>[Gusfield1997]</span></a>),</p></li>
-<li><p>and one simple naive algorithm.</p></li>
+<li><p>one that uses McCreight’s <span class="math notranslate nohighlight">\(\mathcal O(\lvert S\rvert)\)</span> algorithm (<a class="reference internal" href="references.html#mccreight1976" id="id1"><span>[McCreight1976]</span></a>),</p></li>
+<li><p>one that uses Ukkonen’s <span class="math notranslate nohighlight">\(\mathcal O(\lvert S\rvert)\)</span> algorithm (<a class="reference internal" href="references.html#ukkonen1995" id="id2"><span>[Ukkonen1995]</span></a>),</p></li>
+<li><p>and one that uses a naive (non linear time) algorithm.</p></li>
 </ul>
 <p>Being implemented in Python this tree is not very fast nor memory efficient.  The
 building of the tree takes time proportional to the length of the string of symbols.
 The query time is proportional to the length of the query string.  You can get a rough
-idea of the performance under: <a class="reference internal" href="performance.html#time-complexity"><span class="std std-ref">Performance</span></a>.</p>
-<p>To get the best performance run it with <strong class="program">python -O</strong>.</p>
+idea of the performance under: <a class="reference internal" href="performance.html#performance"><span class="std std-ref">Performance</span></a>.</p>
+<p>To get the best performance turn the python optimizer on with <strong class="program">python -O</strong>.</p>
 <p>Install it from PyPi: <a class="reference external" href="https://pypi.org/project/suffix-tree/">https://pypi.org/project/suffix-tree/</a></p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -110,15 +117,17 @@ idea of the performance under: <a class="reference internal" href="performance.h
 <li class="toctree-l1"><a class="reference internal" href="tree.html">Tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">Node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="builder.html">Builder</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.naive">Naive Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen">Ukkonen Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen_gusfield">Gusfield Builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builders.html">Builders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/naive.html">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="performance.html#time-complexity">Time Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#python-3-10-7">Python 3.10.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#pypy-7-3-9">PyPy 7.3.9</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>

@@ -7,6 +7,8 @@
   <title>Node &mdash; suffix-tree 0.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon-cceh-blue.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,7 +17,8 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"macros": {"bs": ["\\boldsymbol"], "suf": ["\\mathrm{\\bf suf}_{\\mkern 1mu\\bs{#1}}", 1], "head": ["\\mathrm{\\bf head}_{\\mkern 1mu\\bs{#1}}", 1], "tail": ["\\mathrm{\\bf tail}_{\\mkern 1mu\\bs{#1}}", 1]}}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -29,6 +32,7 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> suffix-tree
+            <img src="_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,15 +48,18 @@
 <li class="toctree-l1"><a class="reference internal" href="tree.html">Tree</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="builder.html">Builder</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.naive">Naive Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen">Ukkonen Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen_gusfield">Gusfield Builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builders.html">Builders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/naive.html">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="performance.html#time-complexity">Time Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#python-3-10-7">Python 3.10.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#pypy-7-3-9">PyPy 7.3.9</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -87,23 +94,36 @@
 <p>Node classes for a Generalized Suffix Tree.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="suffix_tree.node.Node">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Node" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Node" title="Permalink to this definition"></a></dt>
 <dd><p>The abstract base class for internal and leaf nodes.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Node.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Node.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Node.__init__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="suffix_tree.node.Node.parent">
-<span class="sig-name descname"><span class="pre">parent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></em><a class="headerlink" href="#suffix_tree.node.Node.parent" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">parent</span></span><a class="headerlink" href="#suffix_tree.node.Node.parent" title="Permalink to this definition"></a></dt>
 <dd><p>The parent of this node.  Used by Ukkonen and LCA.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="suffix_tree.node.Node.suffix_link">
-<span class="sig-name descname"><span class="pre">suffix_link</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#suffix_tree.node.Node.suffix_link" title="Permalink to this definition"></a></dt>
-<dd><p>Used by the Ukkonen algorithm while constructing the tree.</p>
+<dt class="sig sig-object py" id="suffix_tree.node.Node.S">
+<span class="sig-name descname"><span class="pre">S</span></span><a class="headerlink" href="#suffix_tree.node.Node.S" title="Permalink to this definition"></a></dt>
+<dd><p>The sequence of symbols. In a generalized tree the first sequence that
+created this node. S[start:end] is the path-label of this node.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="suffix_tree.node.Node.start">
+<span class="sig-name descname"><span class="pre">start</span></span><a class="headerlink" href="#suffix_tree.node.Node.start" title="Permalink to this definition"></a></dt>
+<dd><p>The start position in S of the path-label that goes into this node.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="suffix_tree.node.Node.end">
+<span class="sig-name descname"><span class="pre">end</span></span><a class="headerlink" href="#suffix_tree.node.Node.end" title="Permalink to this definition"></a></dt>
+<dd><p>The end position in S of the path-label that goes into this node.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -114,42 +134,9 @@ It is reported in the debug dot graph.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Node.string_depth">
-<span class="sig-name descname"><span class="pre">string_depth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#suffix_tree.node.Node.string_depth" title="Permalink to this definition"></a></dt>
-<dd><p>Return the string-depth of this node.</p>
-<p><strong>Definition</strong> For any node <span class="math notranslate nohighlight">\(v\)</span> in a suffix-tree, the <em>string-depth</em> of
-<span class="math notranslate nohighlight">\(v\)</span> is the number of characters in <span class="math notranslate nohighlight">\(v\)</span>’s label. — <a class="reference internal" href="references.html#gusfield1997" id="id1"><span>[Gusfield1997]</span></a>
-§5.2, page 90f</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Node.__str__">
 <span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#suffix_tree.node.Node.__str__" title="Permalink to this definition"></a></dt>
 <dd><p>Return a string representaion of this node for debugging.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Node.__len__">
-<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#suffix_tree.node.Node.__len__" title="Permalink to this definition"></a></dt>
-<dd><p>Return the string depth of this node.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="suffix_tree.node.Node.S">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">S</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#suffix_tree.node.Node.S" title="Permalink to this definition"></a></dt>
-<dd><p>Return the start of the path.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="suffix_tree.node.Node.start">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#suffix_tree.node.Node.start" title="Permalink to this definition"></a></dt>
-<dd><p>Return the start of the path.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="suffix_tree.node.Node.end">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#suffix_tree.node.Node.end" title="Permalink to this definition"></a></dt>
-<dd><p>Return the end of the path.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -161,14 +148,8 @@ Also we don’t need negative indices.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Node.compare">
-<span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#suffix_tree.node.Node.compare" title="Permalink to this definition"></a></dt>
-<dd><p>Compare this node against a path, return the matched length.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Node.compute_C">
-<span class="sig-name descname"><span class="pre">compute_C</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.node.Node.compute_C" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">compute_C</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.node.Node.compute_C" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the <span class="math notranslate nohighlight">\(C(v)\)</span> number for this node and all its children.</p>
 </dd></dl>
 
@@ -202,19 +183,19 @@ Also we don’t need negative indices.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Node.add_position">
-<span class="sig-name descname"><span class="pre">add_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Node.add_position" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Node.add_position" title="Permalink to this definition"></a></dt>
 <dd><p>If this node is a Leaf, then add the path to the list.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Node.get_positions">
-<span class="sig-name descname"><span class="pre">get_positions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.node.Node.get_positions" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_positions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.node.Node.get_positions" title="Permalink to this definition"></a></dt>
 <dd><p>Get all paths that traverse this node.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Node.common_substrings">
-<span class="sig-name descname"><span class="pre">common_substrings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_V</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Node.common_substrings" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">common_substrings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_V</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Node.common_substrings" title="Permalink to this definition"></a></dt>
 <dd><p>Common substrings recursive function.</p>
 </dd></dl>
 
@@ -226,96 +207,42 @@ Also we don’t need negative indices.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Node.to_dot">
-<span class="sig-name descname"><span class="pre">to_dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Node.to_dot" title="Permalink to this definition"></a></dt>
-<dd><p>Translate the node into Graphviz .dot format.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="suffix_tree.node.Leaf">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.node.</span></span><span class="sig-name descname"><span class="pre">Leaf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Leaf" title="Permalink to this definition"></a></dt>
-<dd><p>A leaf node.</p>
-<p>A suffix tree contains exactly len(S) leaf nodes.  A generalized suffix tree
-contains less than len (concat (S_1..S_N)) leaf nodes.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Leaf.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Leaf.__init__" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Leaf.__str__">
-<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#suffix_tree.node.Leaf.__str__" title="Permalink to this definition"></a></dt>
-<dd><p>Return a string representaion of this node for debugging.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Leaf.pre_order">
-<span class="sig-name descname"><span class="pre">pre_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Leaf.pre_order" title="Permalink to this definition"></a></dt>
-<dd><p>Walk the tree visiting each node before its children.</p>
+<span class="sig-name descname"><span class="pre">to_dot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#suffix_tree.node.Node.to_dot" title="Permalink to this definition"></a></dt>
+<dd><p>Output the tree in GraphViz .dot format.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>f</strong> (<em>Callable</em>) – the visitor function</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the tree in GraphViz dot format.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Leaf.post_order">
-<span class="sig-name descname"><span class="pre">post_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Leaf.post_order" title="Permalink to this definition"></a></dt>
-<dd><p>Walk the tree visiting each node after its children.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>f</strong> (<em>Callable</em>) – the visitor function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Leaf.add_position">
-<span class="sig-name descname"><span class="pre">add_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Leaf.add_position" title="Permalink to this definition"></a></dt>
-<dd><p>If this node is a Leaf, then add the path to the list.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Leaf.compute_C">
-<span class="sig-name descname"><span class="pre">compute_C</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.node.Leaf.compute_C" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the <span class="math notranslate nohighlight">\(C(v)\)</span> number for this node and all its children.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Leaf.compute_left_diverse">
-<span class="sig-name descname"><span class="pre">compute_left_diverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Leaf.compute_left_diverse" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the left-diversity of this node and all its children.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Leaf.maximal_repeats">
-<span class="sig-name descname"><span class="pre">maximal_repeats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Leaf.maximal_repeats" title="Permalink to this definition"></a></dt>
-<dd><p>Maximal repeats recursive function.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Leaf.to_dot">
-<span class="sig-name descname"><span class="pre">to_dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Leaf.to_dot" title="Permalink to this definition"></a></dt>
-<dd><p>Translate the node into Graphviz .dot format.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="suffix_tree.node.Internal">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.node.</span></span><span class="sig-name descname"><span class="pre">Internal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Internal" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Internal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Internal" title="Permalink to this definition"></a></dt>
 <dd><p>An internal node.</p>
-<p>Internal nodes have at least 2 children.</p>
+<p>Internal nodes are created for the root and auxiliary node and when splitting edges.
+Internal nodes have at least 2 children and a fixed end.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Internal.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Internal.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Internal.__init__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="suffix_tree.node.Internal.suffix_link">
+<span class="sig-name descname"><span class="pre">suffix_link</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#suffix_tree.node.Internal.suffix_link" title="Permalink to this definition"></a></dt>
+<dd><p>Used by the McCreight and Ukkonen algorithms to speed up the construction of
+the tree.</p>
+<p>“<strong>Corollary 6.1.2</strong> In any implicit suffix tree <span class="math notranslate nohighlight">\(\mathcal{T}_i', if
+internal node \)</span> has path-label <span class="math notranslate nohighlight">\(x\alpha\)</span>, then <em>there is</em> a node
+<span class="math notranslate nohighlight">\(s(v)\)</span> of <span class="math notranslate nohighlight">\(\mathcal{T}_i\)</span> with path-label <span class="math notranslate nohighlight">\(\alpha\)</span>.”
+— <a class="reference internal" href="references.html#gusfield1997" id="id1"><span>[Gusfield1997]</span></a> page 98</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="suffix_tree.node.Internal.children">
-<span class="sig-name descname"><span class="pre">children</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#suffix_tree.node.Internal.children" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">children</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#suffix_tree.node.Internal.children" title="Permalink to this definition"></a></dt>
 <dd><p>A dictionary of item =&gt; node</p>
 </dd></dl>
 
@@ -350,7 +277,7 @@ appear at the leaves in the subtree of <span class="math notranslate nohighlight
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Internal.add_position">
-<span class="sig-name descname"><span class="pre">add_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Internal.add_position" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Internal.add_position" title="Permalink to this definition"></a></dt>
 <dd><p>If this node is a Leaf, then add the path to the list.</p>
 </dd></dl>
 
@@ -378,7 +305,7 @@ appear at the leaves in the subtree of <span class="math notranslate nohighlight
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Internal.find_path">
-<span class="sig-name descname"><span class="pre">find_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'Node'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.node.Internal.find_path" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.node.Internal.find_path" title="Permalink to this definition"></a></dt>
 <dd><p>Find a path starting from this node.</p>
 <p>The path is absolute.</p>
 <p>Returns the deepest node on the path, the matched length of the path,
@@ -389,39 +316,162 @@ string-depth of the deepest node on the path.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Internal.split_edge">
 <span class="sig-name descname"><span class="pre">split_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></span></span><a class="headerlink" href="#suffix_tree.node.Internal.split_edge" title="Permalink to this definition"></a></dt>
-<dd><p>Split the edge.</p>
-<p>Split self –&gt; child into self –&gt; new_node –&gt; child and return the new node.
-new_len is the string-depth of the new node.</p>
+<dd><p>Split the edge from self to child.</p>
+<p>Split <em>self –&gt; child</em> into <em>self –&gt; new_node –&gt; child</em> and return new_node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>new_len</strong> (<em>int</em>) – the length of the path into the new node</p></li>
+<li><p><strong>child</strong> (<a class="reference internal" href="#suffix_tree.node.Node" title="suffix_tree.node.Node"><em>Node</em></a>) – indicates the edge to split</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the new node</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Internal.compute_C">
-<span class="sig-name descname"><span class="pre">compute_C</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.node.Internal.compute_C" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">compute_C</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.node.Internal.compute_C" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the <span class="math notranslate nohighlight">\(C(v)\)</span> number for this node and all its children.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Internal.compute_left_diverse">
-<span class="sig-name descname"><span class="pre">compute_left_diverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">set</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.node.Internal.compute_left_diverse" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">compute_left_diverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.node.Internal.compute_left_diverse" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the left-diversity of this node and all its children.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Internal.common_substrings">
-<span class="sig-name descname"><span class="pre">common_substrings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Internal.common_substrings" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">common_substrings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Internal.common_substrings" title="Permalink to this definition"></a></dt>
 <dd><p>Common substrings recursive function.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.node.Internal.maximal_repeats">
-<span class="sig-name descname"><span class="pre">maximal_repeats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Internal.maximal_repeats" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">maximal_repeats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Internal.maximal_repeats" title="Permalink to this definition"></a></dt>
 <dd><p>Maximal repeats recursive function.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="suffix_tree.node.Leaf">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Leaf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Leaf" title="Permalink to this definition"></a></dt>
+<dd><p>A leaf node.</p>
+<p>Leaf nodes are created when a new suffix is inserted into the tree.</p>
+<p>A suffix tree contains exactly <span class="math notranslate nohighlight">\(len(S)\)</span> leaf nodes.  A generalized suffix tree
+contains less than <span class="math notranslate nohighlight">\(len (concat (S_1..S_N))\)</span> leaf nodes.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="suffix_tree.node.Internal.to_dot">
-<span class="sig-name descname"><span class="pre">to_dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Internal.to_dot" title="Permalink to this definition"></a></dt>
-<dd><p>Translate the node into Graphviz .dot format.</p>
+<dt class="sig sig-object py" id="suffix_tree.node.Leaf.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Leaf.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="suffix_tree.node.Leaf.str_id">
+<span class="sig-name descname"><span class="pre">str_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">object</span></em><a class="headerlink" href="#suffix_tree.node.Leaf.str_id" title="Permalink to this definition"></a></dt>
+<dd><p>The id of the sequence that created this node.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.node.Leaf.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#suffix_tree.node.Leaf.__str__" title="Permalink to this definition"></a></dt>
+<dd><p>Return a string representaion of this node for debugging.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.node.Leaf.pre_order">
+<span class="sig-name descname"><span class="pre">pre_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Leaf.pre_order" title="Permalink to this definition"></a></dt>
+<dd><p>Walk the tree visiting each node before its children.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>f</strong> (<em>Callable</em>) – the visitor function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.node.Leaf.post_order">
+<span class="sig-name descname"><span class="pre">post_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Leaf.post_order" title="Permalink to this definition"></a></dt>
+<dd><p>Walk the tree visiting each node after its children.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>f</strong> (<em>Callable</em>) – the visitor function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.node.Leaf.add_position">
+<span class="sig-name descname"><span class="pre">add_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.node.Leaf.add_position" title="Permalink to this definition"></a></dt>
+<dd><p>If this node is a Leaf, then add the path to the list.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.node.Leaf.compute_C">
+<span class="sig-name descname"><span class="pre">compute_C</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.node.Leaf.compute_C" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the <span class="math notranslate nohighlight">\(C(v)\)</span> number for this node and all its children.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.node.Leaf.compute_left_diverse">
+<span class="sig-name descname"><span class="pre">compute_left_diverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Leaf.compute_left_diverse" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the left-diversity of this node and all its children.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.node.Leaf.maximal_repeats">
+<span class="sig-name descname"><span class="pre">maximal_repeats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.Leaf.maximal_repeats" title="Permalink to this definition"></a></dt>
+<dd><p>Maximal repeats recursive function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="suffix_tree.node.UkkonenLeaf">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UkkonenLeaf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.UkkonenLeaf" title="Permalink to this definition"></a></dt>
+<dd><p>A leaf node.</p>
+<p>UkkonenLeaf nodes have mutable ends. See: <a class="reference internal" href="#suffix_tree.node.UkkonenLeaf.end" title="suffix_tree.node.UkkonenLeaf.end"><code class="xref py py-attr docutils literal notranslate"><span class="pre">end</span></code></a>.</p>
+<p>A suffix tree contains exactly <span class="math notranslate nohighlight">\(len(S)\)</span> leaf nodes.  A generalized suffix tree
+contains less than <span class="math notranslate nohighlight">\(len (concat (S_1..S_N))\)</span> leaf nodes.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="suffix_tree.node.UkkonenLeaf.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#suffix_tree.node.Internal" title="suffix_tree.node.Internal"><span class="pre">suffix_tree.node.Internal</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.node.UkkonenLeaf.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="suffix_tree.node.UkkonenLeaf.str_id">
+<span class="sig-name descname"><span class="pre">str_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">object</span></em><a class="headerlink" href="#suffix_tree.node.UkkonenLeaf.str_id" title="Permalink to this definition"></a></dt>
+<dd><p>The id of the sequence that created this node.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="suffix_tree.node.UkkonenLeaf.end">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#suffix_tree.node.UkkonenLeaf.end" title="Permalink to this definition"></a></dt>
+<dd><p>Return the end of the path.</p>
+<p>This is a calculated property because in Ukkonen’s algorithm the end of a leaf
+node is implicitly assumed to be the end of the current phase.</p>
+<p>“Any transition of <span class="math notranslate nohighlight">\(STree(T_{i-1})\)</span> leading to a leaf is called an <em>open
+transition.</em>  Such a transition is of the form <span class="math notranslate nohighlight">\(g'(s,(k,i-1)) = r\)</span> where, as
+stated above, the right pointer has to point to the last position <span class="math notranslate nohighlight">\(i-1\)</span> of
+<span class="math notranslate nohighlight">\(T_{i-1}\)</span>. Therefore it is not necessary to represent the actual value of the
+right pointer. Instead, open transitions are represented as <span class="math notranslate nohighlight">\(g'(s,(k,\infty)) =
+r\)</span> where <span class="math notranslate nohighlight">\(\infty\)</span> indicates that this transition is ‘open to grow’.”</p>
+<p>– <a class="reference internal" href="references.html#ukkonen1995" id="id4"><span>[Ukkonen1995]</span></a></p>
+<p>This will return the current length since at the start of each phase we pop a
+symbol off the iterable and append it to self.S.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="suffix_tree.node.UkkonenLeaf.depth">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">depth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#suffix_tree.node.UkkonenLeaf.depth" title="Permalink to this definition"></a></dt>
+<dd><p>Return the string-depth of this node.</p>
+<p>That is the length of the label on the edge going into this node.</p>
+<p><strong>Definition</strong> For any node <span class="math notranslate nohighlight">\(v\)</span> in a suffix-tree, the <em>string-depth</em> of
+<span class="math notranslate nohighlight">\(v\)</span> is the number of characters in <span class="math notranslate nohighlight">\(v\)</span>’s label. — <a class="reference internal" href="references.html#gusfield1997" id="id5"><span>[Gusfield1997]</span></a>
+§5.2, page 90f</p>
 </dd></dl>
 
 </dd></dl>

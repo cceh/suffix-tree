@@ -7,6 +7,8 @@
   <title>LCA Mixin &mdash; suffix-tree 0.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon-cceh-blue.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,11 +17,12 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"macros": {"bs": ["\\boldsymbol"], "suf": ["\\mathrm{\\bf suf}_{\\mkern 1mu\\bs{#1}}", 1], "head": ["\\mathrm{\\bf head}_{\\mkern 1mu\\bs{#1}}", 1], "tail": ["\\mathrm{\\bf tail}_{\\mkern 1mu\\bs{#1}}", 1]}}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Builder" href="builder.html" />
+    <link rel="next" title="Builders" href="builders.html" />
     <link rel="prev" title="Node" href="node.html" /> 
 </head>
 
@@ -29,6 +32,7 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> suffix-tree
+            <img src="_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,15 +48,18 @@
 <li class="toctree-l1"><a class="reference internal" href="tree.html">Tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">Node</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">LCA Mixin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="builder.html">Builder</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.naive">Naive Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen">Ukkonen Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen_gusfield">Gusfield Builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builders.html">Builders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/naive.html">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="performance.html#time-complexity">Time Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#python-3-10-7">Python 3.10.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#pypy-7-3-9">PyPy 7.3.9</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -98,14 +105,14 @@ ancestor</em> of <span class="math notranslate nohighlight">\(v\)</span> refers 
 — <a class="reference internal" href="references.html#gusfield1997" id="id2"><span>[Gusfield1997]</span></a> Chapter 8, 181ff</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.uint">
-<span class="sig-prename descclassname"><span class="pre">suffix_tree.lca_mixin.</span></span><span class="sig-name descname"><span class="pre">uint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.uint" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">uint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.uint" title="Permalink to this definition"></a></dt>
 <dd><p>Convert a number into unsigned 32-bit representation.</p>
 <p>Used only for debugging.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.nlz">
-<span class="sig-prename descclassname"><span class="pre">suffix_tree.lca_mixin.</span></span><span class="sig-name descname"><span class="pre">nlz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.nlz" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">nlz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.nlz" title="Permalink to this definition"></a></dt>
 <dd><p>Get the number of leadings zeros in a 32 bit word.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nlz</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="go">32</span>
@@ -123,7 +130,7 @@ ancestor</em> of <span class="math notranslate nohighlight">\(v\)</span> refers 
 
 <dl class="py function">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.msb">
-<span class="sig-prename descclassname"><span class="pre">suffix_tree.lca_mixin.</span></span><span class="sig-name descname"><span class="pre">msb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.msb" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">msb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.msb" title="Permalink to this definition"></a></dt>
 <dd><p>Get the position of the most dignificat bit.</p>
 <p>Get the position of the most significant set bit counting from the right and
 starting from 0.</p>
@@ -139,7 +146,7 @@ starting from 0.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.h">
-<span class="sig-prename descclassname"><span class="pre">suffix_tree.lca_mixin.</span></span><span class="sig-name descname"><span class="pre">h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.h" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.h" title="Permalink to this definition"></a></dt>
 <dd><p>Return the h value.</p>
 <p>“<strong>Definition</strong> For any number <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(h(k)\)</span> denotes the position
 (counting from the right) of the least-significant 1-bit in the binary
@@ -160,11 +167,11 @@ leaf has four nodes (three edges).” — <a class="reference internal" href="re
 
 <dl class="py class">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.Node">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.lca_mixin.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.Node" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Node</span></span><a class="headerlink" href="#suffix_tree.lca_mixin.Node" title="Permalink to this definition"></a></dt>
 <dd><p>Mixin for Node to allow LCA retireval.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.Node.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.Node.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.Node.__init__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -218,7 +225,7 @@ ancestor in <span class="math notranslate nohighlight">\(\mathcal{T}\)</span> th
 
 <dl class="py class">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.Leaf">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.lca_mixin.</span></span><span class="sig-name descname"><span class="pre">Leaf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.Leaf" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Leaf</span></span><a class="headerlink" href="#suffix_tree.lca_mixin.Leaf" title="Permalink to this definition"></a></dt>
 <dd><p>A mixin for leaf nodes to allow for LCA retrievals.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.Leaf.__str__">
@@ -248,7 +255,7 @@ ancestor in <span class="math notranslate nohighlight">\(\mathcal{T}\)</span> th
 
 <dl class="py class">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.Internal">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.lca_mixin.</span></span><span class="sig-name descname"><span class="pre">Internal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.Internal" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Internal</span></span><a class="headerlink" href="#suffix_tree.lca_mixin.Internal" title="Permalink to this definition"></a></dt>
 <dd><p>A mixin for internal nodes to allow for LCA retrievals.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.Internal.__str__">
@@ -278,7 +285,7 @@ ancestor in <span class="math notranslate nohighlight">\(\mathcal{T}\)</span> th
 
 <dl class="py class">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.Tree">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">suffix_tree.lca_mixin.</span></span><span class="sig-name descname"><span class="pre">Tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.Tree" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.lca_mixin.Tree" title="Permalink to this definition"></a></dt>
 <dd><p>A mixin for suffix trees to allow for LCA retrievals.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.lca_mixin.Tree.__init__">
@@ -320,7 +327,7 @@ ancestor in <span class="math notranslate nohighlight">\(\mathcal{T}\)</span> th
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="node.html" class="btn btn-neutral float-left" title="Node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="builder.html" class="btn btn-neutral float-right" title="Builder" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="builders.html" class="btn btn-neutral float-right" title="Builders" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

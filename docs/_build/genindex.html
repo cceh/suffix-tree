@@ -6,6 +6,8 @@
   <title>Index &mdash; suffix-tree 0.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon-cceh-blue.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -25,6 +27,7 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> suffix-tree
+            <img src="_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -40,15 +43,17 @@
 <li class="toctree-l1"><a class="reference internal" href="tree.html">Tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">Node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="builder.html">Builder</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.naive">Naive Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen">Ukkonen Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder.html#module-suffix_tree.ukkonen_gusfield">Gusfield Builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builders.html">Builders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/naive.html">Naive Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="performance.html#time-complexity">Time Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#python-3-10-7">Python 3.10.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#pypy-7-3-9">PyPy 7.3.9</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -91,7 +96,6 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
- | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -104,54 +108,44 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="node.html#suffix_tree.node.Node.__getitem__">__getitem__() (suffix_tree.node.Node method)</a>
+      <li><a href="node.html#suffix_tree.node.Node.__getitem__">__getitem__() (Node method)</a>
 
       <ul>
-        <li><a href="util.html#suffix_tree.util.Path.__getitem__">(suffix_tree.util.Path method)</a>
+        <li><a href="util.html#suffix_tree.util.Path.__getitem__">(Path method)</a>
 </li>
       </ul></li>
-      <li><a href="builder.html#suffix_tree.builder.Builder.__init__">__init__() (suffix_tree.builder.Builder method)</a>
+      <li><a href="builder/builder.html#suffix_tree.builder.Builder.__init__">__init__() (Builder method)</a>, <a href="builder/ukkonen.html#suffix_tree.ukkonen.Builder.__init__">[1]</a>
 
       <ul>
-        <li><a href="lca.html#suffix_tree.lca_mixin.Node.__init__">(suffix_tree.lca_mixin.Node method)</a>
+        <li><a href="node.html#suffix_tree.node.Internal.__init__">(Internal method)</a>
 </li>
-        <li><a href="lca.html#suffix_tree.lca_mixin.Tree.__init__">(suffix_tree.lca_mixin.Tree method)</a>
+        <li><a href="node.html#suffix_tree.node.Leaf.__init__">(Leaf method)</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Internal.__init__">(suffix_tree.node.Internal method)</a>
+        <li><a href="lca.html#suffix_tree.lca_mixin.Node.__init__">(Node method)</a>, <a href="node.html#suffix_tree.node.Node.__init__">[1]</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Leaf.__init__">(suffix_tree.node.Leaf method)</a>
+        <li><a href="util.html#suffix_tree.util.Path.__init__">(Path method)</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Node.__init__">(suffix_tree.node.Node method)</a>
+        <li><a href="lca.html#suffix_tree.lca_mixin.Tree.__init__">(Tree method)</a>, <a href="tree.html#suffix_tree.tree.Tree.__init__">[1]</a>
 </li>
-        <li><a href="tree.html#suffix_tree.tree.Tree.__init__">(suffix_tree.tree.Tree method)</a>
+        <li><a href="node.html#suffix_tree.node.UkkonenLeaf.__init__">(UkkonenLeaf method)</a>
 </li>
-        <li><a href="builder.html#suffix_tree.ukkonen.Builder.__init__">(suffix_tree.ukkonen.Builder method)</a>
-</li>
-        <li><a href="util.html#suffix_tree.util.Path.__init__">(suffix_tree.util.Path method)</a>
-</li>
-        <li><a href="util.html#suffix_tree.util.UniqueEndChar.__init__">(suffix_tree.util.UniqueEndChar method)</a>
+        <li><a href="util.html#suffix_tree.util.UniqueEndChar.__init__">(UniqueEndChar method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="node.html#suffix_tree.node.Node.__len__">__len__() (suffix_tree.node.Node method)</a>
+      <li><a href="util.html#suffix_tree.util.Path.__lt__">__lt__() (Path method)</a>
 </li>
-      <li><a href="util.html#suffix_tree.util.Path.__lt__">__lt__() (suffix_tree.util.Path method)</a>
-</li>
-      <li><a href="lca.html#suffix_tree.lca_mixin.Internal.__str__">__str__() (suffix_tree.lca_mixin.Internal method)</a>
+      <li><a href="lca.html#suffix_tree.lca_mixin.Internal.__str__">__str__() (Internal method)</a>, <a href="node.html#suffix_tree.node.Internal.__str__">[1]</a>
 
       <ul>
-        <li><a href="lca.html#suffix_tree.lca_mixin.Leaf.__str__">(suffix_tree.lca_mixin.Leaf method)</a>
+        <li><a href="lca.html#suffix_tree.lca_mixin.Leaf.__str__">(Leaf method)</a>, <a href="node.html#suffix_tree.node.Leaf.__str__">[1]</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Internal.__str__">(suffix_tree.node.Internal method)</a>
+        <li><a href="node.html#suffix_tree.node.Node.__str__">(Node method)</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Leaf.__str__">(suffix_tree.node.Leaf method)</a>
+        <li><a href="util.html#suffix_tree.util.Path.__str__">(Path method)</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Node.__str__">(suffix_tree.node.Node method)</a>
-</li>
-        <li><a href="util.html#suffix_tree.util.Path.__str__">(suffix_tree.util.Path method)</a>
-</li>
-        <li><a href="util.html#suffix_tree.util.UniqueEndChar.__str__">(suffix_tree.util.UniqueEndChar method)</a>
+        <li><a href="util.html#suffix_tree.util.UniqueEndChar.__str__">(UniqueEndChar method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -160,18 +154,18 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="lca.html#suffix_tree.lca_mixin.Node.A">A (suffix_tree.lca_mixin.Node attribute)</a>
+      <li><a href="lca.html#suffix_tree.lca_mixin.Node.A">A (Node attribute)</a>
 </li>
-      <li><a href="tree.html#suffix_tree.tree.Tree.add">add() (suffix_tree.tree.Tree method)</a>
+      <li><a href="tree.html#suffix_tree.tree.Tree.add">add() (Tree method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="node.html#suffix_tree.node.Internal.add_position">add_position() (suffix_tree.node.Internal method)</a>
+      <li><a href="node.html#suffix_tree.node.Internal.add_position">add_position() (Internal method)</a>
 
       <ul>
-        <li><a href="node.html#suffix_tree.node.Leaf.add_position">(suffix_tree.node.Leaf method)</a>
+        <li><a href="node.html#suffix_tree.node.Leaf.add_position">(Leaf method)</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Node.add_position">(suffix_tree.node.Node method)</a>
+        <li><a href="node.html#suffix_tree.node.Node.add_position">(Node method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -180,26 +174,16 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="builder.html#suffix_tree.builder.Builder.build">build() (suffix_tree.builder.Builder method)</a>
+      <li><a href="builder/builder.html#suffix_tree.builder.Builder.build">build() (Builder method)</a>, <a href="builder/mccreight.html#suffix_tree.mccreight.Builder.build">[1]</a>, <a href="builder/naive.html#suffix_tree.naive.Builder.build">[2]</a>, <a href="builder/ukkonen.html#suffix_tree.ukkonen.Builder.build">[3]</a>
+</li>
+      <li><a href="builder/builder.html#suffix_tree.builder.Builder">Builder (class in suffix_tree.builder)</a>
 
       <ul>
-        <li><a href="builder.html#suffix_tree.naive.Builder.build">(suffix_tree.naive.Builder method)</a>
+        <li><a href="builder/mccreight.html#suffix_tree.mccreight.Builder">(class in suffix_tree.mccreight)</a>
 </li>
-        <li><a href="builder.html#suffix_tree.ukkonen.Builder.build">(suffix_tree.ukkonen.Builder method)</a>
+        <li><a href="builder/naive.html#suffix_tree.naive.Builder">(class in suffix_tree.naive)</a>
 </li>
-        <li><a href="builder.html#suffix_tree.ukkonen_gusfield.Builder.build">(suffix_tree.ukkonen_gusfield.Builder method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="builder.html#suffix_tree.builder.Builder">Builder (class in suffix_tree.builder)</a>
-
-      <ul>
-        <li><a href="builder.html#suffix_tree.naive.Builder">(class in suffix_tree.naive)</a>
-</li>
-        <li><a href="builder.html#suffix_tree.ukkonen.Builder">(class in suffix_tree.ukkonen)</a>
-</li>
-        <li><a href="builder.html#suffix_tree.ukkonen_gusfield.Builder">(class in suffix_tree.ukkonen_gusfield)</a>
+        <li><a href="builder/ukkonen.html#suffix_tree.ukkonen.Builder">(class in suffix_tree.ukkonen)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -208,54 +192,52 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="node.html#suffix_tree.node.Internal.C">C (suffix_tree.node.Internal attribute)</a>
+      <li><a href="node.html#suffix_tree.node.Internal.C">C (Internal attribute)</a>
 </li>
-      <li><a href="builder.html#suffix_tree.ukkonen.Builder.canonize">canonize() (suffix_tree.ukkonen.Builder method)</a>
+      <li><a href="builder/ukkonen.html#suffix_tree.ukkonen.Builder.canonize">canonize() (Builder method)</a>
 </li>
-      <li><a href="node.html#suffix_tree.node.Internal.children">children (suffix_tree.node.Internal attribute)</a>
+      <li><a href="node.html#suffix_tree.node.Internal.children">children (Internal attribute)</a>
 </li>
-      <li><a href="node.html#suffix_tree.node.Internal.common_substrings">common_substrings() (suffix_tree.node.Internal method)</a>
+      <li><a href="node.html#suffix_tree.node.Internal.common_substrings">common_substrings() (Internal method)</a>
 
       <ul>
-        <li><a href="node.html#suffix_tree.node.Node.common_substrings">(suffix_tree.node.Node method)</a>
+        <li><a href="node.html#suffix_tree.node.Node.common_substrings">(Node method)</a>
 </li>
-        <li><a href="tree.html#suffix_tree.tree.Tree.common_substrings">(suffix_tree.tree.Tree method)</a>
+        <li><a href="tree.html#suffix_tree.tree.Tree.common_substrings">(Tree method)</a>
 </li>
       </ul></li>
-      <li><a href="node.html#suffix_tree.node.Node.compare">compare() (suffix_tree.node.Node method)</a>
-</li>
-      <li><a href="lca.html#suffix_tree.lca_mixin.Internal.compute_A">compute_A() (suffix_tree.lca_mixin.Internal method)</a>
+      <li><a href="lca.html#suffix_tree.lca_mixin.Internal.compute_A">compute_A() (Internal method)</a>
 
       <ul>
-        <li><a href="lca.html#suffix_tree.lca_mixin.Leaf.compute_A">(suffix_tree.lca_mixin.Leaf method)</a>
+        <li><a href="lca.html#suffix_tree.lca_mixin.Leaf.compute_A">(Leaf method)</a>
 </li>
-        <li><a href="lca.html#suffix_tree.lca_mixin.Node.compute_A">(suffix_tree.lca_mixin.Node method)</a>
+        <li><a href="lca.html#suffix_tree.lca_mixin.Node.compute_A">(Node method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="node.html#suffix_tree.node.Internal.compute_C">compute_C() (suffix_tree.node.Internal method)</a>
+      <li><a href="node.html#suffix_tree.node.Internal.compute_C">compute_C() (Internal method)</a>
 
       <ul>
-        <li><a href="node.html#suffix_tree.node.Leaf.compute_C">(suffix_tree.node.Leaf method)</a>
+        <li><a href="node.html#suffix_tree.node.Leaf.compute_C">(Leaf method)</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Node.compute_C">(suffix_tree.node.Node method)</a>
+        <li><a href="node.html#suffix_tree.node.Node.compute_C">(Node method)</a>
 </li>
       </ul></li>
-      <li><a href="lca.html#suffix_tree.lca_mixin.Internal.compute_I_and_L">compute_I_and_L() (suffix_tree.lca_mixin.Internal method)</a>
+      <li><a href="lca.html#suffix_tree.lca_mixin.Internal.compute_I_and_L">compute_I_and_L() (Internal method)</a>
 
       <ul>
-        <li><a href="lca.html#suffix_tree.lca_mixin.Leaf.compute_I_and_L">(suffix_tree.lca_mixin.Leaf method)</a>
+        <li><a href="lca.html#suffix_tree.lca_mixin.Leaf.compute_I_and_L">(Leaf method)</a>
 </li>
-        <li><a href="lca.html#suffix_tree.lca_mixin.Node.compute_I_and_L">(suffix_tree.lca_mixin.Node method)</a>
+        <li><a href="lca.html#suffix_tree.lca_mixin.Node.compute_I_and_L">(Node method)</a>
 </li>
       </ul></li>
-      <li><a href="node.html#suffix_tree.node.Internal.compute_left_diverse">compute_left_diverse() (suffix_tree.node.Internal method)</a>
+      <li><a href="node.html#suffix_tree.node.Internal.compute_left_diverse">compute_left_diverse() (Internal method)</a>
 
       <ul>
-        <li><a href="node.html#suffix_tree.node.Leaf.compute_left_diverse">(suffix_tree.node.Leaf method)</a>
+        <li><a href="node.html#suffix_tree.node.Leaf.compute_left_diverse">(Leaf method)</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Node.compute_left_diverse">(suffix_tree.node.Node method)</a>
+        <li><a href="node.html#suffix_tree.node.Node.compute_left_diverse">(Node method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -274,16 +256,18 @@
 </li>
       <li><a href="util.html#suffix_tree.util.DEBUG_LABELS">DEBUG_LABELS (in module suffix_tree.util)</a>
 </li>
+      <li><a href="node.html#suffix_tree.node.UkkonenLeaf.depth">depth (UkkonenLeaf property)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="node.html#suffix_tree.node.Node.end">end (suffix_tree.node.Node property)</a>
+      <li><a href="node.html#suffix_tree.node.Node.end">end (Node attribute)</a>
 
       <ul>
-        <li><a href="util.html#suffix_tree.util.Path.end">(suffix_tree.util.Path property)</a>
+        <li><a href="node.html#suffix_tree.node.UkkonenLeaf.end">(UkkonenLeaf property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -292,21 +276,21 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="tree.html#suffix_tree.tree.Tree.find">find() (suffix_tree.tree.Tree method)</a>
+      <li><a href="tree.html#suffix_tree.tree.Tree.find">find() (Tree method)</a>
 </li>
-      <li><a href="tree.html#suffix_tree.tree.Tree.find_all">find_all() (suffix_tree.tree.Tree method)</a>
+      <li><a href="tree.html#suffix_tree.tree.Tree.find_all">find_all() (Tree method)</a>
 </li>
-      <li><a href="tree.html#suffix_tree.tree.Tree.find_id">find_id() (suffix_tree.tree.Tree method)</a>
+      <li><a href="tree.html#suffix_tree.tree.Tree.find_id">find_id() (Tree method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="node.html#suffix_tree.node.Internal.find_path">find_path() (suffix_tree.node.Internal method)</a>
+      <li><a href="node.html#suffix_tree.node.Internal.find_path">find_path() (Internal method)</a>
 
       <ul>
-        <li><a href="tree.html#suffix_tree.tree.Tree.find_path">(suffix_tree.tree.Tree method)</a>
+        <li><a href="tree.html#suffix_tree.tree.Tree.find_path">(Tree method)</a>
 </li>
       </ul></li>
-      <li><a href="util.html#suffix_tree.util.Path.from_iterable">from_iterable() (suffix_tree.util.Path class method)</a>
+      <li><a href="util.html#suffix_tree.util.Path.from_iterable">from_iterable() (Path class method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -314,7 +298,7 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="node.html#suffix_tree.node.Node.get_positions">get_positions() (suffix_tree.node.Node method)</a>
+      <li><a href="node.html#suffix_tree.node.Node.get_positions">get_positions() (Node method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -330,9 +314,7 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="lca.html#suffix_tree.lca_mixin.Node.I">I (suffix_tree.lca_mixin.Node attribute)</a>
-</li>
-      <li><a href="util.html#suffix_tree.util.Path.i">i (suffix_tree.util.Path property)</a>
+      <li><a href="lca.html#suffix_tree.lca_mixin.Node.I">I (Node attribute)</a>
 </li>
       <li><a href="lca.html#suffix_tree.lca_mixin.Internal">Internal (class in suffix_tree.lca_mixin)</a>
 
@@ -344,15 +326,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="util.html#suffix_tree.util.is_debug">is_debug() (in module suffix_tree.util)</a>
 </li>
-      <li><a href="node.html#suffix_tree.node.Internal.is_left_diverse">is_left_diverse (suffix_tree.node.Internal attribute)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="K">K</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="util.html#suffix_tree.util.Path.k">k (suffix_tree.util.Path property)</a>
+      <li><a href="node.html#suffix_tree.node.Internal.is_left_diverse">is_left_diverse (Internal attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -360,9 +334,9 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="lca.html#suffix_tree.lca_mixin.Tree.lca">lca() (suffix_tree.lca_mixin.Tree method)</a>
+      <li><a href="lca.html#suffix_tree.lca_mixin.Tree.lca">lca() (Tree method)</a>
 </li>
-      <li><a href="lca.html#suffix_tree.lca_mixin.Node.lca_id">lca_id (suffix_tree.lca_mixin.Node attribute)</a>
+      <li><a href="lca.html#suffix_tree.lca_mixin.Node.lca_id">lca_id (Node attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -378,14 +352,14 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="node.html#suffix_tree.node.Internal.maximal_repeats">maximal_repeats() (suffix_tree.node.Internal method)</a>
+      <li><a href="node.html#suffix_tree.node.Internal.maximal_repeats">maximal_repeats() (Internal method)</a>
 
       <ul>
-        <li><a href="node.html#suffix_tree.node.Leaf.maximal_repeats">(suffix_tree.node.Leaf method)</a>
+        <li><a href="node.html#suffix_tree.node.Leaf.maximal_repeats">(Leaf method)</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Node.maximal_repeats">(suffix_tree.node.Node method)</a>
+        <li><a href="node.html#suffix_tree.node.Node.maximal_repeats">(Node method)</a>
 </li>
-        <li><a href="tree.html#suffix_tree.tree.Tree.maximal_repeats">(suffix_tree.tree.Tree method)</a>
+        <li><a href="tree.html#suffix_tree.tree.Tree.maximal_repeats">(Tree method)</a>
 </li>
       </ul></li>
       <li><a href="util.html#suffix_tree.util.min_debug_depth">min_debug_depth (in module suffix_tree.util)</a>
@@ -394,19 +368,19 @@
     module
 
       <ul>
-        <li><a href="builder.html#module-suffix_tree.builder">suffix_tree.builder</a>
+        <li><a href="builder/builder.html#module-suffix_tree.builder">suffix_tree.builder</a>
 </li>
         <li><a href="lca.html#module-suffix_tree.lca_mixin">suffix_tree.lca_mixin</a>
 </li>
-        <li><a href="builder.html#module-suffix_tree.naive">suffix_tree.naive</a>
+        <li><a href="builder/mccreight.html#module-suffix_tree.mccreight">suffix_tree.mccreight</a>
+</li>
+        <li><a href="builder/naive.html#module-suffix_tree.naive">suffix_tree.naive</a>
 </li>
         <li><a href="node.html#module-suffix_tree.node">suffix_tree.node</a>
 </li>
         <li><a href="tree.html#module-suffix_tree.tree">suffix_tree.tree</a>
 </li>
-        <li><a href="builder.html#module-suffix_tree.ukkonen">suffix_tree.ukkonen</a>
-</li>
-        <li><a href="builder.html#module-suffix_tree.ukkonen_gusfield">suffix_tree.ukkonen_gusfield</a>
+        <li><a href="builder/ukkonen.html#module-suffix_tree.ukkonen">suffix_tree.ukkonen</a>
 </li>
         <li><a href="util.html#module-suffix_tree.util">suffix_tree.util</a>
 </li>
@@ -421,7 +395,7 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="node.html#suffix_tree.node.Node.name">name (suffix_tree.node.Node attribute)</a>
+      <li><a href="node.html#suffix_tree.node.Node.name">name (Node attribute)</a>
 </li>
       <li><a href="lca.html#suffix_tree.lca_mixin.nlz">nlz() (in module suffix_tree.lca_mixin)</a>
 </li>
@@ -433,7 +407,7 @@
         <li><a href="node.html#suffix_tree.node.Node">(class in suffix_tree.node)</a>
 </li>
       </ul></li>
-      <li><a href="lca.html#suffix_tree.lca_mixin.Tree.nodemap">nodemap (suffix_tree.lca_mixin.Tree attribute)</a>
+      <li><a href="lca.html#suffix_tree.lca_mixin.Tree.nodemap">nodemap (Tree attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -441,42 +415,40 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="util.html#suffix_tree.util.Path.p">p (suffix_tree.util.Path property)</a>
-</li>
-      <li><a href="node.html#suffix_tree.node.Node.parent">parent (suffix_tree.node.Node attribute)</a>
+      <li><a href="node.html#suffix_tree.node.Node.parent">parent (Node attribute)</a>
 </li>
       <li><a href="util.html#suffix_tree.util.Path">Path (class in suffix_tree.util)</a>
 </li>
-      <li><a href="node.html#suffix_tree.node.Internal.post_order">post_order() (suffix_tree.node.Internal method)</a>
+      <li><a href="node.html#suffix_tree.node.Internal.post_order">post_order() (Internal method)</a>
 
       <ul>
-        <li><a href="node.html#suffix_tree.node.Leaf.post_order">(suffix_tree.node.Leaf method)</a>
+        <li><a href="node.html#suffix_tree.node.Leaf.post_order">(Leaf method)</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Node.post_order">(suffix_tree.node.Node method)</a>
+        <li><a href="node.html#suffix_tree.node.Node.post_order">(Node method)</a>
 </li>
-        <li><a href="tree.html#suffix_tree.tree.Tree.post_order">(suffix_tree.tree.Tree method)</a>
+        <li><a href="tree.html#suffix_tree.tree.Tree.post_order">(Tree method)</a>
+</li>
+      </ul></li>
+      <li><a href="node.html#suffix_tree.node.Internal.pre_order">pre_order() (Internal method)</a>
+
+      <ul>
+        <li><a href="node.html#suffix_tree.node.Leaf.pre_order">(Leaf method)</a>
+</li>
+        <li><a href="node.html#suffix_tree.node.Node.pre_order">(Node method)</a>
+</li>
+        <li><a href="tree.html#suffix_tree.tree.Tree.pre_order">(Tree method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="node.html#suffix_tree.node.Internal.pre_order">pre_order() (suffix_tree.node.Internal method)</a>
+      <li><a href="lca.html#suffix_tree.lca_mixin.Internal.prepare_lca">prepare_lca() (Internal method)</a>
 
       <ul>
-        <li><a href="node.html#suffix_tree.node.Leaf.pre_order">(suffix_tree.node.Leaf method)</a>
+        <li><a href="lca.html#suffix_tree.lca_mixin.Leaf.prepare_lca">(Leaf method)</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Node.pre_order">(suffix_tree.node.Node method)</a>
+        <li><a href="lca.html#suffix_tree.lca_mixin.Node.prepare_lca">(Node method)</a>
 </li>
-        <li><a href="tree.html#suffix_tree.tree.Tree.pre_order">(suffix_tree.tree.Tree method)</a>
-</li>
-      </ul></li>
-      <li><a href="lca.html#suffix_tree.lca_mixin.Internal.prepare_lca">prepare_lca() (suffix_tree.lca_mixin.Internal method)</a>
-
-      <ul>
-        <li><a href="lca.html#suffix_tree.lca_mixin.Leaf.prepare_lca">(suffix_tree.lca_mixin.Leaf method)</a>
-</li>
-        <li><a href="lca.html#suffix_tree.lca_mixin.Node.prepare_lca">(suffix_tree.lca_mixin.Node method)</a>
-</li>
-        <li><a href="lca.html#suffix_tree.lca_mixin.Tree.prepare_lca">(suffix_tree.lca_mixin.Tree method)</a>
+        <li><a href="lca.html#suffix_tree.lca_mixin.Tree.prepare_lca">(Tree method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -485,27 +457,27 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="node.html#suffix_tree.node.Node.S">S (suffix_tree.node.Node property)</a>
+      <li><a href="node.html#suffix_tree.node.Node.S">S (Node attribute)</a>
 </li>
-      <li><a href="util.html#suffix_tree.util.Path.set_open_end">set_open_end() (suffix_tree.util.Path method)</a>
+      <li><a href="builder/builder.html#suffix_tree.builder.Builder.set_progress_function">set_progress_function() (Builder method)</a>
 </li>
-      <li><a href="builder.html#suffix_tree.builder.Builder.set_progress_function">set_progress_function() (suffix_tree.builder.Builder method)</a>
+      <li><a href="node.html#suffix_tree.node.Internal.split_edge">split_edge() (Internal method)</a>
 </li>
-      <li><a href="node.html#suffix_tree.node.Internal.split_edge">split_edge() (suffix_tree.node.Internal method)</a>
+      <li><a href="node.html#suffix_tree.node.Node.start">start (Node attribute)</a>
 </li>
-      <li><a href="node.html#suffix_tree.node.Node.start">start (suffix_tree.node.Node property)</a>
+      <li><a href="node.html#suffix_tree.node.Leaf.str_id">str_id (Leaf attribute)</a>
+
+      <ul>
+        <li><a href="node.html#suffix_tree.node.UkkonenLeaf.str_id">(UkkonenLeaf attribute)</a>
 </li>
-      <li><a href="node.html#suffix_tree.node.Node.string_depth">string_depth() (suffix_tree.node.Node method)</a>
-</li>
-      <li><a href="node.html#suffix_tree.node.Node.suffix_link">suffix_link (suffix_tree.node.Node attribute)</a>
-</li>
-      <li><a href="builder.html#suffix_tree.ukkonen_gusfield.Builder.suffix_link_dance">suffix_link_dance() (suffix_tree.ukkonen_gusfield.Builder method)</a>
+      </ul></li>
+      <li><a href="node.html#suffix_tree.node.Internal.suffix_link">suffix_link (Internal attribute)</a>
 </li>
       <li>
     suffix_tree.builder
 
       <ul>
-        <li><a href="builder.html#module-suffix_tree.builder">module</a>
+        <li><a href="builder/builder.html#module-suffix_tree.builder">module</a>
 </li>
       </ul></li>
       <li>
@@ -518,10 +490,17 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
+    suffix_tree.mccreight
+
+      <ul>
+        <li><a href="builder/mccreight.html#module-suffix_tree.mccreight">module</a>
+</li>
+      </ul></li>
+      <li>
     suffix_tree.naive
 
       <ul>
-        <li><a href="builder.html#module-suffix_tree.naive">module</a>
+        <li><a href="builder/naive.html#module-suffix_tree.naive">module</a>
 </li>
       </ul></li>
       <li>
@@ -542,14 +521,7 @@
     suffix_tree.ukkonen
 
       <ul>
-        <li><a href="builder.html#module-suffix_tree.ukkonen">module</a>
-</li>
-      </ul></li>
-      <li>
-    suffix_tree.ukkonen_gusfield
-
-      <ul>
-        <li><a href="builder.html#module-suffix_tree.ukkonen_gusfield">module</a>
+        <li><a href="builder/ukkonen.html#module-suffix_tree.ukkonen">module</a>
 </li>
       </ul></li>
       <li>
@@ -565,21 +537,13 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="builder.html#suffix_tree.ukkonen.Builder.test_and_split">test_and_split() (suffix_tree.ukkonen.Builder method)</a>
+      <li><a href="builder/ukkonen.html#suffix_tree.ukkonen.Builder.test_and_split">test_and_split() (Builder method)</a>
 </li>
-      <li><a href="node.html#suffix_tree.node.Internal.to_dot">to_dot() (suffix_tree.node.Internal method)</a>
-
-      <ul>
-        <li><a href="node.html#suffix_tree.node.Leaf.to_dot">(suffix_tree.node.Leaf method)</a>
+      <li><a href="node.html#suffix_tree.node.Node.to_dot">to_dot() (Node method)</a>
 </li>
-        <li><a href="node.html#suffix_tree.node.Node.to_dot">(suffix_tree.node.Node method)</a>
-</li>
-        <li><a href="tree.html#suffix_tree.tree.Tree.to_dot">(suffix_tree.tree.Tree method)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="builder.html#suffix_tree.ukkonen.Builder.transition">transition() (suffix_tree.ukkonen.Builder method)</a>
+      <li><a href="builder/ukkonen.html#suffix_tree.ukkonen.Builder.transition">transition() (Builder method)</a>
 </li>
       <li><a href="lca.html#suffix_tree.lca_mixin.Tree">Tree (class in suffix_tree.lca_mixin)</a>
 
@@ -595,13 +559,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lca.html#suffix_tree.lca_mixin.uint">uint() (in module suffix_tree.lca_mixin)</a>
 </li>
-      <li><a href="util.html#suffix_tree.util.Path.ukko_str">ukko_str() (suffix_tree.util.Path method)</a>
+      <li><a href="util.html#suffix_tree.util.ukko_str">ukko_str() (in module suffix_tree.util)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="node.html#suffix_tree.node.UkkonenLeaf">UkkonenLeaf (class in suffix_tree.node)</a>
+</li>
       <li><a href="util.html#suffix_tree.util.UniqueEndChar">UniqueEndChar (class in suffix_tree.util)</a>
 </li>
-      <li><a href="builder.html#suffix_tree.ukkonen.Builder.update">update() (suffix_tree.ukkonen.Builder method)</a>
+      <li><a href="builder/ukkonen.html#suffix_tree.ukkonen.Builder.update">update() (Builder method)</a>
 </li>
   </ul></td>
 </tr></table>
