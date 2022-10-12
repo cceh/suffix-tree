@@ -4,14 +4,14 @@ r"""A mixin that implements Constant-Time Lowest Common Ancestor Retrieval.
 suffix trees can be used to solve many additional string problems."
 --- [Gusfield1997]_ §9, 196
 
-"**Definition** In a rooted tree :math:`\mathcal{T}`, a node :math:`u` is an
-*ancestor* of a node :math:`v` if :math:`u` is on the unique path from the root
-to :math:`v`.  With this definition a node is an ancestor of itself.  A *proper
-ancestor* of :math:`v` refers to an ancestor that is not :math:`v`.
+"**Definition** In a rooted tree `\mathcal{T}`, a node `u` is an
+*ancestor* of a node `v` if `u` is on the unique path from the root
+to `v`.  With this definition a node is an ancestor of itself.  A *proper
+ancestor* of `v` refers to an ancestor that is not `v`.
 
-**Definition** In a rooted tree :math:`\mathcal{T}`, the *lowest common ancestor
-(lca)* of two nodes :math:`x` and :math:`y` is the deepest node in
-:math:`\mathcal{T}` that is an ancestor to both :math:`x` and :math:`y`."
+**Definition** In a rooted tree `\mathcal{T}`, the *lowest common ancestor
+(lca)* of two nodes `x` and `y` is the deepest node in
+`\mathcal{T}` that is an ancestor to both `x` and `y`."
 --- [Gusfield1997]_ Chapter 8, 181ff
 """
 
@@ -76,13 +76,13 @@ def msb(x):
 def h(k):
     r"""Return the h value.
 
-    "**Definition** For any number :math:`k`, :math:`h(k)` denotes the position
+    "**Definition** For any number `k`, `h(k)` denotes the position
     (counting from the right) of the least-significant 1-bit in the binary
-    representation of :math:`k`." --- [Gusfield1997]_ §8.5, 184ff
+    representation of `k`." --- [Gusfield1997]_ §8.5, 184ff
 
-    "**Lemma 8.5.1.** For any node :math:`k` (node with path number k) in
-    :math:`\mathcal{B}`, :math:`h(k)` equals the height of node :math:`k` in
-    :math:`\mathcal{B}`.
+    "**Lemma 8.5.1.** For any node `k` (node with path number k) in
+    `\mathcal{B}`, `h(k)` equals the height of node `k` in
+    `\mathcal{B}`.
 
     For example, node 8 (binary 1000) is at height 4, and the path from it to a
     leaf has four nodes (three edges)." --- [Gusfield1997]_ §8.5, 184ff
@@ -106,30 +106,32 @@ class Node:
 
     __slots__ = "lca_id", "I", "A"
 
-    def __init__(self):
+    def __init__(self):  # pragma: no cover
+        """ This is inlined on all subclasses to save one __init__ call per symbol."""
+
         self.lca_id = 0
         """Number of the node given in a depth-first traversal of the tree, starting
         with 1.  See [Gusfield1997]_ Figure 8.1, 182
         """
 
         self.I = 0
-        r"""For a node :math:`v` of :math:`\mathcal{T}`, let :math:`I(v)` be a node
-        :math:`w` in :math:`\mathcal{T}` such that :math:`h(w)` is maximum over
-        all nodes in the subtree of :math:`v` (including :math:`v` itself).
+        r"""For a node `v` of `\mathcal{T}`, let `I(v)` be a node
+        `w` in `\mathcal{T}` such that `h(w)` is maximum over
+        all nodes in the subtree of `v` (including `v` itself).
         --- [Gusfield1997]_ §8.5, 184ff
 
-        For any node :math:`v`, node :math:`I(v)` is the deepest node in the run
-        containing node :math:`v`. --- [Gusfield1997]_ Lemma 8.6.1., 187
+        For any node `v`, node `I(v)` is the deepest node in the run
+        containing node `v`. --- [Gusfield1997]_ Lemma 8.6.1., 187
 
-        N.B. This is the id of the node :math:`I(v)`.
+        N.B. This is the id of the node `I(v)`.
 
         """
 
         self.A = 0
-        r"""Bit :math:`A_v(i)` is set to 1 if and only if node :math:`v` has some
-        ancestor in :math:`\mathcal{T}` that maps to height :math:`i` in
-        :math:`\mathcal{B}`, i.e. if and only if :math:`v` has an ancestor
-        :math:`u` such that :math:`h(I(u))=i`. --- [Gusfield1997]_ §8.7, 188f
+        r"""Bit `A_v(i)` is set to 1 if and only if node `v` has some
+        ancestor in `\mathcal{T}` that maps to height `i` in
+        `\mathcal{B}`, i.e. if and only if `v` has an ancestor
+        `u` such that `h(I(u))=i`. --- [Gusfield1997]_ §8.7, 188f
 
         N.B. A node is an ancestor of itself. --- [Gusfield1997]_ §8.1, 181
         """
@@ -283,7 +285,7 @@ class Tree:
 
         # step 3 and 4
         def get_xy_bar(n):
-            r"""Compute :math:`\bar{x}` from :math:`x`."""
+            r"""Compute `\bar{x}` from `x`."""
             l = h(n.A)
             if l == j:
                 return n

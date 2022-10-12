@@ -1,15 +1,19 @@
 """A builder factory."""
 
-from . import builder, naive, ukkonen, mccreight
+from typing import Type
+
+from . import builder, naive, mccreight, ukkonen
 
 
-def builder_factory(name: str = None) -> type[builder.Builder]:
-    """Return the specified builder (default: ukkonen)."""
-    if name == "naive":
-        return naive.Builder
+def builder_factory(name: str = None) -> Type[builder.Builder]:
+    """Return the specified builder (default: mccreight)."""
     if name == "mccreight":
         return mccreight.Builder
-    return ukkonen.Builder
+    if name == "ukkonen":
+        return ukkonen.Builder
+    if name == "naive":
+        return naive.Builder
+    return mccreight.Builder
 
 
-BUILDERS = ["naive", "ukkonen", "mccreight"]
+BUILDERS = ["naive", "mccreight", "ukkonen"]

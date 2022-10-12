@@ -6,7 +6,7 @@ import itertools
 import gc
 import random
 import time
-from typing import Optional
+from typing import Optional, List, Tuple
 
 # import cProfile
 
@@ -24,7 +24,7 @@ WORDLIST = "/usr/share/dict/words"
 
 SYMBOLS = "".join(random.choices("ACTG", k=SIZE))
 
-WORDS: Optional[list[str]] = None
+WORDS: Optional[List[str]] = None
 try:
     # ~ 100_000 words
     with open(WORDLIST, "r") as fp:
@@ -76,7 +76,7 @@ class TestTimeComplexity:
         print(f"\ntesting {builder.name}")
         gc.disable()
 
-        def timer(sequence) -> list[tuple[int, float]]:
+        def timer(sequence) -> List[Tuple[int, float]]:
             tree = Tree()
             elapsed = []
             start: float = time.process_time()

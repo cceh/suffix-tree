@@ -1,5 +1,7 @@
 #!python3
 
+# type: ignore
+
 import glob
 import re
 import sys
@@ -7,16 +9,16 @@ import sys
 from lxml import etree
 import requests
 
-DESTDIR="docs/" # physical
-REFDIR="docs/"  # logical from .rst
+DESTDIR = "docs/"  # physical
+REFDIR = "docs/"  # logical from .rst
 
 # shields_io_colors = ["success", "important", "critical", "informational", "inactive"]
 
-badges={}
+badges = {}
 
 # one build=passing badge for each python version
-for filename in glob.glob(".tox/py3*/log/2-commands*.log"):
-    with open (filename, "r") as fp:
+for filename in glob.glob(".tox/py*/log/2-commands*.log"):
+    with open(filename, "r") as fp:
         status = "passing"
         color = "success"
         for line in fp:
@@ -29,18 +31,19 @@ for filename in glob.glob(".tox/py3*/log/2-commands*.log"):
                     color = "critical"
     badge = requests.get(f"https://img.shields.io/badge/{name}-{status}-{color}").text
     filename = f"_images/tox-{name}.svg"
-    with open (f"{DESTDIR}{filename}", "w") as dest:
+    with open(f"{DESTDIR}{filename}", "w") as dest:
         dest.write(badge)
+        print(f"{filename}")
 
-    badges[name]=f"{REFDIR}{filename}"
+    badges[name] = f"{REFDIR}{filename}"
 
 # one coverage badge
 with open("htmlcov/index.html") as fp:
-    root = etree.parse(fp, parser = etree.HTMLParser()).getroot()
+    root = etree.parse(fp, parser=etree.HTMLParser()).getroot()
 
 coverage = root.xpath("//span[@class='pc_cov']")[0].text
 
-cov = int (coverage.rstrip("%"))
+cov = int(coverage.rstrip("%"))
 if cov > 95:
     color = "success"
 elif cov > 75:
@@ -53,11 +56,12 @@ badge = requests.get(f"https://img.shields.io/badge/coverage-{coverage}-{color}"
 filename = "_images/coverage.svg"
 with open(f"{DESTDIR}{filename}", "w") as dest:
     dest.write(badge)
+    print(f"{filename}")
     badges["coverage"] = f"{REFDIR}{filename}"
 
 # write a template to include in README.rst
 
-with open (f"{DESTDIR}/badges.rst.include", "w") as dest:
+with open(f"{DESTDIR}/badges.rst.include", "w") as dest:
     for name, filename in badges.items():
         dest.write(f".. |{name}| image:: {filename}\n\n")
 

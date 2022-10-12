@@ -6,21 +6,22 @@ import gc
 import json
 import random
 import time
+from typing import Tuple, List, Dict
 
 import numpy as np
 
 from suffix_tree import Tree
 from suffix_tree.util import Symbols
-from suffix_tree.test.tests import BUILDERS
+from suffix_tree.builder_factory import BUILDERS, builder_factory
 
 
 SIZE = 10_000_000
-# SIZE = 100_000
-STEPS = 20
+# SIZE = 1_000_000
+TICK = SIZE // 10
 WORDLIST = "/usr/share/dict/words"
 random.seed(42)
 
-SOURCES: dict[str, Symbols] = {}
+SOURCES: Dict[str, Symbols] = {}
 SOURCES["4ACGT"] = "".join(random.choices("ACTG", k=SIZE))
 SOURCES["20PROT"] = "".join(random.choices("ARNDCQEGHILKMFPSTWYV", k=SIZE))
 SOURCES["1000INT"] = random.choices(range(1000), k=SIZE)
@@ -37,35 +38,36 @@ except FileNotFoundError:
     print("No wordlist found")
 
 
-def timer(builder, sequence: Symbols) -> list[float]:  # in seconds
+def timer(builder, sequence: Symbols) -> List[Tuple[int, float]]:  # phase, seconds
+    print(f"Building {id_} with {builder.name}")
     tree = Tree()
     elapsed = []
     start = time.process_time()
+    builder.set_progress_function(
+        TICK, lambda i: elapsed.append((i, time.process_time() - start))
+    )
     tree.add(
         "A",
         sequence,
         builder=builder,
-        progress=lambda x: elapsed.append(time.process_time() - start),
     )
-    elapsed.append(time.process_time() - start)
     return elapsed
 
 
 jso = []
-xdata = np.linspace(0, SIZE, STEPS + 1, dtype=int)
 gc.disable()
 for id_, symbols in SOURCES.items():
-    for builder in BUILDERS:
-        print(f"Building {id_} with {builder.name}")
-        ydata = np.array(timer(builder, symbols)).take(xdata)
+    for builder_ in BUILDERS:
+        builder = builder_factory(builder_)()
+        elapsed = timer(builder, symbols)
         gc.collect()
 
         jso.append(
             {
                 "source": id_,
                 "builder": builder.name,
-                "xdata": xdata.tolist(),
-                "ydata": ydata.tolist(),
+                "xdata": [x[0] for x in elapsed],
+                "ydata": [x[1] for x in elapsed],
             }
         )
 

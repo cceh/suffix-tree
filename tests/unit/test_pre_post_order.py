@@ -1,11 +1,11 @@
 """ Test the pre- and post_order tree walkes. """
 
-from suffix_tree.node import Leaf
+from suffix_tree.node import Internal
 
 
 class TestPrePostOrder:
     def leaf_count(self, node):
-        if isinstance(node, Leaf):
+        if not isinstance(node, Internal):
             self.count += 1
 
     def test_preorder(self, tree):

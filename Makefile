@@ -1,6 +1,6 @@
 .PHONY: lint test dist upload docs
 
-DIRS=src/ tests/unit/ tests/performance/ scripts/
+DIRS=src/ tests/unit/ tests/performance/ scripts/ docs/
 BROWSER=firefox
 PYTEST=pytest --doctest-modules --doctest-glob="*.rst"
 
@@ -48,6 +48,9 @@ docs:
 
 badges: test coverage
 	python -m scripts.make_badges
+
+tox:
+	tox
 
 dist: test coverage badges
 	python3 -m build

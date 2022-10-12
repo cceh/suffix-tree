@@ -1,12 +1,11 @@
 r"""A naive tree builder.
 
-This builder uses a naive algorithm to build a suffix tree in
-:math:`\mathcal{O}(n^2)` time.
+This builder uses a naive algorithm to build a suffix tree in `\mathcal{O}(n^2)` time.
 
 This implementation closely follows the description in [Gusfield1997]_ §5.4 page 93.
 """
 
-from .util import Id, Symbols, debug
+from .util import Id, IterSymbols, debug
 from .node import Leaf, Internal
 from . import builder, util
 
@@ -20,16 +19,17 @@ class Builder(builder.Builder):
         """Write a debug graph."""
         self.root.debug_dot(f"/tmp/suffix_tree_naive_{str(self.id)}_{start}.dot")
 
-    def build(self, root: Internal, id_: Id, S: Symbols) -> None:
+    def build(self, root: Internal, id_: Id, S: IterSymbols) -> None:
         """Add a sequence to the tree.
 
         :param node.Internal root: the root node of the tree
         :param Id id_: the id of the sequence
         :param Symbols S: the sequence to insert
         """
-        super().build(root, id_, S)
+        self.root = root
+        self.id = id_
 
-        S = list(self.S)
+        S = list(S)
         end = len(S)
 
         node: Internal
@@ -44,12 +44,10 @@ class Builder(builder.Builder):
                 # the path ended in the middle of an edge
                 node = node.split_edge(matched_len, child)
 
-            assert (
-                matched_len == node.depth()
-            ), f"Add String {matched_len}/{node.depth()}"
+            assert matched_len == node.depth, f"Add String {matched_len}/{node.depth}"
             assert matched_len < (end - start)
 
-            new_leaf = Leaf(node, self.id, S, start, [end])
+            new_leaf = Leaf(node, self.id, S, start, end)
 
             assert S[start + matched_len] not in node.children  # do not overwrite
 

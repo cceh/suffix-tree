@@ -3,7 +3,7 @@
 import collections
 import logging
 import sys
-from typing import Optional, cast, overload
+from typing import Optional, cast, overload, Sequence, Iterable
 
 # python 3.10+
 # Id: TypeAlias = object
@@ -12,7 +12,8 @@ from typing import Optional, cast, overload
 
 Id = object
 Symbol = collections.abc.Hashable
-Symbols = collections.abc.Sequence[Symbol]
+Symbols = Sequence[Symbol]
+IterSymbols = Iterable[Symbol]
 
 DEBUG = False
 """ Print lots of debug information. """
@@ -74,45 +75,14 @@ class Path:
 
     __slots__ = "S", "start", "end"
 
-    @overload
-    def __init__(self, S: Symbols, start: int, end: int):
-        ...  # pragma: no cover
+    def __init__(self, S, start = 0, end = None):
+        """Initialize a path from a sequence of symbols.
 
-    @overload
-    def __init__(self, S: "Path", start: int, end: Optional[int]):
-        ...  # pragma: no cover
-
-    def __init__(self, S, start, end):
-        """Initialize a path from a sequence of symbols or another path.
-
-        If end is None it is copied from the other path.
+        If end is None it is set to the length of the sequence.
         """
-
-        if isinstance(S, Path):
-            self.S: Symbols = S.S
-            self.start: int = start
-            self.end: int = end if end is not None else S.end
-        else:
-            self.S = S
-            self.start = start
-            self.end = end
-
-        assert (
-            0 <= start <= self.end <= len(self.S)
-        ), f"Path: 0 <= {start} <= {self.end} <= {len(self.S)}"
-
-    @classmethod
-    def from_iterable(cls, iterable: collections.abc.Iterable[Symbol]) -> "Path":
-        """Build a path from an iterable."""
-
-        if isinstance(iterable, collections.abc.Sequence):
-            return Path(
-                cast(collections.abc.Sequence[Symbol], iterable), 0, len(iterable)
-            )
-
-        # make it a collection because we need __len__
-        tup = tuple(iterable)
-        return Path(tup, 0, len(tup))
+        self.S = S
+        self.start = start
+        self.end = end or len(S)
 
     def __str__(self) -> str:
         return " ".join(map(str, self.S[self.start : self.end]))

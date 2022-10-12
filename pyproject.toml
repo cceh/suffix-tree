@@ -6,7 +6,7 @@ authors = [
 ]
 description = "A Generalized Suffix Tree for any iterable, with Lowest Common Ancestor retrieval"
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
@@ -81,7 +81,7 @@ legacy_tox_ini = """
 
 [tox]
 isolated_build = True
-envlist = py39,py310,py311
+envlist = pypy38,py39,py310,py311
 
 [testenv]
 allowlist_externals = make

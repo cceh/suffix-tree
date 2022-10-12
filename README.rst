@@ -8,9 +8,11 @@
 
 .. |py311| image:: docs/_images/tox-py311.svg
 
+.. |pypy38| image:: docs/_images/tox-pypy38.svg
+
 .. |coverage| image:: docs/_images/coverage.svg
 
-|py39| |py310| |py311| |coverage|
+|py39| |py310| |py311| |pypy38| |coverage|
 
 A Generalized Suffix Tree for any Python sequence, with Lowest Common Ancestor
 retrieval.

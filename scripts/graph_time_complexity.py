@@ -11,29 +11,33 @@ import numpy as np
 import scipy.optimize as optimize
 
 SOURCES = {
-    "4ACGT": "Random Choice of 4 Symbols",
-    "20PROT": "Random Choice of 20 Symbols",
-    "1000INT": "Random Choice of 1000 Symbols",
-    "WORDLIST": "Random Choice of English Words, concatenated",
+    "4ACGT": "Random Choice of 4 Characters",
+    "20PROT": "Random Choice of 20 Characters",
+    "300INT": "Random Choice of 300 Integers",
+    "1000INT": "Random Choice of 1000 Integers",
+    "WORDLIST": "String of Randomly Chosen English Words",
 }
 
 BUILDERS = {
-    "Naive": "r",
-    "Ukkonen": "g",
-    "Gusfield": "b",
+    "Naive": "tab:blue",
+    "Ukkonen": "tab:orange",
+    "McCreight": "tab:green",
+    "STree": "tab:red",
 }
 
 
-def func(x, b, c):
-    return b * x + c * x * x
+def func(x, a, b, c):
+    return a + b * x + c * x * x
 
 
-def print_fit(b, c):
+def print_fit(a, b, c):
     f = []
-    if c > 1e-10:
+    if c > 1e-5:
         f.append(f"{c:.3g}x²")
-    if b > 1e-10:
+    if b > 1e-5:
         f.append(f"{b:.3g}x")
+    if a > 1e-5:
+        f.append(f"{a:.3g}")
     return "+".join(f)
 
 
@@ -54,6 +58,8 @@ with plt.style.context("bmh"):
             xdata = np.array(data["xdata"])
             ydata = np.array(data["ydata"])
             builder = data["builder"]
+            if builder not in BUILDERS:
+                continue
             color = BUILDERS[builder]
 
             pxdata = xdata / 1e6
@@ -61,7 +67,7 @@ with plt.style.context("bmh"):
 
             # fit to a quadratic curve
             opt, pcov = optimize.curve_fit(
-                func, pxdata, ydata, bounds=((0, 0), (np.inf, np.inf))
+                func, pxdata, ydata, bounds=((0, 0, 0), (np.inf, np.inf, np.inf))
             )
 
             ax.plot(

@@ -2,7 +2,7 @@
 
 import collections
 import itertools
-from typing import Optional, TypeAlias, Union
+from typing import Optional, Union, Tuple, List, Dict
 
 from . import lca_mixin
 from .builder import Builder
@@ -10,16 +10,17 @@ from .builder_factory import builder_factory
 from .node import Node, Internal
 from .util import Path, UniqueEndChar, Id, Symbols
 
-builder_type: TypeAlias = Union[Builder, type, str, None]
+# builder_type: TypeAlias = Union[Builder, type, str, None]
+builder_type = Union[Builder, type, str, None]
 
 
 class Tree(lca_mixin.Tree):
     """A generalized suffix tree.
 
-    The key feature of the suffix tree is that for any leaf :math:`i`, the
+    The key feature of the suffix tree is that for any leaf `i`, the
     concatenation of the edgle-labels on the path from the root to leaf
-    :math:`i` exactly spells out the suffix of :math:`S` that starts at point
-    :math:`i`.  That is, it spells out :math:`S[i..m]`.
+    `i` exactly spells out the suffix of `S` that starts at point
+    `i`.  That is, it spells out `S[i..m]`.
 
     Initialize and interrogate the tree:
 
@@ -50,14 +51,14 @@ class Tree(lca_mixin.Tree):
 
     def __init__(
         self,
-        d: dict[Id, Symbols] = None,
+        d: Dict[Id, Symbols] = None,
         *,
         builder: builder_type = None,
     ):
         """Initialize and optionally build the tree.
 
-        :param dict[Id, Symbols] d: a dictionary of ids to sequences of symbols or None
-        :param Builder builder: a builder
+        :param Dict[Id, Symbols] d: a dictionary of ids to sequences of symbols or None
+        :param builder.Builder builder: a builder
             (default = :py:class:`suffix_tree.ukkonen.Builder`)
         :param Callable progress: a progress function (default = None).  The function
             gets called at regular intervals during tree construction with one
@@ -86,7 +87,7 @@ class Tree(lca_mixin.Tree):
         :param object id_: an object (probably a str or int) serving as an id for the
             sequence
         :param Sequence S: a sequence of symbols
-        :param Builder builder: a builder
+        :param builder.Builder builder: a builder
             (default = :py:class:`suffix_tree.ukkonen.Builder`)
         :param Callable progress: a progress function (default = None).  The function
             gets called at regular intervals during tree construction with one
@@ -106,15 +107,15 @@ class Tree(lca_mixin.Tree):
         """
 
         if builder is None:
-            builder = builder_factory("ukkonen")
+            builder = builder_factory()
         if isinstance(builder, str):
             builder = builder_factory(builder)
         if isinstance(builder, type):
             builder = builder()
-        if isinstance(builder, Builder):
-            builder.build(self.root, id_, itertools.chain(S, [UniqueEndChar(id_)]))
+        assert isinstance(builder, Builder)
+        builder.build(self.root, id_, itertools.chain(S, [UniqueEndChar(id_)]))
 
-    def find_path(self, path: Path) -> tuple[Node, int, Optional[Node]]:
+    def find_path(self, path: Path) -> Tuple[Node, int, Optional[Node]]:
         """Find a path in the tree.
 
         See: :py:func:`suffix_tree.node.Internal.find_path`
@@ -136,11 +137,11 @@ class Tree(lca_mixin.Tree):
         False
         """
 
-        path = Path.from_iterable(S)
+        path = Path(S)
         dummy_node, matched_len, dummy_child = self.find_path(path)
         return matched_len == len(path)
 
-    def find_all(self, S: Symbols) -> list[tuple[Id, Path]]:
+    def find_all(self, S: Symbols) -> List[Tuple[Id, Path]]:
         """Find all occurences of a sequence in a tree.
 
         :param Sequence S: a sequence of symbols
@@ -156,7 +157,7 @@ class Tree(lca_mixin.Tree):
         []
         """
 
-        path = Path.from_iterable(S)
+        path = Path(S)
         node, matched_len, child = self.find_path(path)
         if matched_len < len(path):
             return []
@@ -201,15 +202,15 @@ class Tree(lca_mixin.Tree):
         """
         self.root.post_order(f)
 
-    def common_substrings(self) -> list[tuple[int, int, Path]]:
+    def common_substrings(self) -> List[Tuple[int, int, Path]]:
         """Get a list of common substrings.
 
-        **Definition** Let :math:`K` be the number of sequences in the tree.  For each
-        :math:`k` between 2 and :math:`K`, we define :math:`l(k)` to be the length of
-        the *longest substring common to at least* :math:`k` *of the strings.*
+        **Definition** Let `K` be the number of sequences in the tree.  For each
+        `k` between 2 and `K`, we define `l(k)` to be the length of
+        the *longest substring common to at least* `k` *of the strings.*
         --- [Gusfield1997]_ §7.6, page 127ff
 
-        :return: a list of tuples containing :math:`k`, :math:`l(k)`, and the Path.
+        :return: a list of tuples containing `k`, `l(k)`, and the Path.
 
         >>> from suffix_tree import Tree
         >>> tree = Tree(
@@ -232,13 +233,13 @@ class Tree(lca_mixin.Tree):
 
         self.root.compute_C()
 
-        V: dict[int, tuple[int, Id, Path]] = collections.defaultdict(
+        V: Dict[int, Tuple[int, Id, Path]] = collections.defaultdict(
             lambda: (0, "no_id", None)  # type: ignore
         )  # C => (depth, id, path)
 
         self.root.common_substrings(V)  #  pre_order(f)
 
-        l: list[tuple[int, int, Path]] = []
+        l: List[Tuple[int, int, Path]] = []
         max_len = 0
         max_path = None
         for k in range(max(V.keys()), 1, -1):
@@ -249,18 +250,18 @@ class Tree(lca_mixin.Tree):
             l.append((k, max_len, max_path))  # type: ignore
         return sorted(l)
 
-    def maximal_repeats(self) -> list[tuple[int, Path]]:
+    def maximal_repeats(self) -> List[Tuple[int, Path]]:
         r"""Get a list of the maximal repeats in the tree.
 
-        **Definition** A *maximal pair* in a string :math:`S` is a pair of identical
-        substrings :math:`\alpha` and :math:`\beta` in :math:`S` such that the character
-        to immediate left (right) of :math:`\alpha` is different from the character to
-        the immediate left (right) of :math:`\beta`.  That is, extending :math:`\alpha`
-        and :math:`\beta` in either direction would destroy the equality of the two
-        strings.  A *maximal repeat* :math:`\alpha` is a *substring* of :math:`S` that
-        occurs in a maximal pair in :math:`S`. --- [Gusfield1997]_ §7.12, page 143ff.
+        **Definition** A *maximal pair* in a string `S` is a pair of identical
+        substrings `\alpha` and `\beta` in `S` such that the character
+        to immediate left (right) of `\alpha` is different from the character to
+        the immediate left (right) of `\beta`.  That is, extending `\alpha`
+        and `\beta` in either direction would destroy the equality of the two
+        strings.  A *maximal repeat* `\alpha` is a *substring* of `S` that
+        occurs in a maximal pair in `S`. --- [Gusfield1997]_ §7.12, page 143ff.
 
-        :return: a list of tuples of :math:`C` and path, where :math:`C` is the number
+        :return: a list of tuples of `C` and path, where `C` is the number
             of distinct sequences in the tree that contain the maximal repeat.
 
         >>> from suffix_tree import Tree
@@ -278,7 +279,7 @@ class Tree(lca_mixin.Tree):
         self.root.compute_C()
         self.root.compute_left_diverse()
 
-        l: list[tuple[int, Path]] = []
+        l: List[Tuple[int, Path]] = []
         for child in self.root.children.values():
             child.maximal_repeats(l)
         return l
