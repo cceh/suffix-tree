@@ -11,4 +11,5 @@ class TestBuilderFactory:
         assert builder_factory("mccreight") == mccreight.Builder
         assert builder_factory("ukkonen") == ukkonen.Builder
         assert builder_factory("naive") == naive.Builder
+        assert builder_factory("foo") == mccreight.Builder
         assert builder_factory() == mccreight.Builder
