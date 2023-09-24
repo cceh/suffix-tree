@@ -87,6 +87,8 @@ skip_missing_interpreters = True
 
 [testenv]
 allowlist_externals = make
-deps = pytest
+deps =
+  pytest
+  requests
 commands = make BIN= test
 """

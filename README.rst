@@ -2,17 +2,17 @@
  A Generalized Suffix Tree
 ===========================
 
-.. |py39| image:: docs/_images/tox-py39.svg
+.. |py39| image:: docs/_images/badge-py39.svg
 
-.. |py310| image:: docs/_images/tox-py310.svg
+.. |py310| image:: docs/_images/badge-py310.svg
 
-.. |py311| image:: docs/_images/tox-py311.svg
+.. |py311| image:: docs/_images/badge-py311.svg
 
-.. |py312| image:: docs/_images/tox-py312.svg
+.. |py312| image:: docs/_images/badge-py312.svg
 
-.. |pypy39| image:: docs/_images/tox-pypy39.svg
+.. |pypy39| image:: docs/_images/badge-pypy39.svg
 
-.. |coverage| image:: docs/_images/coverage.svg
+.. |coverage| image:: docs/_images/badge-coverage.svg
 
 |py39| |py310| |py311| |py312| |pypy39| |coverage|
 

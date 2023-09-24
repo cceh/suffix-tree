@@ -2,7 +2,7 @@
 
 ENV=.venv
 BIN=$(ENV)/bin/
-DIRS=src/ tests/unit/ tests/performance/ scripts/ docs/
+DIRS=src/ tests/ scripts/ docs/
 BROWSER=firefox
 PYTEST=pytest --doctest-modules --doctest-glob="*.rst" --doctest-ignore-import-errors
 
@@ -38,9 +38,9 @@ coverage:
 	$(BIN)coverage erase
 	$(BIN)coverage run --branch --source=src -m $(PYTEST) tests/
 	$(BIN)coverage run --append --branch --source=src -m $(PYTEST) --debug-mode tests/
-	$(BIN)coverage report
 	$(BIN)coverage html
 	$(BROWSER) htmlcov/index.html
+	$(BIN)coverage json -o - | $(BIN)python tests/make_coverage_badge.py > docs/_images/badge-coverage.svg
 
 profile:
 	$(BIN)python -O -m scripts.profile
@@ -48,13 +48,10 @@ profile:
 docs:
 	cd docs; make html
 
-badges: test coverage
-	$(BIN)python docs/make_badges.py
-
 tox:
 	$(BIN)tox
 
-dist: clean test coverage badges
+dist: clean tox coverage docs
 	$(BIN)python -m build
 	$(BIN)twine check dist/*
 
@@ -72,5 +69,6 @@ uninstall:
 
 clean:
 	-rm -rf dist build *.egg-info
+	-rm docs/_images/badge*.svg
 	-rm *~ .*~ pylintgraph.dot
 	-find . -name __pycache__ -type d -exec rm -r "{}" \;
