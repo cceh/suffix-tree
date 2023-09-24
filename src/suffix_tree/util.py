@@ -3,7 +3,7 @@
 import collections
 import logging
 import sys
-from typing import Optional, cast, overload, Sequence, Iterable
+from typing import Sequence, Iterable
 
 # python 3.10+
 # Id: TypeAlias = object
@@ -75,7 +75,7 @@ class Path:
 
     __slots__ = "S", "start", "end"
 
-    def __init__(self, S, start = 0, end = None):
+    def __init__(self, S, start=0, end=None):
         """Initialize a path from a sequence of symbols.
 
         If end is None it is set to the length of the sequence.

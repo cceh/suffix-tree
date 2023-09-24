@@ -107,7 +107,7 @@ class Node:
     __slots__ = "lca_id", "I", "A"
 
     def __init__(self):  # pragma: no cover
-        """ This is inlined on all subclasses to save one __init__ call per symbol."""
+        """This is inlined on all subclasses to save one __init__ call per symbol."""
 
         self.lca_id = 0
         """Number of the node given in a depth-first traversal of the tree, starting

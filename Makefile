@@ -1,70 +1,77 @@
 .PHONY: lint test dist upload docs
 
+ENV=env
+BIN=$(ENV)/bin/
 DIRS=src/ tests/unit/ tests/performance/ scripts/ docs/
 BROWSER=firefox
-PYTEST=pytest --doctest-modules --doctest-glob="*.rst"
+PYTEST=pytest --doctest-modules --doctest-glob="*.rst" --doctest-ignore-import-errors
 
 all: lint test
 
 black:
-	-black $(DIRS)
+	-$(BIN)black $(DIRS)
 
 blackdoc:
-	-blackdoc $(DIRS)
+	-$(BIN)blackdoc $(DIRS)
 
 pylint:
-	-pylint src/
+	-$(BIN)pylint src/
 
 mypy:
-	-mypy $(DIRS)
+	-$(BIN)mypy $(DIRS)
 
 doc8:
-	-doc8 README.rst
+	-$(BIN)doc8 README.rst
 
 pydocstyle:
-	pydocstyle src/
+	-$(BIN)pydocstyle src/
 
 lint: black blackdoc pylint mypy pydocstyle
 
 test:
-	python3 -m $(PYTEST) src/ tests/ docs/ README.rst
+	$(BIN)python -m $(PYTEST) src/ tests/ docs/ README.rst
 
 test-performance:
-	python3 -m $(PYTEST) --performance tests/performance/
+	$(BIN)python -m $(PYTEST) --performance tests/performance/
 
 coverage:
-	coverage erase
-	coverage run --branch --source=src -m $(PYTEST) tests/
-	coverage run --append --branch --source=src -m $(PYTEST) --debug-mode tests/
-	coverage report
-	coverage html
+	$(BIN)coverage erase
+	$(BIN)coverage run --branch --source=src -m $(PYTEST) tests/
+	$(BIN)coverage run --append --branch --source=src -m $(PYTEST) --debug-mode tests/
+	$(BIN)coverage report
+	$(BIN)coverage html
 	$(BROWSER) htmlcov/index.html
 
 profile:
-	python3 -O -m scripts.profile
+	$(BIN)python -O -m scripts.profile
 
 docs:
 	cd docs; make html
 
 badges: test coverage
-	python -m scripts.make_badges
+	$(BIN)python docs/make_badges.py
 
 tox:
-	tox
+	$(BIN)tox
 
-dist: test coverage badges
-	python3 -m build
-	twine check dist/*
+tox-e:
+	$(BIN)tox -e py
+
+dist: clean test coverage badges
+	$(BIN)python -m build
+	$(BIN)twine check dist/*
 
 upload: dist
-	twine check dist/*
-	twine upload dist/*
+	$(BIN)twine check dist/*
+	$(BIN)twine upload dist/*
 
 install:
-	pip3 install --force-reinstall -e .
+	python -m venv --clear $(ENV)
+	$(BIN)pip install -r requirements-dev.txt
+	$(BIN)pip install --force-reinstall -e .
 
 uninstall:
-	pip3 uninstall -e .
+	$(BIN)pip uninstall suffix_tree
 
 clean:
 	-rm -rf dist build *.egg-info

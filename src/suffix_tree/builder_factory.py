@@ -5,7 +5,7 @@ from typing import Type
 from . import builder, naive, mccreight, ukkonen
 
 
-def builder_factory(name: str = None) -> Type[builder.Builder]:
+def builder_factory(name: str = "mccreight") -> Type[builder.Builder]:
     """Return the specified builder (default: mccreight)."""
     if name == "mccreight":
         return mccreight.Builder

@@ -14,14 +14,16 @@ class Builder:
     def __init__(self):
         self.root: Internal
         self.id: Id
-        self.progress: Optional[Callable[[int], None]] = None
+        self.progress: Optional[Callable[[int], None]] | None = None
         self.progress_tick = 1
 
     def build(self, root: Internal, id_: Id, S: IterSymbols) -> None:
-        """Adds the sequence to the tree."""
+        """Add the sequence to the tree."""
         raise NotImplementedError()
 
-    def set_progress_function(self, tick: int, callback: Callable[[int], None] = None):
+    def set_progress_function(
+        self, tick: int, callback: Callable[[int], None] | None = None
+    ):
         """Set a progress indicator callback function.
 
         You should not change the tree in this callback.

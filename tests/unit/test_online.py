@@ -10,7 +10,7 @@ from suffix_tree.builder_factory import BUILDERS
 
 class TestOnline:
     def test_online(self):
-        """ Test building Ukkonen from an iterator."""
+        """Test building Ukkonen from an iterator."""
         tree = Tree()
 
         def generator():
@@ -20,4 +20,3 @@ class TestOnline:
 
         tree.add("A", generator(), builder="ukkonen")
         assert tree.find("xacabc")
-

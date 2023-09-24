@@ -5,7 +5,7 @@ adapted to generalized suffix trees.
 
 """
 
-from .util import Path, Id, IterSymbols, debug
+from .util import Id, IterSymbols, debug
 from .node import Node, Internal, Leaf
 from . import builder, util
 

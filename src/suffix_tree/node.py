@@ -20,7 +20,9 @@ class Node(lca_mixin.Node):
         "name",
     )
 
-    def __init__(self, parent: Optional["Internal"], S: Symbols, start: int, end: int):  # pragma: no cover
+    def __init__(
+        self, parent: Optional["Internal"], S: Symbols, start: int, end: int
+    ):  # pragma: no cover
         super().__init__()
 
         self.parent = parent

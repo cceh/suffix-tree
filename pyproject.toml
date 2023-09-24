@@ -1,12 +1,12 @@
 [project]
 name = "suffix-tree"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
   { name="Marcello Perathoner", email="marcello@perathoner.de" },
 ]
 description = "A Generalized Suffix Tree for any iterable, with Lowest Common Ancestor retrieval"
 readme = "README.rst"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
@@ -16,6 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
     "Topic :: Text Processing :: Indexing",
     "Topic :: Text Processing :: Linguistic",
@@ -81,7 +82,8 @@ legacy_tox_ini = """
 
 [tox]
 isolated_build = True
-envlist = pypy38,py39,py310,py311
+envlist = pypy39,py39,py310,py311,py312
+skip_missing_interpreters = True
 
 [testenv]
 allowlist_externals = make

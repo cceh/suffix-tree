@@ -1,4 +1,4 @@
-name: Python package
+name: Run Tox Tests
 
 on:
   push:
@@ -13,18 +13,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11-dev"]
+        python-version: ["pypy3.9", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+        allow-prereleases: true
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install pytest coverage[toml] tox
+        make install
     - name: Run tox
       run: |
-        tox -e py
+        make tox-e

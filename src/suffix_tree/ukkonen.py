@@ -7,7 +7,7 @@ adapted to generalized suffix trees.
 
 from typing import Tuple, List
 
-from .util import Path, Id, Symbol, Symbols, IterSymbols, debug, ukko_str
+from .util import Id, Symbol, Symbols, IterSymbols, debug, ukko_str
 from .node import Node, Internal, UkkonenLeaf
 from . import builder, util
 

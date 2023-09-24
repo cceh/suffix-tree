@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tree &mdash; suffix-tree 0.1.0 documentation</title>
+  <title>Tree &mdash; suffix-tree 0.1.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -13,10 +13,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=a58bc63e"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script>window.MathJax = {"tex": {"macros": {"bs": ["\\boldsymbol"], "suf": ["\\mathrm{\\bf suf}_{\\mkern 1mu\\bs{#1}}", 1], "head": ["\\mathrm{\\bf head}_{\\mkern 1mu\\bs{#1}}", 1], "tail": ["\\mathrm{\\bf tail}_{\\mkern 1mu\\bs{#1}}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -31,12 +32,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> suffix-tree
-            <img src="_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            suffix-tree
+              <img src="_static/logo-cceh-white.svg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -45,19 +50,168 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tree</a></li>
-<li class="toctree-l1"><a class="reference internal" href="node.html">Node</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="builders.html">Builders</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder/naive.html">Naive Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tree</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#suffix_tree.tree.Tree"><code class="docutils literal notranslate"><span class="pre">Tree</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#suffix_tree.tree.Tree.__init__"><code class="docutils literal notranslate"><span class="pre">Tree.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#suffix_tree.tree.Tree.add"><code class="docutils literal notranslate"><span class="pre">Tree.add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#suffix_tree.tree.Tree.find_path"><code class="docutils literal notranslate"><span class="pre">Tree.find_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#suffix_tree.tree.Tree.find"><code class="docutils literal notranslate"><span class="pre">Tree.find()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#suffix_tree.tree.Tree.find_all"><code class="docutils literal notranslate"><span class="pre">Tree.find_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#suffix_tree.tree.Tree.find_id"><code class="docutils literal notranslate"><span class="pre">Tree.find_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#suffix_tree.tree.Tree.pre_order"><code class="docutils literal notranslate"><span class="pre">Tree.pre_order()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#suffix_tree.tree.Tree.post_order"><code class="docutils literal notranslate"><span class="pre">Tree.post_order()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#suffix_tree.tree.Tree.common_substrings"><code class="docutils literal notranslate"><span class="pre">Tree.common_substrings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#suffix_tree.tree.Tree.maximal_repeats"><code class="docutils literal notranslate"><span class="pre">Tree.maximal_repeats()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="node.html">Node</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="node.html#suffix_tree.node.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.__init__"><code class="docutils literal notranslate"><span class="pre">Node.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.parent"><code class="docutils literal notranslate"><span class="pre">Node.parent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.S"><code class="docutils literal notranslate"><span class="pre">Node.S</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.start"><code class="docutils literal notranslate"><span class="pre">Node.start</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.end"><code class="docutils literal notranslate"><span class="pre">Node.end</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.name"><code class="docutils literal notranslate"><span class="pre">Node.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.__str__"><code class="docutils literal notranslate"><span class="pre">Node.__str__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.__getitem__"><code class="docutils literal notranslate"><span class="pre">Node.__getitem__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.compute_C"><code class="docutils literal notranslate"><span class="pre">Node.compute_C()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.compute_left_diverse"><code class="docutils literal notranslate"><span class="pre">Node.compute_left_diverse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.pre_order"><code class="docutils literal notranslate"><span class="pre">Node.pre_order()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.post_order"><code class="docutils literal notranslate"><span class="pre">Node.post_order()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.add_position"><code class="docutils literal notranslate"><span class="pre">Node.add_position()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.get_positions"><code class="docutils literal notranslate"><span class="pre">Node.get_positions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.common_substrings"><code class="docutils literal notranslate"><span class="pre">Node.common_substrings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.maximal_repeats"><code class="docutils literal notranslate"><span class="pre">Node.maximal_repeats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Node.to_dot"><code class="docutils literal notranslate"><span class="pre">Node.to_dot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node.html#suffix_tree.node.Internal"><code class="docutils literal notranslate"><span class="pre">Internal</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.__init__"><code class="docutils literal notranslate"><span class="pre">Internal.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.suffix_link"><code class="docutils literal notranslate"><span class="pre">Internal.suffix_link</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.children"><code class="docutils literal notranslate"><span class="pre">Internal.children</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.is_left_diverse"><code class="docutils literal notranslate"><span class="pre">Internal.is_left_diverse</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.C"><code class="docutils literal notranslate"><span class="pre">Internal.C</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.__str__"><code class="docutils literal notranslate"><span class="pre">Internal.__str__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.add_position"><code class="docutils literal notranslate"><span class="pre">Internal.add_position()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.pre_order"><code class="docutils literal notranslate"><span class="pre">Internal.pre_order()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.post_order"><code class="docutils literal notranslate"><span class="pre">Internal.post_order()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.find_path"><code class="docutils literal notranslate"><span class="pre">Internal.find_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.split_edge"><code class="docutils literal notranslate"><span class="pre">Internal.split_edge()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.compute_C"><code class="docutils literal notranslate"><span class="pre">Internal.compute_C()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.compute_left_diverse"><code class="docutils literal notranslate"><span class="pre">Internal.compute_left_diverse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.common_substrings"><code class="docutils literal notranslate"><span class="pre">Internal.common_substrings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Internal.maximal_repeats"><code class="docutils literal notranslate"><span class="pre">Internal.maximal_repeats()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node.html#suffix_tree.node.Leaf"><code class="docutils literal notranslate"><span class="pre">Leaf</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Leaf.__init__"><code class="docutils literal notranslate"><span class="pre">Leaf.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Leaf.str_id"><code class="docutils literal notranslate"><span class="pre">Leaf.str_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Leaf.__str__"><code class="docutils literal notranslate"><span class="pre">Leaf.__str__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Leaf.pre_order"><code class="docutils literal notranslate"><span class="pre">Leaf.pre_order()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Leaf.post_order"><code class="docutils literal notranslate"><span class="pre">Leaf.post_order()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Leaf.add_position"><code class="docutils literal notranslate"><span class="pre">Leaf.add_position()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Leaf.compute_C"><code class="docutils literal notranslate"><span class="pre">Leaf.compute_C()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Leaf.compute_left_diverse"><code class="docutils literal notranslate"><span class="pre">Leaf.compute_left_diverse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.Leaf.maximal_repeats"><code class="docutils literal notranslate"><span class="pre">Leaf.maximal_repeats()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node.html#suffix_tree.node.UkkonenLeaf"><code class="docutils literal notranslate"><span class="pre">UkkonenLeaf</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.UkkonenLeaf.__init__"><code class="docutils literal notranslate"><span class="pre">UkkonenLeaf.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.UkkonenLeaf.str_id"><code class="docutils literal notranslate"><span class="pre">UkkonenLeaf.str_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.UkkonenLeaf.end"><code class="docutils literal notranslate"><span class="pre">UkkonenLeaf.end</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="node.html#suffix_tree.node.UkkonenLeaf.depth"><code class="docutils literal notranslate"><span class="pre">UkkonenLeaf.depth</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lca.html">LCA Mixin</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.uint"><code class="docutils literal notranslate"><span class="pre">uint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.nlz"><code class="docutils literal notranslate"><span class="pre">nlz()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.msb"><code class="docutils literal notranslate"><span class="pre">msb()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.h"><code class="docutils literal notranslate"><span class="pre">h()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Node.__init__"><code class="docutils literal notranslate"><span class="pre">Node.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Node.lca_id"><code class="docutils literal notranslate"><span class="pre">Node.lca_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Node.I"><code class="docutils literal notranslate"><span class="pre">Node.I</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Node.A"><code class="docutils literal notranslate"><span class="pre">Node.A</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Node.compute_A"><code class="docutils literal notranslate"><span class="pre">Node.compute_A()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Node.compute_I_and_L"><code class="docutils literal notranslate"><span class="pre">Node.compute_I_and_L()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Node.prepare_lca"><code class="docutils literal notranslate"><span class="pre">Node.prepare_lca()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Leaf"><code class="docutils literal notranslate"><span class="pre">Leaf</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Leaf.__str__"><code class="docutils literal notranslate"><span class="pre">Leaf.__str__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Leaf.compute_A"><code class="docutils literal notranslate"><span class="pre">Leaf.compute_A()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Leaf.compute_I_and_L"><code class="docutils literal notranslate"><span class="pre">Leaf.compute_I_and_L()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Leaf.prepare_lca"><code class="docutils literal notranslate"><span class="pre">Leaf.prepare_lca()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Leaf.lca_id"><code class="docutils literal notranslate"><span class="pre">Leaf.lca_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Leaf.I"><code class="docutils literal notranslate"><span class="pre">Leaf.I</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Leaf.A"><code class="docutils literal notranslate"><span class="pre">Leaf.A</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Internal"><code class="docutils literal notranslate"><span class="pre">Internal</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Internal.__str__"><code class="docutils literal notranslate"><span class="pre">Internal.__str__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Internal.compute_A"><code class="docutils literal notranslate"><span class="pre">Internal.compute_A()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Internal.compute_I_and_L"><code class="docutils literal notranslate"><span class="pre">Internal.compute_I_and_L()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Internal.prepare_lca"><code class="docutils literal notranslate"><span class="pre">Internal.prepare_lca()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Internal.lca_id"><code class="docutils literal notranslate"><span class="pre">Internal.lca_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Internal.I"><code class="docutils literal notranslate"><span class="pre">Internal.I</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Internal.A"><code class="docutils literal notranslate"><span class="pre">Internal.A</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Tree"><code class="docutils literal notranslate"><span class="pre">Tree</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Tree.__init__"><code class="docutils literal notranslate"><span class="pre">Tree.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Tree.nodemap"><code class="docutils literal notranslate"><span class="pre">Tree.nodemap</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Tree.prepare_lca"><code class="docutils literal notranslate"><span class="pre">Tree.prepare_lca()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lca.html#suffix_tree.lca_mixin.Tree.lca"><code class="docutils literal notranslate"><span class="pre">Tree.lca()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="builders.html">Builders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="builder/mccreight.html">McCreight Builder</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="builder/mccreight.html#suffix_tree.mccreight.Builder"><code class="docutils literal notranslate"><span class="pre">Builder</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="builder/ukkonen.html">Ukkonen Builder</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="builder/ukkonen.html#suffix_tree.ukkonen.Builder"><code class="docutils literal notranslate"><span class="pre">Builder</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="builder/naive.html">Naive Builder</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="builder/naive.html#suffix_tree.naive.Builder"><code class="docutils literal notranslate"><span class="pre">Builder</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="builder/builder.html">Base Class for Builders</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder"><code class="docutils literal notranslate"><span class="pre">Builder</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="util.html#suffix_tree.util.DEBUG"><code class="docutils literal notranslate"><span class="pre">DEBUG</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#suffix_tree.util.DEBUG_DOT"><code class="docutils literal notranslate"><span class="pre">DEBUG_DOT</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#suffix_tree.util.DEBUG_LABELS"><code class="docutils literal notranslate"><span class="pre">DEBUG_LABELS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#suffix_tree.util.UniqueEndChar"><code class="docutils literal notranslate"><span class="pre">UniqueEndChar</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="util.html#suffix_tree.util.UniqueEndChar.__init__"><code class="docutils literal notranslate"><span class="pre">UniqueEndChar.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.html#suffix_tree.util.UniqueEndChar.__str__"><code class="docutils literal notranslate"><span class="pre">UniqueEndChar.__str__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#suffix_tree.util.min_debug_depth"><code class="docutils literal notranslate"><span class="pre">min_debug_depth</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#suffix_tree.util.debug"><code class="docutils literal notranslate"><span class="pre">debug()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#suffix_tree.util.is_debug"><code class="docutils literal notranslate"><span class="pre">is_debug()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#suffix_tree.util.ukko_str"><code class="docutils literal notranslate"><span class="pre">ukko_str()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#suffix_tree.util.Path"><code class="docutils literal notranslate"><span class="pre">Path</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="util.html#suffix_tree.util.Path.__init__"><code class="docutils literal notranslate"><span class="pre">Path.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.html#suffix_tree.util.Path.__str__"><code class="docutils literal notranslate"><span class="pre">Path.__str__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.html#suffix_tree.util.Path.__lt__"><code class="docutils literal notranslate"><span class="pre">Path.__lt__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.html#suffix_tree.util.Path.__getitem__"><code class="docutils literal notranslate"><span class="pre">Path.__getitem__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="performance.html#time-complexity">Time Complexity</a></li>
 <li class="toctree-l2"><a class="reference internal" href="performance.html#python-3-10-7">Python 3.10.7</a></li>
 <li class="toctree-l2"><a class="reference internal" href="performance.html#pypy-7-3-9">PyPy 7.3.9</a></li>
 </ul>
@@ -78,8 +232,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Tree</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tree</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/tree.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -90,11 +244,11 @@
            <div itemprop="articleBody">
              
   <section id="module-suffix_tree.tree">
-<span id="tree"></span><h1>Tree<a class="headerlink" href="#module-suffix_tree.tree" title="Permalink to this headline"></a></h1>
+<span id="tree"></span><h1>Tree<a class="headerlink" href="#module-suffix_tree.tree" title="Link to this heading"></a></h1>
 <p>A Generalized Suffix Tree.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><span class="pre">suffix_tree.builder.Builder</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><span class="pre">Builder</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">type</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree" title="Link to this definition"></a></dt>
 <dd><p>A generalized suffix tree.</p>
 <p>The key feature of the suffix tree is that for any leaf <span class="math notranslate nohighlight">\(i\)</span>, the
 concatenation of the edgle-labels on the path from the root to leaf
@@ -129,10 +283,10 @@ concatenation of the edgle-labels on the path from the root to leaf
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><span class="pre">suffix_tree.builder.Builder</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><span class="pre">Builder</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">type</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree.__init__" title="Link to this definition"></a></dt>
 <dd><p>Initialize and optionally build the tree.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>d</strong> (<em>Dict</em><em>[</em><em>Id</em><em>, </em><em>Symbols</em><em>]</em>) – a dictionary of ids to sequences of symbols or None</p></li>
 <li><p><strong>builder</strong> (<a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><em>builder.Builder</em></a>) – a builder
@@ -147,10 +301,10 @@ parameter: the current phase.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.add">
-<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><span class="pre">suffix_tree.builder.Builder</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree.add" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="builder/builder.html#suffix_tree.builder.Builder" title="suffix_tree.builder.Builder"><span class="pre">Builder</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">type</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#suffix_tree.tree.Tree.add" title="Link to this definition"></a></dt>
 <dd><p>Add a sequence of symbols to the tree.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>object</em>) – an object (probably a str or int) serving as an id for the
 sequence</p></li>
@@ -179,20 +333,20 @@ parameter: the current phase.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.find_path">
-<span class="sig-name descname"><span class="pre">find_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="node.html#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="node.html#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">suffix_tree.node.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_path" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="node.html#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="node.html#suffix_tree.node.Node" title="suffix_tree.node.Node"><span class="pre">Node</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_path" title="Link to this definition"></a></dt>
 <dd><p>Find a path in the tree.</p>
 <p>See: <a class="reference internal" href="node.html#suffix_tree.node.Internal.find_path" title="suffix_tree.node.Internal.find_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">suffix_tree.node.Internal.find_path()</span></code></a></p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.find">
-<span class="sig-name descname"><span class="pre">find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find" title="Link to this definition"></a></dt>
 <dd><p>Find a sequence in the tree.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>S</strong> (<em>Sequence</em>) – a sequence of symbols</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if the sequence was found in the tree.</p>
 </dd>
 </dl>
@@ -208,13 +362,13 @@ parameter: the current phase.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.find_all">
-<span class="sig-name descname"><span class="pre">find_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_all" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_all" title="Link to this definition"></a></dt>
 <dd><p>Find all occurences of a sequence in a tree.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>S</strong> (<em>Sequence</em>) – a sequence of symbols</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a list of positions</p>
 </dd>
 </dl>
@@ -232,16 +386,16 @@ parameter: the current phase.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.find_id">
-<span class="sig-name descname"><span class="pre">find_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.find_id" title="Link to this definition"></a></dt>
 <dd><p>Find a sequence in the tree.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>object</em>) – the id of a sequence in the tree</p></li>
 <li><p><strong>S</strong> (<em>Sequence</em>) – a given sequence of symbols</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if the given sequence was found in the tree in the sequence
 labeled with id_.</p>
 </dd>
@@ -260,10 +414,10 @@ labeled with id_.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.pre_order">
-<span class="sig-name descname"><span class="pre">pre_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.pre_order" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">pre_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.pre_order" title="Link to this definition"></a></dt>
 <dd><p>Walk the tree visiting each node before its children.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>f</strong> (<em>Callable</em>) – the visitor function</p>
 </dd>
 </dl>
@@ -271,10 +425,10 @@ labeled with id_.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.post_order">
-<span class="sig-name descname"><span class="pre">post_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.post_order" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">post_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.post_order" title="Link to this definition"></a></dt>
 <dd><p>Walk the tree visiting each node after its children.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>f</strong> (<em>Callable</em>) – the visitor function</p>
 </dd>
 </dl>
@@ -282,15 +436,18 @@ labeled with id_.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.common_substrings">
-<span class="sig-name descname"><span class="pre">common_substrings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.common_substrings" title="Permalink to this definition"></a></dt>
-<dd><p>Get a list of common substrings.</p>
-<p><strong>Definition</strong> Let <span class="math notranslate nohighlight">\(K\)</span> be the number of sequences in the tree.  For each
-<span class="math notranslate nohighlight">\(k\)</span> between 2 and <span class="math notranslate nohighlight">\(K\)</span>, we define <span class="math notranslate nohighlight">\(l(k)\)</span> to be the length of
-the <em>longest substring common to at least</em> <span class="math notranslate nohighlight">\(k\)</span> <em>of the strings.</em>
+<span class="sig-name descname"><span class="pre">common_substrings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.common_substrings" title="Link to this definition"></a></dt>
+<dd><p>Compute a common substring table.</p>
+<p>Suppose we have <span class="math notranslate nohighlight">\(K\)</span> strings.</p>
+<p><strong>Definition</strong> For each <span class="math notranslate nohighlight">\(k\)</span> between 2 and <span class="math notranslate nohighlight">\(K\)</span>, we define <span class="math notranslate nohighlight">\(l(k)\)</span> to be the length
+of the <em>longest substring common to at least</em> <span class="math notranslate nohighlight">\(k\)</span> <em>of the strings.</em></p>
+<p>We want to compute a table of <span class="math notranslate nohighlight">\(K - 1\)</span> entries, where entry <span class="math notranslate nohighlight">\(k\)</span> gives <span class="math notranslate nohighlight">\(l(k)\)</span> and
+also points to one of the common substrings of that length.
 — <a class="reference internal" href="references.html#gusfield1997" id="id1"><span>[Gusfield1997]</span></a> §7.6, page 127ff</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a list of tuples containing <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(l(k)\)</span>, and the Path.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a list of <span class="math notranslate nohighlight">\(K - 1\)</span> tuples containing <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(l(k)\)</span>, and one of the common
+substrings of that length.</p>
 </dd>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">suffix_tree</span> <span class="kn">import</span> <span class="n">Tree</span>
@@ -316,7 +473,7 @@ the <em>longest substring common to at least</em> <span class="math notranslate 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="suffix_tree.tree.Tree.maximal_repeats">
-<span class="sig-name descname"><span class="pre">maximal_repeats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">suffix_tree.util.Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.maximal_repeats" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">maximal_repeats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="util.html#suffix_tree.util.Path" title="suffix_tree.util.Path"><span class="pre">Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#suffix_tree.tree.Tree.maximal_repeats" title="Link to this definition"></a></dt>
 <dd><p>Get a list of the maximal repeats in the tree.</p>
 <p><strong>Definition</strong> A <em>maximal pair</em> in a string <span class="math notranslate nohighlight">\(S\)</span> is a pair of identical
 substrings <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in <span class="math notranslate nohighlight">\(S\)</span> such that the character
@@ -326,7 +483,7 @@ and <span class="math notranslate nohighlight">\(\beta\)</span> in either direct
 strings.  A <em>maximal repeat</em> <span class="math notranslate nohighlight">\(\alpha\)</span> is a <em>substring</em> of <span class="math notranslate nohighlight">\(S\)</span> that
 occurs in a maximal pair in <span class="math notranslate nohighlight">\(S\)</span>. — <a class="reference internal" href="references.html#gusfield1997" id="id2"><span>[Gusfield1997]</span></a> §7.12, page 143ff.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a list of tuples of <span class="math notranslate nohighlight">\(C\)</span> and path, where <span class="math notranslate nohighlight">\(C\)</span> is the number
 of distinct sequences in the tree that contain the maximal repeat.</p>
 </dd>

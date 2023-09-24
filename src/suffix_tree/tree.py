@@ -51,13 +51,14 @@ class Tree(lca_mixin.Tree):
 
     def __init__(
         self,
-        d: Dict[Id, Symbols] = None,
+        data: Dict[Id, Symbols] | None = None,
         *,
         builder: builder_type = None,
     ):
         """Initialize and optionally build the tree.
 
-        :param Dict[Id, Symbols] d: a dictionary of ids to sequences of symbols or None
+        :param Dict[Id, Symbols] data: a dictionary of ids to sequences of symbols
+            or None
         :param builder.Builder builder: a builder
             (default = :py:class:`suffix_tree.ukkonen.Builder`)
         :param Callable progress: a progress function (default = None).  The function
@@ -65,7 +66,7 @@ class Tree(lca_mixin.Tree):
             parameter: the current phase.
         """
 
-        d = d or {}
+        d = data or {}
 
         super().__init__(d)
 
@@ -203,14 +204,19 @@ class Tree(lca_mixin.Tree):
         self.root.post_order(f)
 
     def common_substrings(self) -> List[Tuple[int, int, Path]]:
-        """Get a list of common substrings.
+        """Compute a common substring table.
 
-        **Definition** Let `K` be the number of sequences in the tree.  For each
-        `k` between 2 and `K`, we define `l(k)` to be the length of
-        the *longest substring common to at least* `k` *of the strings.*
+        Suppose we have `K` strings.
+
+        **Definition** For each `k` between 2 and `K`, we define `l(k)` to be the length
+        of the *longest substring common to at least* `k` *of the strings.*
+
+        We want to compute a table of `K - 1` entries, where entry `k` gives `l(k)` and
+        also points to one of the common substrings of that length.
         --- [Gusfield1997]_ §7.6, page 127ff
 
-        :return: a list of tuples containing `k`, `l(k)`, and the Path.
+        :return: a list of `K - 1` tuples containing `k`, `l(k)`, and one of the common
+                 substrings of that length.
 
         >>> from suffix_tree import Tree
         >>> tree = Tree(
