@@ -216,7 +216,7 @@ class Tree(lca_mixin.Tree):
         --- [Gusfield1997]_ §7.6, page 127ff
 
         :return: a list of `K - 1` tuples containing `k`, `l(k)`, and one of the common
-                 substrings of that length.
+                 substrings of that length, which may be None.
 
         >>> from suffix_tree import Tree
         >>> tree = Tree(
