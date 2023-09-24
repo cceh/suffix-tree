@@ -2,13 +2,13 @@
 
 import collections
 import itertools
-from typing import Optional, Union, Tuple, List, Dict
+from typing import Dict, List, Optional, Tuple, Union
 
 from . import lca_mixin
 from .builder import Builder
 from .builder_factory import builder_factory
-from .node import Node, Internal
-from .util import Path, UniqueEndChar, Id, Symbols
+from .node import Internal, Node
+from .util import Id, Path, Symbols, UniqueEndChar
 
 # builder_type: TypeAlias = Union[Builder, type, str, None]
 builder_type = Union[Builder, type, str, None]
@@ -51,7 +51,7 @@ class Tree(lca_mixin.Tree):
 
     def __init__(
         self,
-        data: Dict[Id, Symbols] | None = None,
+        data: Optional[Dict[Id, Symbols]] = None,
         *,
         builder: builder_type = None,
     ):

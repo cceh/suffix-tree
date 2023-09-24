@@ -3,6 +3,7 @@
 pylintgraph.dot
 .mypy_cache/
 .pytest_cache/
+.venv/
 .vscode/
 
 # Byte-compiled / optimized / DLL files

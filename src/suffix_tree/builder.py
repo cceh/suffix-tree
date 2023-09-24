@@ -14,7 +14,7 @@ class Builder:
     def __init__(self):
         self.root: Internal
         self.id: Id
-        self.progress: Optional[Callable[[int], None]] | None = None
+        self.progress: Optional[Callable[[int], None]] = None
         self.progress_tick = 1
 
     def build(self, root: Internal, id_: Id, S: IterSymbols) -> None:
@@ -22,7 +22,7 @@ class Builder:
         raise NotImplementedError()
 
     def set_progress_function(
-        self, tick: int, callback: Callable[[int], None] | None = None
+        self, tick: int, callback: Optional[Callable[[int], None]] = None
     ):
         """Set a progress indicator callback function.
 

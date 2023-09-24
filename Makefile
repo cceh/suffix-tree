@@ -1,6 +1,6 @@
 .PHONY: lint test dist upload docs
 
-ENV=env
+ENV=.venv
 BIN=$(ENV)/bin/
 DIRS=src/ tests/unit/ tests/performance/ scripts/ docs/
 BROWSER=firefox
@@ -53,9 +53,6 @@ badges: test coverage
 
 tox:
 	$(BIN)tox
-
-tox-e:
-	$(BIN)tox -e py
 
 dist: clean test coverage badges
 	$(BIN)python -m build
