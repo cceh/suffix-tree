@@ -46,7 +46,7 @@ profile:
 	$(BIN)python -O -m scripts.profile
 
 docs:
-	cd docs; make html
+	cd docs; make SPHINXBUILD='../$(BIN)python -msphinx' html
 
 tox:
 	$(BIN)tox
@@ -68,7 +68,7 @@ uninstall:
 	$(BIN)pip uninstall suffix_tree
 
 clean:
-	-rm -rf dist build *.egg-info
+	-rm -rf dist build htmlcov .mypy_cache .pytest_cache .tox *.egg-info
 	-rm docs/_images/badge*.svg
 	-rm *~ .*~ pylintgraph.dot
 	-find . -name __pycache__ -type d -exec rm -r "{}" \;

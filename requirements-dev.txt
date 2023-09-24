@@ -2,6 +2,7 @@ black
 blackdoc
 build
 coverage[toml]
+hatchling
 mypy
 pydocstyle
 pylint
