@@ -14,6 +14,7 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+from suffix_tree import _version
 
 # -- Project information -----------------------------------------------------
 
@@ -22,8 +23,7 @@ copyright = "2018-22, Marcello Perathoner"
 author = "Marcello Perathoner"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.1"
-
+release = _version.VERSION
 
 # -- General configuration ---------------------------------------------------
 

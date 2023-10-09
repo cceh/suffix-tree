@@ -6,7 +6,7 @@ Performance
 Both McCreight's and Ukkonen's algorithms build the suffix tree in `\mathcal O(\lvert
 S\rvert)` time, with `\lvert S\rvert` being the length of the input sequence.  This may
 not be strictly true for this implementation, especially for large alphabets, since the
-library use Python dictionaries to store symbols and those dictionaries are not linear.
+library uses Python dictionaries to store symbols and those dictionaries are not linear.
 
 
 
