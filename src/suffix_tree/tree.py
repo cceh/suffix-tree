@@ -124,7 +124,7 @@ class Tree(lca_mixin.Tree):
         """
         return self.root.find_path(path.S, path.start, path.end)
 
-    def find(self, S: Symbols) -> bool:
+    def find(self, S: Symbols, return_depth=False) -> bool:
         """Find a sequence in the tree.
 
         :param Sequence S: a sequence of symbols
@@ -136,10 +136,14 @@ class Tree(lca_mixin.Tree):
         True
         >>> tree.find("abc")
         False
+        >>> tree.find("abx", return_depth=True)
+        (True, 2)
         """
 
         path = Path(S)
         dummy_node, matched_len, dummy_child = self.find_path(path)
+        if return_depth:
+            return matched_len == len(path), matched_len
         return matched_len == len(path)
 
     def find_all(self, S: Symbols) -> List[Tuple[Id, Path]]:
