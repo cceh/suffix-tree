@@ -116,15 +116,23 @@ class Tree(lca_mixin.Tree):
         assert isinstance(builder, Builder)
         builder.build(self.root, id_, itertools.chain(S, [UniqueEndChar(id_)]))
 
-    def find_path(self, path: Path) -> Tuple[Node, int, Optional[Node]]:
+    def find_path(
+            self, path: Path, return_nodedepth: bool = False,
+            ) -> Union[Tuple[Node, int, Optional[Node]], Tuple[Node, int, Optional[Node], int]]:
         """Find a path in the tree.
 
         See: :py:func:`suffix_tree.node.Internal.find_path`
 
         """
+        if return_nodedepth:
+            return self.root.find_path(
+                path.S, path.start, path.end, return_nodedepth=True
+            )
         return self.root.find_path(path.S, path.start, path.end)
 
-    def find(self, S: Symbols) -> bool:
+    def find(
+            self, S: Symbols, return_nodedepth: bool = False
+        ) -> Union[bool, Tuple[bool, int]]:
         """Find a sequence in the tree.
 
         :param Sequence S: a sequence of symbols
@@ -136,9 +144,18 @@ class Tree(lca_mixin.Tree):
         True
         >>> tree.find("abc")
         False
+        >>> tree.find("abx", return_depth=True)
+        (True, 2)
         """
 
         path = Path(S)
+        
+        if return_nodedepth:
+            dummy_node, matched_len, dummy_child, nodedepth = self.find_path(
+                path, return_nodedepth=return_nodedepth
+            )
+            return matched_len == len(path), nodedepth
+        
         dummy_node, matched_len, dummy_child = self.find_path(path)
         return matched_len == len(path)
 

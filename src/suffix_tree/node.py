@@ -1,6 +1,6 @@
 """Node classes for a Generalized Suffix Tree."""
 
-from typing import Optional, Tuple, List, Set, Dict
+from typing import Optional, Tuple, List, Set, Dict, Union
 
 from .util import Path, Id, Symbol, Symbols, debug
 from . import lca_mixin, util
@@ -204,8 +204,8 @@ class Internal(lca_mixin.Internal, Node):
         f(self)
 
     def find_path(
-        self, S: Symbols, start: int, end: int
-    ) -> Tuple["Node", int, Optional["Node"]]:
+        self, S: Symbols, start: int, end: int, return_nodedepth: bool = False
+    ) -> Union[Tuple["Node", int, Optional["Node"]], Tuple["Node", int, Optional["Node"], int]]:
         """Find a path starting from this node.
 
         The path is absolute.
@@ -217,6 +217,7 @@ class Internal(lca_mixin.Internal, Node):
         node: Node = self
         matched_len = self.depth
         max_len = end - start
+        node_depth = 0
 
         while matched_len < max_len:
             # find the edge to follow
@@ -231,13 +232,20 @@ class Internal(lca_mixin.Internal, Node):
                     matched_len += 1
                 if matched_len < child.depth:
                     # the path ends between node and child
+                    if return_nodedepth:
+                        return node, matched_len, None, node_depth
                     return node, matched_len, child
                 # we reached another node, loop
                 node = child
+                node_depth += 1
             else:
                 # no edge to follow
+                if return_nodedepth:
+                    return node, matched_len, None, node_depth
                 return node, matched_len, None
         # path exhausted
+        if return_nodedepth:
+            return node, matched_len, None, node_depth
         return node, matched_len, None
 
     def split_edge(self, new_len: int, child: Node) -> "Internal":
